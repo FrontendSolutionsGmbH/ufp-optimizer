@@ -1,5 +1,5 @@
 const globals = require('./globals')
-const settings = require('./settings')
+const settings = globals;
 const helper = require('./helper')
 const path = require('path')
 const fs = require('fs-extra')

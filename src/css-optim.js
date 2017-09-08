@@ -1,4 +1,3 @@
-const globals = require('./globals')
 const settings = require('./settings')
 const helper = require('./helper')
 const path = require('path')

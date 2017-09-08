@@ -1,6 +1,6 @@
 const globals = require('./globals')
 const helper = require('./helper')
-const settings = require('./settings')
+const settings = globals
 const path = require('path');
 const imagemin = require('imagemin');
 const imageminMozjpeg = require('imagemin-mozjpeg');
