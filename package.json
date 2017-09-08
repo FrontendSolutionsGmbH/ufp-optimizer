@@ -1,0 +1,25 @@
+{
+  "name": "ufp-optimizer",
+  "version": "0.8.0",
+  "description": "optimizing ufp frontend packages",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "node src/index.js"
+  },
+  "author": "Frontend Solutions GmbH",
+  "license": "MIT",
+  "dependencies": {
+    "clean-css": "^3.4.21",
+    "concurrently": "^3.1.0",
+    "fs-extra": "^1.0.0",
+    "html-minifier": "^3.2.2",
+    "imagemin": "^5.2.2",
+    "imagemin-giflossy": "^5.1.10",
+    "imagemin-jpeg-recompress": "^5.1.0",
+    "imagemin-mozjpeg": "^6.0.0",
+    "imagemin-pngcrush": "^5.0.0",
+    "imagemin-pngquant": "^5.0.0",
+    "imagemin-svgo": "^5.2.0",
+    "imagemin-webp": "^4.0.0"
+  }
+}
