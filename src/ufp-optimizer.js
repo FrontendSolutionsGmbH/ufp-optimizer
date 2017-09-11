@@ -1,4 +1,3 @@
-const settings = require('./globals')
 const helper = require('./helper')
 const path = require('path')
 const optimImages = require('./image-optim')
@@ -11,28 +10,28 @@ const fs = require('fs-extra')
 var app = {}
 
 
-app.copy = function () {
+app.copy = function (settings) {
     // prepare
     fs.removeSync(settings.outputDir)
     fs.mkdirSync(settings.outputDir)
     fs.copySync(settings.inputDir, settings.outputDir)
 }
 
-app.optimizeImages = function () {
+app.optimizeImages = function (settings) {
     //optimize
     var files = fs.walkSync(settings.outputDir)
-    return optimImages.optimizeFileList(files);
+    return optimImages.optimizeFileList(files, settings);
 
 }
 
-app.optimizeHTML = function () {
+app.optimizeHTML = function (settings) {
     //optimize
     var files = fs.walkSync(settings.outputDir)
-    return optimHTML.optimizeFileList(files);
+    return optimHTML.optimizeFileList(files, settings);
 
 }
 
-app.optimizeCSS = function () {
+app.optimizeCSS = function (settings) {
     //optimize
     var files = fs.walkSync(settings.outputDir)
     return optimizeCSS.optimizeFileList(files.filter(function (entry) {
@@ -41,12 +40,12 @@ app.optimizeCSS = function () {
         htmlFiles: files.filter(function (entry) {
             return ['.htm', '.html'].indexOf(path.extname(entry)) > -1
         })
-    });
+    }, settings);
 }
 
-app.gzip = function () {
+app.gzip = function (settings) {
     var files = fs.walkSync(settings.outputDir)
-    return optimGZIP.optimizeFileList(files)
+    return optimGZIP.optimizeFileList(files, settings)
 }
 
 module.exports = app;

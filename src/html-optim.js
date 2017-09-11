@@ -1,5 +1,3 @@
-const globals = require('./globals')
-const settings = globals;
 const helper = require('./helper')
 const path = require('path')
 const fs = require('fs-extra')
@@ -7,7 +5,7 @@ var minify = require('html-minifier').minify;
 
 var optim = {}
 
-optim.optimizeFile = function (fileName, options) {
+optim.optimizeFile = function (fileName, settings) {
     var result = fs.readFileSync(fileName, 'utf8')
     var resultMinified = minify(result, settings.htmlminifyOptions);
     console.log('html minify ' + fileName, 'reduction: ', Math.round((result.length - resultMinified.length) / 1024) + 'kb', Math.round((1 - resultMinified.length / result.length) * 100) + '%')
@@ -17,18 +15,18 @@ optim.optimizeFile = function (fileName, options) {
 
 }
 
-optim.optimizeFileList = function (fileList, options) {
+optim.optimizeFileList = function (fileList, settings) {
 
     console.log('html: started')
 
-    fs.copySync(globals.htaccessFile, globals.outputDir + "/.htaccess")
+    fs.copySync(settings.htaccessFile, settings.outputDir + "/.htaccess")
 
 
     var actions = fileList.filter(function (entry) {
         if (entry && entry.length > 0) {
             var ext = path.extname(entry);
             var dir = path.dirname(entry);
-            if (['.php'].indexOf(ext) > -1 && dir === globals.outputDir) {
+            if (['.php'].indexOf(ext) > -1 && dir === settings.outputDir) {
                 return true;
             }
         }
@@ -47,7 +45,7 @@ optim.optimizeFileList = function (fileList, options) {
                 }
             }
         }).map(function (entry) {
-            return optim.optimizeFile(entry, options)
+            return optim.optimizeFile(entry, settings)
         });
 
     }).then(function (result) {

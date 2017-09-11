@@ -5,7 +5,7 @@ const zlib = require('zlib');
 
 var optim = {}
 
-optim.optimizeFile = function (fileName, options) {
+optim.optimizeFile = function (fileName, settings) {
 
     return new Promise(function (resolve, reject) {
         var sizeBefore = helper.getFilesizeInBytes(fileName);
@@ -25,7 +25,7 @@ optim.optimizeFile = function (fileName, options) {
 
 }
 
-optim.optimizeFileList = function (fileList) {
+optim.optimizeFileList = function (fileList, settings) {
 
     console.log('gzip: started')
     return Promise.all(fileList.filter(function (entry) {
@@ -38,7 +38,7 @@ optim.optimizeFileList = function (fileList) {
             }
         }
     }).map(function (entry) {
-        return optim.optimizeFile(entry)
+        return optim.optimizeFile(entry, settings)
     })).then(function (result) {
         console.log('all gzip files written')
         console.log('gzip: finished')

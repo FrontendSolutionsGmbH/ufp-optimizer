@@ -1,6 +1,4 @@
-const globals = require('./globals')
 const helper = require('./helper')
-const settings = globals
 const path = require('path');
 const imagemin = require('imagemin');
 const imageminMozjpeg = require('imagemin-mozjpeg');
@@ -13,28 +11,28 @@ const imageminPngcrush = require('imagemin-pngcrush');
 
 var optim = {}
 
-optim.optimizeFile = function (fileName, options) {
+optim.optimizeFile = function (fileName, settings) {
 
     var imageDir = path.dirname(fileName);
     var customOptions = {};
     if (settings.customImageOptions) {
         settings.customImageOptions.map(function (entry) {
 
-            var strippedImageFileName = fileName.replace(globals.outputDir + '/', '').replace(globals.outputDir + '\\', '').replace('\\', '/')
-            if (entry.key === fileName.replace(globals.outputDir + '/', '').replace(globals.outputDir + '\\', '').replace('\\', '/')) {
+            var strippedImageFileName = fileName.replace(settings.outputDir + '/', '').replace(settings.outputDir + '\\', '').replace('\\', '/')
+            if (entry.key === fileName.replace(settings.outputDir + '/', '').replace(settings.outputDir + '\\', '').replace('\\', '/')) {
                 customOptions = entry.value;
             }
         })
     }
 
-    options = options || {}
-    options.optionsPNG = customOptions.optionsPNG || options.optionsPNG || settings.optionsPNG || globals.optionsPNG
-    options.optionsPNGCrush = customOptions.optionsPNGCrush || options.optionsPNGCrush || settings.optionsPNGCrush || globals.optionsPNGCrush
-    options.optionsMOZJPEG = customOptions.optionsMOZJPEG || options.optionsMOZJPEG || settings.optionsMOZJPEG || globals.optionsMOZJPEG
-    options.optionsJPEGRECOMPRESS = customOptions.optionsJPEGRECOMPRESS || options.optionsJPEGRECOMPRESS || settings.optionsJPEGRECOMPRESS || globals.optionsJPEGRECOMPRESS
-    options.optionsSVG = customOptions.optionsSVG || options.optionsSVG || settings.optionsSVG || globals.optionsSVG
-    options.optionsWEBP = customOptions.optionsWEBP || options.optionsWEBP || settings.optionsWEBP || globals.optionsWEBP
-    options.optionsGIF = customOptions.optionsGIF || options.optionsGIF || settings.optionsGIF || globals.optionsGIF
+    settings = settings || {}
+    settings.optionsPNG = customOptions.optionsPNG || settings.optionsPNG || settings.optionsPNG || settings.optionsPNG
+    settings.optionsPNGCrush = customOptions.optionsPNGCrush || settings.optionsPNGCrush || settings.optionsPNGCrush || settings.optionsPNGCrush
+    settings.optionsMOZJPEG = customOptions.optionsMOZJPEG || settings.optionsMOZJPEG || settings.optionsMOZJPEG || settings.optionsMOZJPEG
+    settings.optionsJPEGRECOMPRESS = customOptions.optionsJPEGRECOMPRESS || settings.optionsJPEGRECOMPRESS || settings.optionsJPEGRECOMPRESS || settings.optionsJPEGRECOMPRESS
+    settings.optionsSVG = customOptions.optionsSVG || settings.optionsSVG || settings.optionsSVG || settings.optionsSVG
+    settings.optionsWEBP = customOptions.optionsWEBP || settings.optionsWEBP || settings.optionsWEBP || settings.optionsWEBP
+    settings.optionsGIF = customOptions.optionsGIF || settings.optionsGIF || settings.optionsGIF || settings.optionsGIF
 
 
     var sizeBefore = helper.getFilesizeInBytes(fileName);
@@ -45,7 +43,7 @@ optim.optimizeFile = function (fileName, options) {
             //console.log('webp', fileName)
             return imagemin([fileName], imageDir, {
                 plugins: [
-                    imageminWebp(options.optionsWEBP)
+                    imageminWebp(settings.optionsWEBP)
                 ]
             }).catch(function (error) {
                 //console.log('webp-error', fileName)
@@ -67,18 +65,18 @@ optim.optimizeFile = function (fileName, options) {
         var plugins = []
         switch (ext) {
             case '.png':
-                plugins.push(imageminPngquant(options.optionsPNG),
-                    imageminPngcrush(options.optionsPNGCrush))
+                plugins.push(imageminPngquant(settings.optionsPNG),
+                    imageminPngcrush(settings.optionsPNGCrush))
                 break
             case '.jpg':
             case '.jpeg':
-                plugins.push(imageminJpegRecompress(options.optionsJPEGRECOMPRESS))
+                plugins.push(imageminJpegRecompress(settings.optionsJPEGRECOMPRESS))
                 break
             case '.svg':
-                plugins.push(imageminSvgo(options.optionsSVG))
+                plugins.push(imageminSvgo(settings.optionsSVG))
                 break;
             case '.gif':
-                plugins.push(imageminGiflossy(options.optionsGIF))
+                plugins.push(imageminGiflossy(settings.optionsGIF))
                 break
 
         }
@@ -103,7 +101,7 @@ optim.optimizeFile = function (fileName, options) {
     })
 }
 
-optim.optimizeFileList = function (fileList) {
+optim.optimizeFileList = function (fileList, settings) {
     console.log('images: started')
 
     var actions = fileList.filter(function (entry) {
@@ -116,7 +114,7 @@ optim.optimizeFileList = function (fileList) {
             }
         }
     }).map(function (entry) {
-        return optim.optimizeFile(entry)
+        return optim.optimizeFile(entry, settings)
     });
 
     return Promise.all(actions).then(function (result) {

@@ -1,18 +1,17 @@
-const settings = require('./globals')
 const helper = require('./helper')
 const path = require('path')
 const CleanCSS = require('clean-css')
 const fs = require('fs-extra')
 var optim = {}
 
-optim.optimizeFile = function (fileName, options) {
+optim.optimizeFile = function (fileName, settings) {
 
     return new Promise(function (fulfill, reject) {
         var uncss = require('uncss');
         var source = fs.readFileSync(fileName, 'utf8')
 
 
-        uncss(options.htmlFiles, settings.uncssOptions, function (error, sourcePurified) {
+        uncss(settings.htmlFiles, settings.uncssOptions, function (error, sourcePurified) {
 
             var imageDir = path.dirname(fileName);
             var result = new CleanCSS({sourceMap: true}).minify(sourcePurified)
@@ -31,7 +30,7 @@ optim.optimizeFile = function (fileName, options) {
     })
 }
 
-optim.optimizeFileList = function (fileList, options) {
+optim.optimizeFileList = function (fileList, settings) {
 
     var actions = fileList.filter(function (entry) {
         if (entry && entry.length > 0) {
@@ -43,7 +42,7 @@ optim.optimizeFileList = function (fileList, options) {
             }
         }
     }).map(function (entry) {
-        return optim.optimizeFile(entry, options)
+        return optim.optimizeFile(entry, settings)
     });
 
     return Promise.all(actions).then(function (result) {
