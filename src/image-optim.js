@@ -62,7 +62,7 @@ optim.optimizeFile = function (fileName, options) {
 
     var funcAll = function () {
 
-        //console.log('jpeg', fileName)
+        console.log('image', fileName)
         var ext = path.extname(fileName);
         var plugins = []
         switch (ext) {
@@ -86,8 +86,8 @@ optim.optimizeFile = function (fileName, options) {
         return imagemin([fileName], imageDir, {
             plugins: plugins
         }).catch(function (error) {
-            //	console.log('error', fileName)
-            resolve()
+            console.log('error', fileName, error)
+            // resolve()
         })
 
     }
@@ -99,7 +99,7 @@ optim.optimizeFile = function (fileName, options) {
 
 
         console.log('image', (Object.keys(customOptions).length > 0 ? 'custom' : ''), fileName, 'reduction: ', Math.round((sizeBefore - sizeNEW) / 1024) + 'kb', Math.round((1 - sizeNEW / sizeBefore) * 100) + '%', (Object.keys(customOptions).length > 0 ? options : ''))
-        return {sizeBEFORE: sizeBEFORE, sizeNEW: sizeNEW, sizeWEBP: sizeWEBP};
+        return {sizeBEFORE: sizeBefore, sizeNEW: sizeNEW, sizeWEBP: sizeWEBP};
     })
 }
 
