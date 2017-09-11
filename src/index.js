@@ -1,5 +1,17 @@
+console.log('****** UFP OPTIMIZER started ******')
+console.log('****** USAGE:  node src/main.js [inputDir] [outputDir] [configFile] ******')
+
+var myArgs = process.argv.slice(2);
+var inputDirName = myArgs && myArgs.length > 0 && myArgs[0] || 'example'
+var outputDirName = myArgs && myArgs.length > 1 && myArgs[1] || 'dist'
+var configFileName = myArgs && myArgs.length > 1 && myArgs[2] || './globals'
+
+console.log('****** Input directory:', inputDirName, '  ******')
+console.log('****** Ouput directory:', outputDirName, '  ******')
+console.log('****** Config file:', configFileName, '  ******')
+
 const app = require('./ufp-optimizer')
-const settings = require('./globals')
+const settings = require(configFileName)
 
 console.log('* step0 - copy: started')
 app.copy(settings)
@@ -18,3 +30,6 @@ Promise.all([
     app.gzip(settings)
     console.log('*** step2 - compression: finished')
 })
+
+
+console.log('****** UFP OPTIMIZER finished ******')
