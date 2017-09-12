@@ -1,33 +1,33 @@
 const path = require('path')
 
-var globals = {}
+var Globals = {}
 
-globals.inputDir = 'example/input'
-globals.outputDir = 'dist'
-globals.optionsPNG = {quality: '0'}
-globals.optionsMOZJPEG = {quality: '65-80'}
-globals.optionsSVG = {plugins: [{removeViewBox: false}]}
-globals.optionsGIF = {lossy: 80}
-globals.optionsWEBP = {quality: 80}
-globals.optionsJPEGRECOMPRESS = {quality: 'low'}
-globals.optionsPNGCrush = {}
-globals.htaccessFile = path.resolve(__dirname, './.htaccess')
-globals.delete = []
-globals.uncssOptions = {ignore: ['.class1'], ignoreSheets: [/fast.fonts.net/]}
-globals.htmlminifyOptions = {}
-globals.customImageOptions = [
-  {
-    key: 'ui/navopen.png',
-    value: {
-      optionsPNG: {quality: '0'},
-      optionsPNGCrush: {reduce: true}
+Globals.inputDir = 'example/input'
+Globals.outputDir = 'dist'
+Globals.optionsPNG = {quality: '0'}
+Globals.optionsMOZJPEG = {quality: '65-80'}
+Globals.optionsSVG = {plugins: [{removeViewBox: false}]}
+Globals.optionsGIF = {lossy: 80}
+Globals.optionsWEBP = {quality: 80}
+Globals.optionsJPEGRECOMPRESS = {quality: 'low'}
+Globals.optionsPNGCrush = {}
+Globals.htaccessFile = path.resolve(__dirname, './.htaccess')
+Globals.delete = []
+Globals.uncssOptions = {ignore: ['.class1'], ignoreSheets: [/fast.fonts.net/]}
+Globals.htmlminifyOptions = {}
+Globals.customImageOptions = [
+    {
+        key: 'ui/navopen.png',
+        value: {
+            optionsPNG: {quality: '0'},
+            optionsPNGCrush: {reduce: true}
+        }
     }
-  }
 ]
 
 require('events').EventEmitter.defaultMaxListeners = Infinity
 
-module.exports = globals
+module.exports = Globals
 
 /*
  {removeComments : true,
