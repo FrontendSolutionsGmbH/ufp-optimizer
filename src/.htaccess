@@ -71,6 +71,12 @@ FileETag None
 
 RewriteEngine On
 
+RewriteCond %{HTTP_ACCEPT} image/webp
+RewriteRule (.+)\.(jpe?g|png)$ $1.webp [T=image/webp,E=accept:1]
+<IfModule mod_headers.c>
+  Header append Vary Accept env=REDIRECT_accept
+</IfModule>
+
 RewriteCond %{HTTP:Accept-Encoding} br
 RewriteCond %{REQUEST_FILENAME}.br -f
 RewriteRule ^(.*)$ $1.br [L]
