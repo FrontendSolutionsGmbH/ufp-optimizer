@@ -7,7 +7,14 @@ var optim = {}
 
 optim.optimizeFile = function (fileName, settings) {
     var result = fs.readFileSync(fileName, 'utf8')
-    var resultMinified = minify(result, settings.htmlminifyOptions);
+    var resultMinified = result;
+
+    try {
+        resultMinified = minify(result, settings.htmlminifyOptions)
+    } catch (ex) {
+        console.log('html error catched', fileName)
+    }
+
     console.log('html minify ' + fileName, 'reduction: ', Math.round((result.length - resultMinified.length) / 1024) + 'kb', Math.round((1 - resultMinified.length / result.length) * 100) + '%')
     fs.outputFileSync(fileName, resultMinified)
 

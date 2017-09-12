@@ -4,7 +4,8 @@
   "description": "optimizing ufp frontend packages",
   "main": "src/index.js",
   "scripts": {
-    "build": "node bin/ufp-optimizer-cli.js"
+    "build-0": "node bin/ufp-optimizer-cli.js examples/0/input dist",
+    "build-1": "node bin/ufp-optimizer-cli.js examples/1/input dist"
   },
   "bin": {
     "ufp-optimizer-cli": "bin/ufp-optimizer-cli.js"
