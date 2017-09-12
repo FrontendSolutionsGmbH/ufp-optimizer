@@ -2,12 +2,23 @@ const helper = require('./helper')
 const path = require('path');
 const fs = require('fs');
 const zlib = require('zlib');
+var brotli = require('brotli');
 
 var optim = {}
 
 optim.optimizeFile = function (fileName, settings) {
 
     return new Promise(function (resolve, reject) {
+
+        var brotliBuffer = brotli.compress(fs.readFileSync(fileName));
+
+        fs.writeFile(fileName + '.br', brotliBuffer, "binary", function (err) {
+            if (err) {
+                console.log('brotli error', err);
+            }
+        });
+
+
         var sizeBefore = helper.getFilesizeInBytes(fileName);
         const gzip = zlib.createGzip();
         const inp = fs.createReadStream(fileName);
