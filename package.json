@@ -1,11 +1,12 @@
 {
   "name": "ufp-optimizer",
-  "version": "0.8.9",
+  "version": "0.9.0",
   "description": "optimizing ufp frontend packages",
   "main": "src/ufp-optimizer.js",
   "scripts": {
     "build-0": "node bin/ufp-optimizer-cli.js examples/0/input dist",
-    "build-1": "node bin/ufp-optimizer-cli.js examples/1/input dist"
+    "build-1": "node bin/ufp-optimizer-cli.js examples/1/input dist",
+    "eslint": "./node_modules/.bin/eslint src/**.* bin/**.* --fix"
   },
   "bin": {
     "ufp-optimizer-cli": "bin/ufp-optimizer-cli.js"
@@ -30,5 +31,13 @@
     "imagemin-webp": "^4.0.0",
     "node-gyp": "^3.6.2",
     "node-zopfli": "^2.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^4.6.1",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
   }
 }
