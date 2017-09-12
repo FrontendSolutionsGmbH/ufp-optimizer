@@ -8,6 +8,12 @@ UFP optimizer is for optimizing stuff
 * svg
 * ...
 
+
+### TODOS ###
+
+* make cli command
+* pass settings as argument file/object
+
 ### What is this repository for? ###
 
 * Quick summary
