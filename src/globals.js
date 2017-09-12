@@ -1,3 +1,5 @@
+const path = require('path')
+
 var globals = {};
 
 globals.inputDir = "example/input"
@@ -9,18 +11,18 @@ globals.optionsGIF = {lossy: 80}
 globals.optionsWEBP = {quality: 80}
 globals.optionsJPEGRECOMPRESS = {quality: "low"}
 globals.optionsPNGCrush = {}
-globals.htaccessFile = "src/.htaccess"
+globals.htaccessFile = path.resolve(__dirname, './.htaccess')
 globals.delete = []
-globals.uncssOptions = {ignore: ['.class1'],ignoreSheets : [/fast.fonts.net/]}
+globals.uncssOptions = {ignore: ['.class1'], ignoreSheets: [/fast.fonts.net/]}
 globals.htmlminifyOptions = {}
 globals.customImageOptions = [
-	{
-		key: 'ui/navopen.png',
-		value: {
-			optionsPNG: {quality: '0'},
-			optionsPNGCrush: {reduce: true}
-		}
-	}
+    {
+        key: 'ui/navopen.png',
+        value: {
+            optionsPNG: {quality: '0'},
+            optionsPNGCrush: {reduce: true}
+        }
+    }
 ]
 
 require('events').EventEmitter.defaultMaxListeners = Infinity;
@@ -28,14 +30,14 @@ require('events').EventEmitter.defaultMaxListeners = Infinity;
 module.exports = globals;
 
 /*
-{removeComments : true, 
-	collapseWhitespace: true, 
-	conservativeCollapse: true, 
-	collapseInlineTagWhitespace:false,
-	minifyCSS: false,
-	minifyJS: false,
-	removeEmptyAttributes: false,
-	removeEmptyElements: false,
-	removeOptionalTags: false,
-	removeRedundantAttributes: false,
-}*/
+ {removeComments : true,
+ collapseWhitespace: true,
+ conservativeCollapse: true,
+ collapseInlineTagWhitespace:false,
+ minifyCSS: false,
+ minifyJS: false,
+ removeEmptyAttributes: false,
+ removeEmptyElements: false,
+ removeOptionalTags: false,
+ removeRedundantAttributes: false,
+ }*/

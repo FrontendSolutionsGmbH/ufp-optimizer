@@ -7,7 +7,7 @@ const path = require('path')
 var myArgs = process.argv.slice(2);
 var inputDirName = myArgs && myArgs.length > 0 && myArgs[0] || 'examples/0/input'
 var outputDirName = myArgs && myArgs.length > 1 && myArgs[1] || 'dist'
-var configFileName = myArgs && myArgs.length > 1 && path.join(process.cwd(), myArgs[2]) || path.resolve(__dirname, '../src/globals.js')
+var configFileName = myArgs && myArgs.length > 2 && path.join(process.cwd(), myArgs[2]) || path.resolve(__dirname, '../src/globals.js')
 
 console.log('****** USAGE:  ufp-optimizer-cli ' + inputDirName + ' ' + outputDirName + ' ' + configFileName + ' ******')
 
