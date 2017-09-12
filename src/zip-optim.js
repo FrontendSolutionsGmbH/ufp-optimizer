@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const zlib = require('zlib');
 var brotli = require('brotli');
+var zopfli = require('node-zopfli');
 
 var optim = {}
 
@@ -18,18 +19,28 @@ optim.optimizeFile = function (fileName, settings) {
             }
         });
 
-
         var sizeBefore = helper.getFilesizeInBytes(fileName);
-        const gzip = zlib.createGzip();
-        const inp = fs.createReadStream(fileName);
-        const out = fs.createWriteStream(fileName + '.gz');
-        inp.pipe(gzip).pipe(out).on('finish', function () {
-            var sizeNEW = helper.getFilesizeInBytes(fileName + '.gz');
-            console.log('gzip ' + fileName, 'reduction: ', Math.round((sizeBefore - sizeNEW) / 1024) + 'kb', Math.round((sizeNEW / sizeBefore) * 100) + '%')
 
+        fs.createReadStream(fileName)
+            .pipe(zopfli.createGzip())
+            .pipe(fs.createWriteStream(fileName + '.gz')).on('finish', function () {
+            var sizeNEW = helper.getFilesizeInBytes(fileName + '.gz');
+            console.log('zopfli ' + fileName, 'reduction: ', Math.round((sizeBefore - sizeNEW) / 1024) + 'kb', Math.round((sizeNEW / sizeBefore) * 100) + '%')
             resolve(sizeNEW)
         });
 
+
+        /* OLD code without zopfli /*
+         const gzip = zlib.createGzip();
+         const inp = fs.createReadStream(fileName);
+         const out = fs.createWriteStream(fileName + '.gz');
+         inp.pipe(gzip).pipe(out).on('finish', function () {
+         var sizeNEW = helper.getFilesizeInBytes(fileName + '.gz');
+         console.log('gzip ' + fileName, 'reduction: ', Math.round((sizeBefore - sizeNEW) / 1024) + 'kb', Math.round((sizeNEW / sizeBefore) * 100) + '%')
+
+         resolve(sizeNEW)
+         });
+         */
 
     })
 
