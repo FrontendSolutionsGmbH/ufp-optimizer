@@ -4,7 +4,10 @@
   "description": "optimizing ufp frontend packages",
   "main": "src/index.js",
   "scripts": {
-    "build": "node src/index.js"
+    "build": "node bin/ufp-optimizer-cli.js"
+  },
+  "bin": {
+    "ufp-optimizer-cli": "bin/ufp-optimizer-cli.js"
   },
   "keywords": "compress brotli zopfli optimization",
   "author": "Frontend Solutions GmbH",
