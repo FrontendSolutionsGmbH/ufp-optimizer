@@ -1,13 +1,15 @@
 {
   "name": "ufp-optimizer",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "optimizing ufp frontend packages",
   "main": "src/index.js",
   "scripts": {
     "build": "node src/index.js"
   },
+  "keywords": "compress brotli zopfli optimization",
   "author": "Frontend Solutions GmbH",
   "license": "MIT",
+  "repository": "https://bitbucket.org/frontendsolutions/ufp-optimizer.git",
   "dependencies": {
     "clean-css": "^3.4.28",
     "concurrently": "^3.1.0",
