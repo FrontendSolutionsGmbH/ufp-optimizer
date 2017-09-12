@@ -16,6 +16,9 @@ console.log('****** USAGE:  node src/main.js ' + inputDirName + ' ' + outputDirN
 const app = require('./ufp-optimizer')
 const settings = require(configFileName)
 
+settings.inputDir = inputDirName
+settings.outputDir = outputDirName
+
 console.log('* step0 - copy: started')
 app.copy(settings)
 console.log('* step0 - copy: finished')
