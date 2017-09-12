@@ -2,7 +2,7 @@
   "name": "ufp-optimizer",
   "version": "0.8.4",
   "description": "optimizing ufp frontend packages",
-  "main": "src/index.js",
+  "main": "src/ufp-optimizer.js",
   "scripts": {
     "build-0": "node bin/ufp-optimizer-cli.js examples/0/input dist",
     "build-1": "node bin/ufp-optimizer-cli.js examples/1/input dist"

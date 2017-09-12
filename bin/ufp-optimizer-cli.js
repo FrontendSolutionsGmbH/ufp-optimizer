@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 console.log('****** UFP OPTIMIZER started ******')
-console.log('****** USAGE:  node src/main.js [inputDir] [outputDir] [configFile] ******')
+console.log('****** USAGE:  ufp-optimizer-cli [inputDir] [outputDir] [configFile] ******')
 
 const path = require('path')
 var myArgs = process.argv.slice(2);
@@ -35,7 +35,7 @@ Promise.all([
 
 
     console.log('*** step2 - compression: started')
-    app.gzip(settings)
+    app.zip(settings)
     console.log('*** step2 - compression: finished')
 })
 

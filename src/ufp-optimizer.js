@@ -3,7 +3,7 @@ const path = require('path')
 const optimImages = require('./image-optim')
 const optimHTML = require('./html-optim')
 const optimizeCSS = require('./css-optim')
-const optimGZIP = require('./gzip-optim')
+const optimZIP = require('./zip-optim')
 const fs = require('fs-extra')
 
 
@@ -43,9 +43,9 @@ app.optimizeCSS = function (settings) {
     }, settings);
 }
 
-app.gzip = function (settings) {
+app.zip = function (settings) {
     var files = fs.walkSync(settings.outputDir)
-    return optimGZIP.optimizeFileList(files, settings)
+    return optimZIP.optimizeFileList(files, settings)
 }
 
 module.exports = app;
