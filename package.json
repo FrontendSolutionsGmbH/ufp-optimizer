@@ -1,6 +1,6 @@
 {
   "name": "ufp-optimizer",
-  "version": "0.8.7",
+  "version": "0.8.8",
   "description": "optimizing ufp frontend packages",
   "main": "src/ufp-optimizer.js",
   "scripts": {
@@ -27,6 +27,7 @@
     "imagemin-pngcrush": "^5.0.0",
     "imagemin-pngquant": "^5.0.0",
     "imagemin-svgo": "^5.2.0",
-    "imagemin-webp": "^4.0.0"
+    "imagemin-webp": "^4.0.0",
+    "node-gyp": "^3.6.2"
   }
 }

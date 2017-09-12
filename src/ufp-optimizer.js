@@ -10,6 +10,29 @@ const fs = require('fs-extra')
 var app = {}
 
 
+app.execute = function (settings) {
+    console.log('* step0 - copy: started')
+    app.copy(settings)
+    console.log('* step0 - copy: finished')
+    //app.optimizeCSS()
+
+    console.log('** step1 - image/html/css: started')
+    Promise.all([
+        app.optimizeImages(settings),
+        app.optimizeHTML(settings)]).then(function () {
+        console.log('** step1 - image/html/css: finished')
+
+        console.log('*** step2 - compression: started')
+        app.zip(settings)
+        console.log('*** step2 - compression: finished')
+    })
+
+}
+
+app.getDefaultSettings = function () {
+    return require('./globals');
+}
+
 app.copy = function (settings) {
     // prepare
     fs.removeSync(settings.outputDir)
