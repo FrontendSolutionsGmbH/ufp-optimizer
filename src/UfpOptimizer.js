@@ -27,7 +27,7 @@ UfpOptimizer.execute = function (settings) {
 }
 
 UfpOptimizer.getDefaultSettings = function () {
-    return require('./globals')
+    return require('./Globals')
 }
 
 UfpOptimizer.copy = function (settings) {
