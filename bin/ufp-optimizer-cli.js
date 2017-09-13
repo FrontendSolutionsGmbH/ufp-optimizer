@@ -1,8 +1,9 @@
 #! /usr/bin/env node
+
 const path = require('path')
 const app = require('./../src/UfpOptimizer')
 
-console.log('****** UFP OPTIMIZER started ******')
+console.log('****** UFP OPTIMIZER 2.0 started ******')
 console.log('****** USAGE:  ufp-optimizer-cli [inputDir] [outputDir] [configFile] ******')
 
 var myArgs = process.argv.slice(2)
