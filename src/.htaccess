@@ -8,62 +8,90 @@
  ExpiresByType image/gif "access plus 1 month"
  ExpiresByType image/jpeg "access plus 1 month"
  ExpiresByType image/png "access plus 1 month"
- ExpiresByType image/svg+xml "access plus 1 month"
  ExpiresByType image/x-icon "access plus 1 month"
- ExpiresByType application/vnd.ms-fontobject "access plus 1 year"
- ExpiresByType application/x-font-ttf "access plus 1 year"
- ExpiresByType application/x-font-opentype "access plus 1 year"
- ExpiresByType application/x-font-woff "access plus 1 year"
- ExpiresByType image/svg+xml "access plus 1 year"
+ ExpiresByType image/svg+xml "access plus 1 month"
 </IfModule>
+
 <ifmodule mod_headers.c>
- <filesmatch "\\.(ico|jpe?g|png|gif|swf|webp|svg)$">
+ <filesmatch "\\.(ico|jpe?g|png|gif|swf|webp)$">
   Header set Cache-Control "max-age=31536000, public"
  </filesmatch>
- <filesmatch "\\.(css)$">
-  Header set Cache-Control "max-age=31536000, public"
- </filesmatch>
- <filesmatch "\\.(js)$">
-  Header set Cache-Control "max-age=31536000, public"
- </filesmatch>
- <filesmatch "\\.(html)$">
-  Header set Cache-Control "max-age=31536000, public"
- </filesmatch>
-  <filesmatch "\\.(htm)$">
-  Header set Cache-Control "max-age=31536000, public"
- </filesmatch>
-  <filesmatch "\\.(woff|woff2|eot|ttf)$">
+ <filesmatch "\\.(css|js|html|htm|svg)$">
   Header set Cache-Control "max-age=31536000, public"
  </filesmatch>
 </ifmodule>
 
-# AddEncoding allows you to have certain browsers uncompress information on the fly.
-AddEncoding gzip .gz
 
-#Serve gzip compressed CSS files if they exist and the client accepts gzip.
-RewriteCond %{HTTP:Accept-encoding} gzip
-RewriteCond %{REQUEST_FILENAME}\.gz -s
-RewriteRule ^(.*)\.css $1\.css\.gz [QSA]
+AddType image/webp .webp
 
-# Serve gzip compressed JS files if they exist and the client accepts gzip.
-RewriteCond %{HTTP:Accept-encoding} gzip
-RewriteCond %{REQUEST_FILENAME}\.gz -s
-RewriteRule ^(.*)\.js $1\.js\.gz [QSA]
 
-# Serve gzip compressed HTML files if they exist and the client accepts gzip.
-RewriteCond %{HTTP:Accept-encoding} gzip
-RewriteCond %{REQUEST_FILENAME}\.gz -s
-RewriteRule ^(.*)\.html $1\.html\.gz [QSA]
+FileETag None
 
-# Serve gzip compressed HTM files if they exist and the client accepts gzip.
-RewriteCond %{HTTP:Accept-encoding} gzip
-RewriteCond %{REQUEST_FILENAME}\.gz -s
-RewriteRule ^(.*)\.htm $1\.htm\.gz [QSA]
+<Files *.js.gz>
+  AddType "text/javascript" .gz
+  AddEncoding gzip .gz
+</Files>
+<Files *.css.gz>
+  AddType "text/css" .gz
+  AddEncoding gzip .gz
+</Files>
+<Files *.htm.gz>
+  AddType "text/htm" .gz
+  AddEncoding gzip .gz
+</Files>
+<Files *.html.gz>
+  AddType "text/html" .gz
+  AddEncoding gzip .gz
+</Files>
+<Files *.svg.gz>
+  AddType "image/svg+xml" .gz
+  AddEncoding gzip .gz
+</Files>
 
-# Serve gzip compressed svg files if they exist and the client accepts gzip.
-RewriteCond %{HTTP:Accept-encoding} gzip
-RewriteCond %{REQUEST_FILENAME}\.gz -s
-RewriteRule ^(.*)\.svg $1\.svg\.gz [QSA]
+<Files *.js.br>
+  AddType "text/javascript" .br
+  AddEncoding br .br
+</Files>
+<Files *.css.br>
+  AddType "text/css" .br
+  AddEncoding br .br
+</Files>
+<Files *.htm.br>
+  AddType "text/html" .br
+  AddEncoding br .br
+</Files>
+<Files *.html.br>
+  AddType "text/html" .br
+  AddEncoding br .br
+</Files>
+<Files *.svg.br>
+  AddType "image/svg+xml" .br
+  AddEncoding br .br
+</Files>
+
+RewriteEngine On
+
+RewriteCond %{HTTP_ACCEPT} image/webp
+RewriteRule (.+)\.(jpe?g|png)$ $1.webp [T=image/webp,E=accept:1]
+<IfModule mod_headers.c>
+  Header append Vary Accept env=REDIRECT_accept
+</IfModule>
+
+RewriteCond %{HTTP:Accept-Encoding} br
+RewriteCond %{REQUEST_FILENAME}.br -f
+RewriteRule ^(.*)$ $1.br [L]
+
+RewriteCond %{HTTP:Accept-Encoding} gzip
+RewriteCond %{REQUEST_FILENAME}.gz -f
+RewriteRule ^(.*)$ $1.gz [L]
+
+# Serve correct content types, and prevent mod_deflate double br.
+RewriteRule \.css\.br$ - [T=text/css,E=no-gzip:1]
+RewriteRule \.js\.br$ - [T=text/javascript,E=no-gzip:1]
+RewriteRule \.html\.br$ - [T=text/html,E=no-gzip:1]
+RewriteRule \.htm\.br$ - [T=text/html,E=no-gzip:1]
+RewriteRule \.svg\.br$ - [T=image/svg+xml,E=no-gzip:1]
+
 
 # Serve correct content types, and prevent mod_deflate double gzip.
 RewriteRule \.css\.gz$ - [T=text/css,E=no-gzip:1]
@@ -71,31 +99,3 @@ RewriteRule \.js\.gz$ - [T=text/javascript,E=no-gzip:1]
 RewriteRule \.html\.gz$ - [T=text/html,E=no-gzip:1]
 RewriteRule \.htm\.gz$ - [T=text/html,E=no-gzip:1]
 RewriteRule \.svg\.gz$ - [T=image/svg+xml,E=no-gzip:1]
-
-
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  # check if browser accepts webp
-  RewriteCond %{HTTP_ACCEPT} image/webp
-
-  # check if file is jpg or png
-  RewriteCond %{REQUEST_FILENAME} (.*).(jpe?g|png)$
-
-  # check if corresponding webp file exists image.png -> image.webp
-  RewriteCond %1.webp -f
-
-  # serve up webp instead
-  RewriteRule (.+).(jpe?g|png)$ $1.webp [T=image/webp,E=accept:1]
-
-</IfModule>
-
-<IfModule mod_headers.c>
-  Header append Vary Accept env=REDIRECT_accept
-</IfModule>
-
-AddType image/webp .webp
-AddType application/vnd.ms-fontobject .eot
-AddType application/x-font-ttf .ttf
-AddType application/x-font-opentype .otf
-AddType application/x-font-woff .woff
-AddOutputFilterByType DEFLATE application/x-font-ttf application/x-font-opentype image/svg+xml

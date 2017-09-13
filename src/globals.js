@@ -1,41 +1,43 @@
-var globals = {};
+const path = require('path')
 
-globals.inputDir = "example/input"
-globals.outputDir = "dist"
-globals.optionsPNG = {quality: '0'}
-globals.optionsMOZJPEG = {quality: '65-80'}
-globals.optionsSVG = {plugins: [{removeViewBox: false}]}
-globals.optionsGIF = {lossy: 80}
-globals.optionsWEBP = {quality: 80}
-globals.optionsJPEGRECOMPRESS = {quality: "low"}
-globals.optionsPNGCrush = {}
-globals.htaccessFile = "src/.htaccess"
-globals.delete = []
-globals.uncssOptions = {ignore: ['.class1'],ignoreSheets : [/fast.fonts.net/]}
-globals.htmlminifyOptions = {}
-globals.customImageOptions = [
-	{
-		key: 'ui/navopen.png',
-		value: {
-			optionsPNG: {quality: '0'},
-			optionsPNGCrush: {reduce: true}
-		}
-	}
+var Globals = {}
+
+Globals.inputDir = 'example/input'
+Globals.outputDir = 'dist'
+Globals.optionsPNG = {quality: '0'}
+Globals.optionsMOZJPEG = {quality: '65-80'}
+Globals.optionsSVG = {plugins: [{removeViewBox: false}]}
+Globals.optionsGIF = {lossy: 80}
+Globals.optionsWEBP = {quality: 80}
+Globals.optionsJPEGRECOMPRESS = {quality: 'low'}
+Globals.optionsPNGCrush = {}
+Globals.htaccessFile = path.resolve(__dirname, './.htaccess')
+Globals.delete = []
+Globals.uncssOptions = {ignore: ['.class1'], ignoreSheets: [/fast.fonts.net/]}
+Globals.htmlminifyOptions = {}
+Globals.customImageOptions = [
+    {
+        key: 'ui/navopen.png',
+        value: {
+            optionsPNG: {quality: '0'},
+            optionsPNGCrush: {reduce: true}
+        }
+    }
 ]
 
-require('events').EventEmitter.defaultMaxListeners = Infinity;
+require('events').EventEmitter.defaultMaxListeners = Infinity
 
-module.exports = globals;
+module.exports = Globals
 
 /*
-{removeComments : true, 
-	collapseWhitespace: true, 
-	conservativeCollapse: true, 
-	collapseInlineTagWhitespace:false,
-	minifyCSS: false,
-	minifyJS: false,
-	removeEmptyAttributes: false,
-	removeEmptyElements: false,
-	removeOptionalTags: false,
-	removeRedundantAttributes: false,
-}*/
+ {removeComments : true,
+ collapseWhitespace: true,
+ conservativeCollapse: true,
+ collapseInlineTagWhitespace:false,
+ minifyCSS: false,
+ minifyJS: false,
+ removeEmptyAttributes: false,
+ removeEmptyElements: false,
+ removeOptionalTags: false,
+ removeRedundantAttributes: false,
+ } */
