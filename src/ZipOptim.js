@@ -1,4 +1,4 @@
-const helper = require('./helper')
+const helper = require('./Helper')
 const path = require('path')
 const fs = require('fs')
 var brotli = require('brotli')
