@@ -26,18 +26,18 @@ ufp-optimizer works on a directory base and compresses everything inside
 
 ## How do I start? ##
 
-First of all you need to install the package
+First you need to install the package
 
 ```
 > npm install ufp-optimizer --save
 ```
 
 
-Then you can either use it in your node.js code, or as a cli terminal command or as webpack plugin.
+Then you can either use it in your node.js code, as a cli terminal command or as webpack plugin.
 
 ### node.js usage ###
 
-If you use ufp-optimizer via node you have  4 available commands
+If you use ufp-optimizer via node you have 4 available commands
 
 * execute (settings)
 * copy (settings)
