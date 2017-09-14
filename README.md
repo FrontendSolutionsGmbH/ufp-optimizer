@@ -16,19 +16,20 @@ UFP optimizer is for optimizing stuff
 
 ## What is this repository for? ##
 
-ufp-optimizer works on a directory and compresses everything inside (
+ufp-optimizer works on a directory base and compresses everything inside
 
-* zopfli+brotli
-* webp conversion of images
-* html minification
-* ready to use .htaccess for the above optimizations (so that a compatible browser loads image.jpeg.webp and not image.jpeg)
+* zopfli+brotli to text files (html, javascript, svg, css, ...)
+* image compressions (lossless) with imagemin
+* webp conversion of images (jpg and png)
+* html minification with html-minifier
+* ready to use .htaccess for the above optimizations (so that a compatible browser loads image.jpeg.webp instead of image.jpeg)
 
-## How do I get set up? ##
+## How do I start? ##
 
 First of all you need to install the package
 
 ```
-npm install ufp-optimizer --save
+> npm install ufp-optimizer --save
 ```
 
 
@@ -60,14 +61,21 @@ uo.execute(settings);
 you can also use it via command line
 
 ```
-ufp-optimizer-cli [inputDir] [outputDir] [configFile]
+> ufp-optimizer-cli [inputDir] [outputDir] [configFile]
 ```
 
 Example for commandline
 
 ```
-ufp-optimizer-cli dist distOptimized
+> ufp-optimizer-cli dist distOptimized
 ```
+
+or
+
+```
+> node node_modules/ufp-optimizer/bin/ufp-optimizer-cli dist distOptimized
+```
+
 
 The default for inputDir is dist, outputDir is distOptimized. configFile is optional
 
@@ -76,19 +84,53 @@ The default for inputDir is dist, outputDir is distOptimized. configFile is opti
 
 TODO
 
-## Config params ##
+## CLI params ##
+
+ufp-optimizer-cli [inputDir] [outputDir] [configFile]
 
 | Parameter | Description                                     | Example |
 | --------- | -----------                                     | ------- |
-| inputDir  | where are your files that need to be compressed | dist    |
+| inputDir  | Direcotry which contain the files that need to be compressed | dist    |
+| outputDir  | Where will the files be written to. Needs to be different to inputDir | distCompressed    |
+| configFile  | Optional: A config file containing specific params. Copy the ./src/Globals.js and modify it | myConfig.js    |
 
+## ConfigFile params ##
 
-## Contribution guidelines ##
+The config file is a json file containing sever settings to control what will be compressed and how. You can e.g. use a special png compression algorithm on some files or exclude them.
 
-None so far
-
+| Parameter | Description                                     | Example |
+| --------- | -----------                                     | ------- |
+| inputDir  | Direcotry which contain the files that need to be compressed | dist    |
+| outputDir  | Where will the files be written to. Needs to be different to inputDir | distCompressed    |
 
 ## TODOS ##
 
-* Documentation
-* more config settings (enable/disable whole steps and so on)
+* Better docs
+* Better error handling (input dir does not exist, inputDir===outputDir, broken files, write permission errors)
+* Webpack Usage
+* More config settings (enable/disable whole steps like html-minification, use brotli and zopfli on more extensions and so on)
+
+## Known problems ##
+
+### zopfli problem ###
+
+If you get an error like below just execute "npm rebuild"
+
+```
+Error: Cannot find module '/mnt/d/Alex/projects/teo/node_modules/node-zopfli/lib/binding/node-v51-linux-x64/zopfli.node'
+    at Function.Module._resolveFilename (module.js:470:15)
+    at Function.Module._load (module.js:418:25)
+    at Module.require (module.js:498:17)
+    at require (internal/module.js:20:19)
+    at Object.<anonymous> (/mnt/d/Alex/projects/teo/node_modules/node-zopfli/lib/zopfli.js:7:14)
+    at Module._compile (module.js:571:32)
+    at Object.Module._extensions..js (module.js:580:10)
+    at Module.load (module.js:488:32)
+    at tryModuleLoad (module.js:447:12)
+    at Function.Module._load (module.js:439:3)
+```
+
+
+### write permission problem ###
+
+If somehow you get an error saying that you dont have permissions deleting the outputDir, close any program accesings the files in that directory and try again
