@@ -33,7 +33,7 @@ First you need to install the package
 ```
 
 
-Then you can either use it in your node.js code, as a cli terminal command or as webpack plugin.
+Then you can either use it in your node.js code, as a cli terminal command or as a webpack plugin.
 
 ### node.js usage ###
 
@@ -58,7 +58,7 @@ uo.execute(settings);
 
 ### commandline usage ###
 
-you can also use it via command line
+You can also use it via command line
 
 ```
 > ufp-optimizer-cli [inputDir] [outputDir] [configFile]
@@ -90,8 +90,8 @@ ufp-optimizer-cli [inputDir] [outputDir] [configFile]
 
 | Parameter | Description                                     | Example |
 | --------- | -----------                                     | ------- |
-| inputDir  | Direcotry which contain the files that need to be compressed | dist    |
-| outputDir  | Where will the files be written to. Needs to be different to inputDir | distCompressed    |
+| inputDir  | Directory which contains the files that need to be compressed | dist    |
+| outputDir  | Where the files will be written. Needs to be different from inputDir | distCompressed    |
 | configFile  | Optional: A config file containing specific params. Copy the ./src/Globals.js and modify it | myConfig.js    |
 
 ## ConfigFile params ##
@@ -100,8 +100,8 @@ The config file is a json file containing sever settings to control what will be
 
 | Parameter | Description                                     | Example |
 | --------- | -----------                                     | ------- |
-| inputDir  | Direcotry which contain the files that need to be compressed | dist    |
-| outputDir  | Where will the files be written to. Needs to be different to inputDir | distCompressed    |
+| inputDir  | Directory which contains the files that need to be compressed | dist    |
+| outputDir  | Where the files will be written. Needs to be different from inputDir | distCompressed    |
 
 ## TODOS ##
 
@@ -114,7 +114,7 @@ The config file is a json file containing sever settings to control what will be
 
 ### zopfli problem ###
 
-If you get an error like below just execute "npm rebuild"
+If you get an error like the one below just execute "npm rebuild"
 
 ```
 Error: Cannot find module '/mnt/d/Alex/projects/teo/node_modules/node-zopfli/lib/binding/node-v51-linux-x64/zopfli.node'
@@ -133,4 +133,4 @@ Error: Cannot find module '/mnt/d/Alex/projects/teo/node_modules/node-zopfli/lib
 
 ### write permission problem ###
 
-If somehow you get an error saying that you dont have permissions deleting the outputDir, close any program accesings the files in that directory and try again
+If somehow you get an error saying that you dont have permissions deleting the outputDir, close any programs which can access the files in that directory and try again
