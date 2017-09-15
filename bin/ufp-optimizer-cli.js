@@ -18,6 +18,10 @@ const settings = require(configFileName)
 settings.inputDir = inputDirName
 settings.outputDir = outputDirName
 
-app.execute(settings)
+app.execute(settings).then(function (result) {
 
-console.log('****** UFP OPTIMIZER finished ******')
+    console.log('****** UFP OPTIMIZER finished ******')
+
+}).catch(function (ex) {
+    console.log('****** UFP OPTIMIZER finished with errors ******', ex)
+})
