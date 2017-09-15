@@ -56,8 +56,8 @@ If you use ufp-optimizer in your node.js code you have the following commands av
 
 
 | Function | Params | Description |
-| --------- | ----------- | --------- |                                  |
-| getDefaultSettings  | - | Returns the default settings object. You can change anything you like but keep in mind to use different input and outputDir |
+| --------- | ----------- | --------- |
+| getDefaultSettings | none | Returns the default settings object. You can change anything you like but keep in mind to use different input and outputDir |
 | execute  | settings object | The most important command. One function to do everything (copy/css/images/html/...). Just pass the settings and you are good to go |
 | copy | settings object | Creates the outputDir if necessary or deletes the content in it. It copies everything from inputDir then. You need to pass the settings object which contains inputDir and outputDir |
 | optimizeImages | settings object | Does lossless png, jpg and svg optimizations on all files in the outputDir. You can fine-tune the algorithms per settingsfile if necessary, e.g. allowing loss to get better results. |
@@ -68,7 +68,6 @@ If you use ufp-optimizer in your node.js code you have the following commands av
 
 ```javascript
 var uo = require('ufp-optimizer')
-
 var settings = uo.getDefaultSettings();
 settings.inputDir = 'dist';
 settings.outputDir = 'blub';
