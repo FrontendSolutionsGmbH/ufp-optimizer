@@ -50,7 +50,7 @@ First you need to install the package
 
 Then you can either use it in your node.js code, as a cli terminal command or as a webpack plugin.
 
-### node.js usage ###
+### Node.js usage ###
 
 If you use ufp-optimizer in your node.js code you have the following commands available
 
@@ -61,9 +61,9 @@ If you use ufp-optimizer in your node.js code you have the following commands av
 | execute  | settings object | The most important command. One function to do everything (copy/css/images/html/...). Just pass the settings and you are good to go |
 | copy | settings object | Creates the outputDir if necessary or deletes the content in it. It copies everything from inputDir then. You need to pass the settings object which contains inputDir and outputDir |
 | optimizeImages | settings object | Does lossless png, jpg and svg optimizations on all files in the outputDir. You can fine-tune the algorithms per settingsfile if necessary, e.g. allowing loss to get better results. |
-| optimizeHTML | settings object |  |
-| optimizeCSS | settings object |  |
-| zip | settings object |  |
+| optimizeHTML | settings object |  Minimizes html files. By default it does nothing dangerous to keep it compatible with all browsers |
+| optimizeCSS | settings object | Minimize css files. By default it does nothing dangerous to keep it compatible with all browsers |
+| zip | settings object | Does zopfli + brotli compression on all text files |
 
 
 ```javascript
@@ -76,7 +76,7 @@ uo.execute(settings);
 ```
 
 
-### commandline usage ###
+### Commandline usage ###
 
 You can also use it via command line
 
@@ -123,9 +123,11 @@ The config file is a json file containing sever settings to control what will be
 | inputDir  | Directory which contains the files that need to be compressed | dist    |
 | outputDir  | Where the files will be written. Needs to be different from inputDir | distCompressed    |
 
-## TODOS ##
+## Todos ##
 
 * add development mode for faster execution (no brotli, no zoplfi just zlib + faster image compressions)
+* re enable html minifier and gif compressor
+* write a test with totally broken files
 * inputdir === outputDir should also work (just do not copy stuff)
 * add closure compiler if wanted (and optionally uglify-js)
 * Better docs
