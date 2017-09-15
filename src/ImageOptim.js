@@ -1,4 +1,4 @@
-const helper = require('./helper')
+const helper = require('./Helper')
 const path = require('path')
 const imagemin = require('imagemin')
 const imageminPngquant = require('imagemin-pngquant')

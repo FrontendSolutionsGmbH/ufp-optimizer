@@ -1,4 +1,4 @@
-const helper = require('./helper')
+const helper = require('./Helper')
 const path = require('path')
 const fs = require('fs')
 var brotli = require('brotli')
@@ -46,7 +46,7 @@ ZipOptim.optimizeFileList = function (fileList, settings) {
     return Promise.all(fileList.filter(function (entry) {
         if (entry && entry.length > 0) {
             var ext = path.extname(entry)
-            if (['.htm', '.html', '.svg', '.js', '.css'].indexOf(ext) > -1) {
+            if (['.htm', '.html', '.svg', '.js', '.css', '.json'].indexOf(ext) > -1) {
                 return true
             } else {
                 return false
