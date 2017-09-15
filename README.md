@@ -8,6 +8,21 @@ UFP optimizer is for optimizing stuff
 * svg
 * ...
 
+It is based on a bunch of cross-platform node.js tools
+
+
+* [clean-css](https://www.npmjs.com/package/clean-css)
+* [html-minifier](https://www.npmjs.com/package/html-minifier)
+* [node-zopfli](https://www.npmjs.com/package/)
+* [brotli](https://www.npmjs.com/package/brotli)
+* [imagemin](https://www.npmjs.com/package/imagemin)
+* [imagemin-giflossy](https://www.npmjs.com/package/imagemin-giflossy)
+* [imagemin-jpeg-recompress](https://www.npmjs.com/package/imagemin-jpeg-recompress)
+* [imagemin-mozjpeg](https://www.npmjs.com/package/imagemin-mozjpeg)
+* [imagemin-pngcrush](https://www.npmjs.com/package/imagemin-pngcrush)
+* [imagemin-pngquant](https://www.npmjs.com/package/imagemin-pngquant)
+* [imagemin-svgo](https://www.npmjs.com/package/imagemin-svgo)
+* [imagemin-webp](https://www.npmjs.com/package/imagemin-webp)
 
 ## Prerequisites ##
 
@@ -37,14 +52,19 @@ Then you can either use it in your node.js code, as a cli terminal command or as
 
 ### node.js usage ###
 
-If you use ufp-optimizer via node you have 4 available commands
+If you use ufp-optimizer in your node.js code you have the following commands available
 
-* execute (settings)
-* copy (settings)
-* optimizeImages (settings)
-* optimizeHTML (settings)
-* optimizeCSS (settings)
-* zip (settings)
+
+| Function | Params | Description |
+| --------- | ----------- | --------- |                                  |
+| getDefaultSettings  | - | Returns the default settings object. You can change anything you like but keep in mind to use different input and outputDir |
+| execute  | settings object | The most important command. One function to do everything (copy/css/images/html/...). Just pass the settings and you are good to go |
+| copy | settings object | Creates the outputDir if necessary or deletes the content in it. It copies everything from inputDir then. You need to pass the settings object which contains inputDir and outputDir |
+| optimizeImages | settings object | Does lossless png, jpg and svg optimizations on all files in the outputDir. You can fine-tune the algorithms per settingsfile if necessary, e.g. allowing loss to get better results. |
+| optimizeHTML | settings object |  |
+| optimizeCSS | settings object |  |
+| zip | settings object |  |
+
 
 ```javascript
 var uo = require('ufp-optimizer')
@@ -105,6 +125,9 @@ The config file is a json file containing sever settings to control what will be
 
 ## TODOS ##
 
+* add development mode for faster execution (no brotli, no zoplfi just zlib + faster image compressions)
+* inputdir === outputDir should also work (just do not copy stuff)
+* add closure compiler if wanted (and optionally uglify-js)
 * Better docs
 * Better error handling (input dir does not exist, inputDir===outputDir, broken files, write permission errors)
 * Webpack Usage
