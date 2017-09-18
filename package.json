@@ -1,6 +1,6 @@
 {
   "name": "ufp-optimizer",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "description": "optimizing ufp frontend packages",
   "main": "src/UfpOptimizer.js",
   "scripts": {
