@@ -124,14 +124,11 @@ The config file is a json file containing sever settings to control what will be
 
 ## Todos ##
 
-* add development mode for faster execution (no brotli, no zoplfi just zlib + faster image compressions)
+* add development mode for faster execution (no brotli, no zopfli just zlib + faster image compressions)
 * re enable html minifier and gif compressor
-* write a test with totally broken files
-* inputdir === outputDir should also work (just do not copy stuff)
 * add closure compiler if wanted (and optionally uglify-js)
-* Better docs
-* Better error handling (input dir does not exist, inputDir===outputDir, broken files, write permission errors)
-* Webpack Usage
+* Better error handling (write permission errors)
+* Webpack Plugin
 * More config settings (enable/disable whole steps like html-minification, use brotli and zopfli on more extensions and so on)
 
 ## Known problems ##
