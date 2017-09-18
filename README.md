@@ -34,7 +34,7 @@ It is based on a bunch of cross-platform node.js tools
 ufp-optimizer works on a directory base and compresses everything inside
 
 * zopfli+brotli to text files (html, javascript, svg, css, ...)
-* image compressions (lossless) with imagemin
+* image compressions (lossy) with imagemin
 * webp conversion of images (jpg and png)
 * html minification with html-minifier
 * ready to use .htaccess for the above optimizations (so that a compatible browser loads image.jpeg.webp instead of image.jpeg)
@@ -60,7 +60,7 @@ If you use ufp-optimizer in your node.js code you have the following commands av
 | getDefaultSettings | none | Returns the default settings object. You can change anything you like but keep in mind to use different input and outputDir |
 | execute  | settings object | The most important command. One function to do everything (copy/css/images/html/...). Just pass the settings and you are good to go |
 | copy | settings object | Creates the outputDir if necessary or deletes the content in it. It copies everything from inputDir then. You need to pass the settings object which contains inputDir and outputDir |
-| optimizeImages | settings object | Does lossless png, jpg and svg optimizations on all files in the outputDir. You can fine-tune the algorithms per settingsfile if necessary, e.g. allowing loss to get better results. |
+| optimizeImages | settings object | Does lossy png, jpg and svg optimizations on all files in the outputDir. You can fine-tune the algorithms per settingsfile if necessary, e.g. allowing loss to get better results. |
 | optimizeHTML | settings object |  Minimizes html files. By default it does nothing dangerous to keep it compatible with all browsers |
 | optimizeCSS | settings object | Minimize css files. By default it does nothing dangerous to keep it compatible with all browsers |
 | zip | settings object | Does zopfli + brotli compression on all text files |
@@ -125,9 +125,7 @@ The config file is a json file containing sever settings to control what will be
 ## Todos ##
 
 * add development mode for faster execution (no brotli, no zopfli just zlib + faster image compressions)
-* re enable html minifier and gif compressor
 * add closure compiler if wanted (and optionally uglify-js)
-* Better error handling (write permission errors)
 * Webpack Plugin
 * More config settings (enable/disable whole steps like html-minification, use brotli and zopfli on more extensions and so on)
 

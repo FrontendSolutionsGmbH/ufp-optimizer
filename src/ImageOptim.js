@@ -32,23 +32,6 @@ ImageOptim.optimizeFile = function (fileName, settings) {
 
     var sizeBefore = helper.getFilesizeInBytes(fileName)
 
-    var funcWebp = function () {
-        return new Promise(function (resolve) {
-            // console.log('webp', fileName)
-            return imagemin([fileName], imageDir, {
-                plugins: [
-                    imageminWebp(settings.optionsWEBP)
-                ]
-            }).catch(function () {
-                // console.log('webp-error', fileName)
-                resolve()
-            }).then(function () {
-                // console.log('webp-success', fileName)
-                return resolve()
-            })
-        })
-    }
-
     var funcAll = function () {
         console.log('image', fileName)
         var ext = path.extname(fileName)
@@ -56,11 +39,12 @@ ImageOptim.optimizeFile = function (fileName, settings) {
         switch (ext) {
             case '.png':
                 plugins.push(imageminPngquant(settings.optionsPNG),
-                    imageminPngcrush(settings.optionsPNGCrush))
+                    imageminPngcrush(settings.optionsPNGCrush),
+                    imageminWebp(settings.optionsWEBP))
                 break
             case '.jpg':
             case '.jpeg':
-                plugins.push(imageminJpegRecompress(settings.optionsJPEGRECOMPRESS))
+                plugins.push(imageminJpegRecompress(settings.optionsJPEGRECOMPRESS), imageminWebp(settings.optionsWEBP))
                 break
             case '.svg':
                 plugins.push(imageminSvgo(settings.optionsSVG))
@@ -78,7 +62,7 @@ ImageOptim.optimizeFile = function (fileName, settings) {
         })
     }
 
-    return funcAll().then(funcWebp).then(function () {
+    return funcAll().then(function () {
         var sizeNEW = helper.getFilesizeInBytes(fileName)
         var sizeWEBP = helper.getFilesizeInBytes(fileName)
 

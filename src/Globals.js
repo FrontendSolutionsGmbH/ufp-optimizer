@@ -4,12 +4,12 @@ var Globals = {}
 
 Globals.inputDir = 'example/input'
 Globals.outputDir = 'dist'
-Globals.optionsPNG = {quality: '0'}
+Globals.optionsPNG = {quality: '80'}
 Globals.optionsMOZJPEG = {quality: '65-80'}
 Globals.optionsSVG = {plugins: [{removeViewBox: false}]}
 Globals.optionsGIF = {lossy: 80}
 Globals.optionsWEBP = {quality: 80}
-Globals.optionsJPEGRECOMPRESS = {quality: 'low'}
+Globals.optionsJPEGRECOMPRESS = {quality: 'medium'}
 Globals.optionsPNGCrush = {}
 Globals.htaccessFile = path.resolve(__dirname, './.htaccess')
 Globals.delete = []
