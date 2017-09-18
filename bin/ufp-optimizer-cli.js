@@ -19,9 +19,8 @@ settings.inputDir = inputDirName
 settings.outputDir = outputDirName
 
 app.execute(settings).then(function (result) {
-
     console.log('****** UFP OPTIMIZER finished ******')
-
+    return result
 }).catch(function (ex) {
     console.log('****** UFP OPTIMIZER finished with errors ******', ex)
 })

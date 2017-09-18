@@ -4,22 +4,22 @@ const optimHTML = require('./HtmlOptim')
 const optimizeCSS = require('./CssOptim')
 const optimZIP = require('./ZipOptim')
 const fs = require('fs-extra')
-const helper = require('./Helper')
 
 var UfpOptimizer = {}
 
 UfpOptimizer.execute = function (settings) {
-
-
     // app.optimizeCSS()
-    return UfpOptimizer.copy(settings).then(function (result) {
+
+    var afterCopy = function () {
         return Promise.all([
             UfpOptimizer.optimizeImages(settings),
             UfpOptimizer.optimizeHTML(settings)]).then(function () {
             var result = UfpOptimizer.zip(settings)
             return result
         })
-    })
+    }
+
+    return UfpOptimizer.copy(settings).then(afterCopy)
 }
 
 UfpOptimizer.getDefaultSettings = function () {
@@ -27,43 +27,37 @@ UfpOptimizer.getDefaultSettings = function () {
 }
 
 UfpOptimizer.copy = function (settings) {
-    return new Promise(function (fulfill, reject) {
+    return new Promise(function (resolve, reject) {
         console.log('* ufp-optimizer copy: started', settings.inputDir, '=>', settings.outputDir)
 
         if (!fs.existsSync(settings.inputDir)) {
             console.log('ERROR: input dir does not exist', settings.inputDir)
-            reject(settings.inputDir);
-            return;
-        }
-
-        if (settings.outputDir !== settings.inputDir) {
-            // prepare
-
-
-            fs.removeSync(settings.outputDir)
-            fs.mkdirSync(settings.outputDir)
-            fs.copySync(settings.inputDir, settings.outputDir)
-
-            console.log('* ufp-optimizer - copy: finished')
-
+            reject(settings.inputDir)
         } else {
-            console.log('* ufp-optimizer - copy: finished did nothing')
+            if (settings.outputDir !== settings.inputDir) {
+                // prepare
+
+                fs.removeSync(settings.outputDir)
+                fs.mkdirSync(settings.outputDir)
+                fs.copySync(settings.inputDir, settings.outputDir)
+
+                console.log('* ufp-optimizer - copy: finished')
+            } else {
+                console.log('* ufp-optimizer - copy: finished did nothing')
+            }
+
+            resolve()
         }
-
-        fulfill()
-    });
-
+    })
 }
 
 UfpOptimizer.optimizeImages = function (settings) {
-
     console.log('** ufp-optimizer  - image/html/css: started')
     var files = fs.walkSync(settings.outputDir)
     return optimImages.optimizeFileList(files, settings).then(function (result) {
         console.log('** ufp-optimizer  - image/html/css: finished')
         return result
     })
-
 }
 
 UfpOptimizer.optimizeHTML = function (settings) {
