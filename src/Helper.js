@@ -34,8 +34,8 @@ Helper.cleanEmptyFoldersRecursively = function (folder) {
 
 Helper.emptyPromise = function (val) {
     return new Promise(function (resolve) {
-        resolve(val);
-    });
+        resolve(val)
+    })
 }
 
 module.exports = Helper
