@@ -1,6 +1,6 @@
 {
   "name": "ufp-optimizer",
-  "version": "0.9.8",
+  "version": "0.9.9",
   "description": "optimizing ufp frontend packages",
   "main": "src/UfpOptimizer.js",
   "scripts": {
@@ -19,7 +19,7 @@
   "keywords": "compress brotli zopfli optimization",
   "author": "Frontend Solutions GmbH",
   "license": "MIT",
-  "repository": "https://bitbucket.org/frontendsolutions/ufp-optimizer.git",
+  "repository": "https://github.com/FrontendSolutionsGmbH/ufp-optimizer.git",
   "dependencies": {
     "brotli": "^1.3.2",
     "clean-css": "^3.4.28",

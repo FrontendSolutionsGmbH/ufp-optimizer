@@ -1,5 +1,8 @@
 # Changelog #
 
+## 0.9.10
+* moved to github
+
 ## 0.9.6
 * changelog added
 * better error handling
