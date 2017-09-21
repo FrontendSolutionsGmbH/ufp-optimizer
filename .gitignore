@@ -4,7 +4,6 @@ node_modules
 .idea
 npm-debug.log
 npm-debug.log.*
-package-lock.json
 dist-0/
 dist-1/
 dist-2/
