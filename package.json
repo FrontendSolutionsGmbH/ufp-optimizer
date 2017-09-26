@@ -35,7 +35,8 @@
     "imagemin-svgo": "^5.2.0",
     "imagemin-webp": "^4.0.0",
     "node-gyp": "^3.6.2",
-    "node-zopfli": "^2.0.2"
+    "node-zopfli": "^2.0.2",
+    "yargs": "^9.0.1"
   },
   "devDependencies": {
     "eslint": "^4.6.1",
