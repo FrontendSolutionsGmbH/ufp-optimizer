@@ -25,8 +25,6 @@ Globals.customImageOptions = [
     }
 ]
 
-require('events').EventEmitter.defaultMaxListeners = Infinity
-
 module.exports = Globals
 
 /*
