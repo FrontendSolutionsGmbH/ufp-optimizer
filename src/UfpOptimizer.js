@@ -4,10 +4,16 @@ const optimHTML = require('./HtmlOptim')
 const optimizeCSS = require('./CssOptim')
 const optimZIP = require('./ZipOptim')
 const fs = require('fs-extra')
+const defaultsDeep = require('lodash.defaultsdeep')
+const cloneDeep = require('lodash.clonedeep')
 
 var UfpOptimizer = {}
 
-UfpOptimizer.execute = function (settings) {
+
+require('events').EventEmitter.defaultMaxListeners = Infinity
+
+
+UfpOptimizer.executeOptimizations = function (settings) {
     // app.optimizeCSS()
 
     var afterCopy = function () {
@@ -22,9 +28,18 @@ UfpOptimizer.execute = function (settings) {
     return UfpOptimizer.copy(settings).then(afterCopy)
 }
 
-UfpOptimizer.getDefaultSettings = function () {
-    return require('./Globals')
+UfpOptimizer.getConfig = function (preset, customConfigSettings) {
+    return defaultsDeep(cloneDeep(customConfigSettings) || {}, require('./Globals').getConfig(preset || (customConfigSettings && customConfigSettings.preset)))
 }
+
+UfpOptimizer.getConfigHelp = function (preset) {
+    return require('./Globals').getConfigHelp(preset)
+}
+
+UfpOptimizer.validateConfig = function (config, autofix) {
+    return require('./Globals').validateConfig(config)
+}
+
 
 UfpOptimizer.copy = function (settings) {
     return new Promise(function (resolve, reject) {
