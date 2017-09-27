@@ -13,7 +13,7 @@ var ImageOptim = {}
 
 ImageOptim.optimizeFile = function (fileName, settings) {
     var imageOptimSettings = settings.optimizer.imageOptim
-    var imageminOptions = imageOptimSettings.simagemin.options
+    var imageminOptions = imageOptimSettings.imagemin.options
 
     if (imageOptimSettings.enabled && imageminOptions.enabled) {
         var imageDir = path.dirname(fileName)

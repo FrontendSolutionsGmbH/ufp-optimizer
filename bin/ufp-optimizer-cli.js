@@ -43,10 +43,9 @@ var argv = yargs.epilog('UFP Optimizer - Frontend Solutions 2017')
         return check
     })
     .command(['optimize [inputDir] [outputDir]'], 'Optimizes all assets in the [inputDir] and writes them to [outputDir]', function () {
-            console.log('optimize command 1')
+
         },
         function (argv) {
-            console.log('optimize command 2', argv)
 
             app.executeOptimizations(getConfigByArgv(argv)).then(function (result) {
                 console.log('****** UFP OPTIMIZER finished ******')
