@@ -16,7 +16,8 @@ ImageOptim.optimizeFile = function (fileName, settings) {
     var imageOptimSettings = settings.optimizer.imageOptim
     var imageminOptions = imageOptimSettings.imagemin.options
 
-    if (imageOptimSettings.enabled && imageminOptions.enabled) {
+
+    if (imageOptimSettings.enabled && imageOptimSettings.imagemin.enabled) {
         var imageDir = path.dirname(fileName)
         var customOptionsMin = {}
         if (imageOptimSettings.customImageOptions) {
@@ -87,7 +88,8 @@ ImageOptim.optimizeFile = function (fileName, settings) {
             }
         }
 
-        return funcAll().then(function () {
+        return funcAll().then(function (result) {
+            console.log('imagemin', result)
             var sizeNEW = helper.getFilesizeInBytes(fileName)
             var sizeWEBP = helper.getFilesizeInBytes(fileName)
 

@@ -45,7 +45,7 @@ var globalsProduction = {
 
             customImageOptions: [
                 {
-                    key: 'ui/navopen.png',
+                    key: 'img/navopen.png',
                     imageOptim: {
                         imagemin: {
                             options: {
