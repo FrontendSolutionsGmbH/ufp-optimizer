@@ -44,45 +44,45 @@ UfpOptimizer.validateConfig = function (config, autofix) {
 }
 
 UfpOptimizer.copy = function (settings) {
-    console.log('** ufp-optimizer  - copy started')
+    console.log('** copy started')
     // optimize
     return optimCopy.optimize(settings).then(function (result) {
-        console.log('** ufp-optimizer  - copy: finished')
+        console.log('** copy: finished')
         return result
     })
 }
 
 UfpOptimizer.optimizeImages = function (settings) {
-    console.log('** ufp-optimizer  - image/html/css: started')
+    console.log('** image/html/css: started')
     var files = fs.walkSync(settings.outputDir)
     return optimImages.optimizeFileList(files, settings).then(function (result) {
-        console.log('** ufp-optimizer  - image/html/css: finished')
+        console.log('** image/html/css: finished')
         return result
     })
 }
 
 UfpOptimizer.optimizeHTML = function (settings) {
-    console.log('** ufp-optimizer  - image/html/css: started')
+    console.log('** image/html/css: started')
     // optimize
     var files = fs.walkSync(settings.outputDir)
     return optimHTML.optimizeFileList(files, settings).then(function (result) {
-        console.log('** ufp-optimizer  - image/html/css: finished')
+        console.log('** image/html/css: finished')
         return result
     })
 }
 
 UfpOptimizer.optimizeHtAccess = function (settings) {
-    console.log('** ufp-optimizer  - image/html/css: started')
+    console.log('** image/html/css: started')
     // optimize
     var files = fs.walkSync(settings.outputDir)
     return optimHtAccess.optimizeFileList(files, settings).then(function (result) {
-        console.log('** ufp-optimizer  - htaccess: finished')
+        console.log('** htaccess: finished')
         return result
     })
 }
 
 UfpOptimizer.optimizeCSS = function (settings) {
-    console.log('** ufp-optimizer  - image/html/css: started')
+    console.log('** image/html/css: started')
     // optimize
     var files = fs.walkSync(settings.outputDir)
     return optimizeCSS.optimizeFileList(files.filter(function (entry) {
@@ -92,16 +92,16 @@ UfpOptimizer.optimizeCSS = function (settings) {
             return ['.htm', '.html'].indexOf(path.extname(entry)) > -1
         })
     }, settings).then(function (result) {
-        console.log('** ufp-optimizer  - image/html/css: finished')
+        console.log('** image/html/css: finished')
         return result
     })
 }
 
 UfpOptimizer.zip = function (settings) {
-    console.log('*** ufp-optimizer  - zip: started')
+    console.log('*** zip: started')
     var files = fs.walkSync(settings.outputDir)
     return optimZIP.optimizeFileList(files, settings).then(function (result) {
-        console.log('*** ufp-optimizer  - zip: finished')
+        console.log('*** zip: finished')
         return result
     })
 }

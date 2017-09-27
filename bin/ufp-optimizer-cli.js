@@ -53,6 +53,8 @@ var argv = yargs.epilog('UFP Optimizer - Frontend Solutions 2017')
         },
         function (argv) {
 
+            console.log('****** UFP OPTIMIZER started ******')
+
             app.executeOptimizations(getConfigByArgv(argv)).then(function (result) {
                 console.log('****** UFP OPTIMIZER finished ******')
                 return result
@@ -71,14 +73,17 @@ var argv = yargs.epilog('UFP Optimizer - Frontend Solutions 2017')
         alias: 'c',
         demandOption: false,
         describe: 'config file to use'
+    }).option('conf', {
+        describe: 'inline config settings, e.g. --conf.optimizer.htmlOptim.enabled=false'
     })
+
 
 for (var i in configHelp.entries) {
     var entry = cloneDeep(configHelp.entries[i])
     var key = entry.key
 
     if (entry.show) {
-        argv = argv.option(key, Object.assign({}, entry)).group(key, 'conf')
+        argv = argv.option(key, Object.assign({}, entry)).group(key, entry.group || 'conf')
     }
 }
 

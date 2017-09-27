@@ -166,7 +166,8 @@ var getConfigHelp = function (preset) {
                 demandOption: config.debug,
                 choices: ['development', 'production', 'extreme'],
                 describe: 'Defines how strong it optimizes. development is fast. production takes longer, hardcore takes veeery long. Also changes the cache duration for development purposes',
-                type: 'string'
+                type: 'string',
+                group: 'Options:'
             },
             {
                 show: true,
@@ -175,7 +176,8 @@ var getConfigHelp = function (preset) {
                 default: false,
                 demandOption: false,
                 describe: 'if set to true you get some nice console output',
-                type: 'bool'
+                type: 'bool',
+                group: 'Options:'
             }
         ]
     }

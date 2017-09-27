@@ -3,7 +3,7 @@ var CopyOptim = {}
 
 CopyOptim.optimize = function (settings) {
     return new Promise(function (resolve, reject) {
-        console.log('* ufp-optimizer copy: started', settings.inputDir, '=>', settings.outputDir)
+        console.log('* copy: started', settings.inputDir, '=>', settings.outputDir)
 
         if (!fs.existsSync(settings.inputDir)) {
             console.log('ERROR: input dir does not exist', settings.inputDir)
@@ -16,9 +16,9 @@ CopyOptim.optimize = function (settings) {
                 fs.mkdirSync(settings.outputDir)
                 fs.copySync(settings.inputDir, settings.outputDir)
 
-                console.log('* ufp-optimizer - copy: finished')
+                console.log('* copy: finished')
             } else {
-                console.log('* ufp-optimizer - copy: finished did nothing')
+                console.log('* copy: finished did nothing')
             }
 
             resolve()
