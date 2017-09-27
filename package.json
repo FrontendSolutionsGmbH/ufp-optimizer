@@ -38,6 +38,7 @@
     "lodash.defaultsdeep": "^4.6.0",
     "node-gyp": "^3.6.2",
     "node-zopfli": "^2.0.2",
+    "winston": "^2.3.1",
     "yargs": "^9.0.1",
     "zlib": "^1.0.5"
   },

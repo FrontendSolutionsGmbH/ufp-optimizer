@@ -8,12 +8,17 @@ const cloneDeep = require('lodash.clonedeep')
 const yargs = require('yargs')
 
 var getConfigByArgv = function (argv) {
-    var config = app.getConfig(argv.preset || (argv.config && argv.config.preset), argv.conf)
+
+    var config = app.getConfig(argv.preset || (argv.config && argv.config.preset))
+
 
     if (argv.config) {
-        var givenConfig = JSON.parse(fs.readFileSync(argv.config, 'utf-8'))
-        console.log('ÄAAA', argv)
-        config = defaultsDeep(cloneDeep(givenConfig), config)
+        var configFromFile = JSON.parse(fs.readFileSync(argv.config, 'utf-8'))
+        config = defaultsDeep(cloneDeep(configFromFile), config)
+    }
+
+    if (argv.conf) {
+        config = defaultsDeep(argv.conf, config)
     }
 
     if (argv.inputDir) {
@@ -23,6 +28,7 @@ var getConfigByArgv = function (argv) {
     if (argv.outputDir) {
         config.outputDir = argv.outputDir
     }
+
 
     return app.validateConfig(config, true)
 }
@@ -57,14 +63,14 @@ var argv = yargs.epilog('UFP Optimizer - Frontend Solutions 2017')
     )
     .command('config', 'Displays the config on console', function () {
     }, function (argv) {
+
         console.log(JSON.stringify(getConfigByArgv(argv), null, 2))
+
     })
     .option('config', {
         alias: 'c',
         demandOption: false,
         describe: 'config file to use'
-    }).option('conf', {
-        describe: 'inline nested config settings, e.g. --conf.imageCompression.enabled=false'
     })
 
 for (var i in configHelp.entries) {

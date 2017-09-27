@@ -1,1 +1,129 @@
-{ "preset": "extreme2"}
+{
+  "debug": false,
+  "preset": "production",
+  "inputDir": "dist2",
+  "outputDir": "distOptimized",
+  "optimizer": {
+    "imageOptim": {
+      "enabled": true,
+      "imagemin": {
+        "enabled": true,
+        "options": {
+          "pngQuant": {
+            "enabled": true,
+            "options": {
+              "quality": "80"
+            }
+          },
+          "pngCrush": {
+            "enabled": true,
+            "options": {}
+          },
+          "webp": {
+            "enabled": true,
+            "options": {
+              "quality": 80
+            }
+          },
+          "jpegRecompress": {
+            "enabled": true,
+            "options": {
+              "quality": "medium"
+            }
+          },
+          "jpegMoz": {
+            "enabled": false,
+            "options": {
+              "quality": "65-80"
+            }
+          },
+          "svgo": {
+            "enabled": true,
+            "options": {
+              "plugins": [
+                {
+                  "removeViewBox": false
+                }
+              ]
+            }
+          },
+          "giflossy": {
+            "enabeld": true,
+            "options": {
+              "lossy": 80
+            }
+          }
+        }
+      },
+      "customImageOptions": [
+        {
+          "key": "ui/navopen.png",
+          "imageOptim": {
+            "imagemin": {
+              "options": {
+                "pngQuant": {
+                  "enabled": true,
+                  "options": {
+                    "quality": "80"
+                  }
+                },
+                "pngCrush": {
+                  "enabled": true,
+                  "options": {
+                    "reduce": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "cssOptim": {
+      "enabled": true,
+      "options": {
+        "uncss": {
+          "enabled": true,
+          "options": {
+            "ignore": [
+              ".class1"
+            ],
+            "ignoreSheets": [
+              {}
+            ]
+          }
+        }
+      }
+    },
+    "htaccessOptim": {
+      "enabled": true,
+      "options": {
+        "inputFile": "D:\\Alex\\projects\\ufp-optimizer\\src\\.htaccess",
+        "outputFile": "/.htaccess"
+      }
+    },
+    "zipOptim": {
+      "enabled": true,
+      "brotli": {
+        "enabled": true
+      },
+      "zopfli": {
+        "enabled": true,
+        "options": {}
+      },
+      "zlib": {
+        "enabled": false,
+        "options": {}
+      }
+    },
+    "htmlOptim": {
+      "enabled": true,
+      "options": {
+        "minify": {
+          "enabled": true,
+          "options": {}
+        }
+      }
+    }
+  }
+}

@@ -106,7 +106,9 @@ var globalsProduction = {
     }
 }
 
+
 var globalsDevelopment = defaultsDeep({
+    preset: 'development',
     optimizer: {
         imageOptim: {
             enabled: false
@@ -122,7 +124,9 @@ var globalsDevelopment = defaultsDeep({
     }
 }, globalsProduction)
 
-var globalsExtreme = defaultsDeep({}, globalsProduction)
+var globalsExtreme = defaultsDeep({
+    preset: 'extreme'
+}, globalsProduction)
 
 var getConfig = function (preset) {
     var result = globalsProduction
@@ -158,6 +162,7 @@ var getConfigHelp = function (preset) {
                 show: true,
                 key: 'preset',
                 alias: 'p',
+                default: process.env.NODE_ENV,
                 demandOption: config.debug,
                 choices: ['development', 'production', 'extreme'],
                 describe: 'Defines how strong it optimizes. development is fast. production takes longer, hardcore takes veeery long. Also changes the cache duration for development purposes',
@@ -180,7 +185,7 @@ var getConfigHelp = function (preset) {
 
 var validateConfig = function (config, autofix) {
     if (autofix) {
-        console.log('autofix')
+
     }
     return config
 }
