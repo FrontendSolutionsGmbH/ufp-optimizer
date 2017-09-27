@@ -12,10 +12,8 @@ const defaultsDeep = require('lodash.defaultsdeep')
 var ImageOptim = {}
 
 ImageOptim.optimizeFile = function (fileName, settings) {
-
     var imageOptimSettings = settings.optimizer.imageOptim
     var imageminOptions = imageOptimSettings.simagemin.options
-
 
     if (imageOptimSettings.enabled && imageminOptions.enabled) {
         var imageDir = path.dirname(fileName)
@@ -27,7 +25,6 @@ ImageOptim.optimizeFile = function (fileName, settings) {
                 }
             })
         }
-
 
         settings = settings || {}
         settings.pngQuant = defaultsDeep(customOptionsMin.pngQuant || {}, imageminOptions.pngQuant)
@@ -85,23 +82,20 @@ ImageOptim.optimizeFile = function (fileName, settings) {
                     // resolve()
                 })
             } else {
-                return helper.emptyPromise();
+                return helper.emptyPromise()
             }
-
         }
 
         return funcAll().then(function () {
             var sizeNEW = helper.getFilesizeInBytes(fileName)
             var sizeWEBP = helper.getFilesizeInBytes(fileName)
 
-            console.log('image', (Object.keys(customOptions).length > 0 ? 'custom' : ''), fileName, 'reduction: ', Math.round((sizeBefore - sizeNEW) / 1024) + 'kb', Math.round((1 - sizeNEW / sizeBefore) * 100) + '%', (Object.keys(customOptions).length > 0 ? customOptions : ''))
+            console.log('image', (Object.keys(customOptionsMin).length > 0 ? 'custom' : ''), fileName, 'reduction: ', Math.round((sizeBefore - sizeNEW) / 1024) + 'kb', Math.round((1 - sizeNEW / sizeBefore) * 100) + '%', (Object.keys(customOptionsMin).length > 0 ? customOptionsMin : ''))
             return {sizeBEFORE: sizeBefore, sizeNEW: sizeNEW, sizeWEBP: sizeWEBP}
         })
-
     } else {
-        return helper.emptyPromise();
+        return helper.emptyPromise()
     }
-
 }
 
 ImageOptim.optimizeFileList = function (fileList, settings) {

@@ -63,7 +63,6 @@ var globalsProduction = {
                 }
             ]
 
-
         },
         cssOptim: {
             enabled: true,
@@ -84,7 +83,7 @@ var globalsProduction = {
         zipOptim: {
             enabled: true,
             brotli: {
-                enabled: true,
+                enabled: true
             },
             zopfli: {
                 enabled: true,
@@ -121,26 +120,25 @@ var globalsDevelopment = defaultsDeep({
             }
         }
     }
-}, globalsProduction);
+}, globalsProduction)
 
-var globalsExtreme = defaultsDeep({}, globalsProduction);
-
+var globalsExtreme = defaultsDeep({}, globalsProduction)
 
 var getConfig = function (preset) {
-    var result = globalsProduction;
+    var result = globalsProduction
     switch (preset) {
         case 'development':
-            result = globalsDevelopment;
-            break;
+            result = globalsDevelopment
+            break
         case 'extreme':
-            result = globalsExtreme;
-            break;
+            result = globalsExtreme
+            break
     }
-    return result;
+    return result
 }
 
 var getConfigHelp = function (preset) {
-    var config = getConfig(preset);
+    var config = getConfig(preset)
     var help = {
         entries: [
             {
@@ -177,18 +175,17 @@ var getConfigHelp = function (preset) {
         ]
     }
 
-    return help;
+    return help
 }
 
 var validateConfig = function (config, autofix) {
     if (autofix) {
         console.log('autofix')
     }
-    return config;
+    return config
 }
 
 module.exports = {getConfig: getConfig, getConfigHelp: getConfigHelp, validateConfig: validateConfig}
-
 
 /*
 

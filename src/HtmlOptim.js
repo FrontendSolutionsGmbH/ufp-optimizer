@@ -25,7 +25,7 @@ HtmlOptim.optimizeFile = function (fileName, settings) {
             resolve(settings)
         }
     }).catch(function(e) {
-        console.log(e); // "oh, no!"
+        console.log(e) // "oh, no!"
     })
 }
 

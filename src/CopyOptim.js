@@ -1,8 +1,7 @@
-
 const fs = require('fs-extra')
 var CopyOptim = {}
 
-CopyOptim.optimizeFileList = function (fileList, settings) {
+CopyOptim.optimize = function (settings) {
     return new Promise(function (resolve, reject) {
         console.log('* ufp-optimizer copy: started', settings.inputDir, '=>', settings.outputDir)
 
@@ -24,10 +23,7 @@ CopyOptim.optimizeFileList = function (fileList, settings) {
 
             resolve()
         }
-    }).catch(function (e) {
-        console.log(e); // "oh, no!"
     })
-
 }
 
 module.exports = CopyOptim

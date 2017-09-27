@@ -40,15 +40,13 @@ UfpOptimizer.getConfigHelp = function (preset) {
 }
 
 UfpOptimizer.validateConfig = function (config, autofix) {
-    return require('./Globals').validateConfig(config)
+    return require('./Globals').validateConfig(config, autofix)
 }
-
 
 UfpOptimizer.copy = function (settings) {
     console.log('** ufp-optimizer  - copy started')
     // optimize
-    var files = fs.walkSync(settings.outputDir)
-    return optimCopy.optimizeFileList(files, settings).then(function (result) {
+    return optimCopy.optimize(settings).then(function (result) {
         console.log('** ufp-optimizer  - copy: finished')
         return result
     })
@@ -73,7 +71,6 @@ UfpOptimizer.optimizeHTML = function (settings) {
     })
 }
 
-
 UfpOptimizer.optimizeHtAccess = function (settings) {
     console.log('** ufp-optimizer  - image/html/css: started')
     // optimize
@@ -83,7 +80,6 @@ UfpOptimizer.optimizeHtAccess = function (settings) {
         return result
     })
 }
-
 
 UfpOptimizer.optimizeCSS = function (settings) {
     console.log('** ufp-optimizer  - image/html/css: started')
