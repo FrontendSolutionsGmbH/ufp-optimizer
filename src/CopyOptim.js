@@ -1,12 +1,13 @@
 const fs = require('fs-extra')
+const Logger = require('./Logger')
 var CopyOptim = {}
 
 CopyOptim.optimize = function (settings) {
     return new Promise(function (resolve, reject) {
-        console.log('* copy: started', settings.inputDir, '=>', settings.outputDir)
+        Logger.debug('copy', settings.inputDir, '=>', settings.outputDir)
 
         if (!fs.existsSync(settings.inputDir)) {
-            console.log('ERROR: input dir does not exist', settings.inputDir)
+            Logger.debug('ERROR: input dir does not exist', settings.inputDir)
             reject(settings.inputDir)
         } else {
             if (settings.outputDir !== settings.inputDir) {
@@ -16,14 +17,18 @@ CopyOptim.optimize = function (settings) {
                 fs.mkdirSync(settings.outputDir)
                 fs.copySync(settings.inputDir, settings.outputDir)
 
-                console.log('* copy: finished')
+                Logger.debug('copy: finished')
             } else {
-                console.log('* copy: finished did nothing')
+                Logger.debug('copy: finished did nothing')
             }
 
             resolve()
         }
     })
+}
+
+CopyOptim.getName = function () {
+    return 'copy'
 }
 
 module.exports = CopyOptim

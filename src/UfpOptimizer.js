@@ -7,9 +7,22 @@ const optimCopy = require('./CopyOptim')
 const optimHtAccess = require('./HtAccessOptim')
 const fs = require('fs-extra')
 const defaultsDeep = require('lodash.defaultsdeep')
+const Logger = require('./Logger')
+
+
 const cloneDeep = require('lodash.clonedeep')
 
 var UfpOptimizer = {}
+
+
+var logOptimizerStart = function (optimizer) {
+    Logger.info('** ' + optimizer.getName() + ' started' + ' **')
+}
+
+var logOptimizerEnd = function (optimizer) {
+    Logger.info('** ' + optimizer.getName() + ' finished' + ' **')
+}
+
 
 require('events').EventEmitter.defaultMaxListeners = Infinity
 
@@ -35,6 +48,10 @@ UfpOptimizer.getConfig = function (preset, customConfigSettings) {
     return defaultsDeep(cloneDeep(customConfigSettings) || {}, require('./Globals').getConfig(preset || (customConfigSettings && customConfigSettings.preset)))
 }
 
+UfpOptimizer.setLogLevelByConfig = function (config) {
+    Logger.setLevel(config.debug && (config.debug === 'true' || config.debug === true) ? 'debug' : 'info')
+}
+
 UfpOptimizer.getConfigHelp = function (preset) {
     return require('./Globals').getConfigHelp(preset)
 }
@@ -44,45 +61,53 @@ UfpOptimizer.validateConfig = function (config, autofix) {
 }
 
 UfpOptimizer.copy = function (settings) {
-    console.log('** copy started')
-    // optimize
+    logOptimizerStart(optimCopy);
+
     return optimCopy.optimize(settings).then(function (result) {
-        console.log('** copy: finished')
+        logOptimizerEnd(optimCopy);
         return result
     })
 }
 
 UfpOptimizer.optimizeImages = function (settings) {
-    console.log('** image/html/css: started')
+
+    logOptimizerStart(optimImages);
+
     var files = fs.walkSync(settings.outputDir)
     return optimImages.optimizeFileList(files, settings).then(function (result) {
-        console.log('** image/html/css: finished')
+        logOptimizerEnd(optimImages);
         return result
     })
 }
 
 UfpOptimizer.optimizeHTML = function (settings) {
-    console.log('** image/html/css: started')
+    logOptimizerStart(optimHTML);
+
+
     // optimize
     var files = fs.walkSync(settings.outputDir)
     return optimHTML.optimizeFileList(files, settings).then(function (result) {
-        console.log('** image/html/css: finished')
+        logOptimizerEnd(optimHTML);
         return result
     })
 }
 
 UfpOptimizer.optimizeHtAccess = function (settings) {
-    console.log('** image/html/css: started')
+    logOptimizerStart(optimHtAccess);
+
+
     // optimize
     var files = fs.walkSync(settings.outputDir)
     return optimHtAccess.optimizeFileList(files, settings).then(function (result) {
-        console.log('** htaccess: finished')
+        logOptimizerEnd(optimHtAccess);
         return result
     })
 }
 
 UfpOptimizer.optimizeCSS = function (settings) {
-    console.log('** image/html/css: started')
+    logOptimizerStart(optimizeCSS);
+
+
     // optimize
     var files = fs.walkSync(settings.outputDir)
     return optimizeCSS.optimizeFileList(files.filter(function (entry) {
@@ -92,16 +117,18 @@ UfpOptimizer.optimizeCSS = function (settings) {
             return ['.htm', '.html'].indexOf(path.extname(entry)) > -1
         })
     }, settings).then(function (result) {
-        console.log('** image/html/css: finished')
+        logOptimizerEnd(optimizeCSS);
         return result
     })
 }
 
 UfpOptimizer.zip = function (settings) {
-    console.log('*** zip: started')
+    logOptimizerStart(optimZIP);
+
+
     var files = fs.walkSync(settings.outputDir)
     return optimZIP.optimizeFileList(files, settings).then(function (result) {
-        console.log('*** zip: finished')
+        logOptimizerEnd(optimZIP);
         return result
     })
 }

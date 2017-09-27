@@ -7,6 +7,7 @@ const imageminWebp = require('imagemin-webp')
 const imageminGiflossy = require('imagemin-giflossy')
 const imageminJpegRecompress = require('imagemin-jpeg-recompress')
 const imageminPngcrush = require('imagemin-pngcrush')
+const Logger = require('./Logger')
 const defaultsDeep = require('lodash.defaultsdeep')
 
 var ImageOptim = {}
@@ -38,7 +39,7 @@ ImageOptim.optimizeFile = function (fileName, settings) {
         var sizeBefore = helper.getFilesizeInBytes(fileName)
 
         var funcAll = function () {
-            console.log('image', fileName)
+            Logger.debug('image', fileName)
             var ext = path.extname(fileName)
             var plugins = []
             switch (ext) {
@@ -78,7 +79,7 @@ ImageOptim.optimizeFile = function (fileName, settings) {
                 return imagemin([fileName], imageDir, {
                     plugins: plugins
                 }).catch(function (error) {
-                    console.log('error', fileName, error)
+                    Logger.error('error', fileName, error)
                     // resolve()
                 })
             } else {
@@ -90,7 +91,7 @@ ImageOptim.optimizeFile = function (fileName, settings) {
             var sizeNEW = helper.getFilesizeInBytes(fileName)
             var sizeWEBP = helper.getFilesizeInBytes(fileName)
 
-            console.log('image', (Object.keys(customOptionsMin).length > 0 ? 'custom' : ''), fileName, 'reduction: ', Math.round((sizeBefore - sizeNEW) / 1024) + 'kb', Math.round((1 - sizeNEW / sizeBefore) * 100) + '%', (Object.keys(customOptionsMin).length > 0 ? customOptionsMin : ''))
+            Logger.debug('image', (Object.keys(customOptionsMin).length > 0 ? 'custom' : ''), fileName, 'reduction: ', Math.round((sizeBefore - sizeNEW) / 1024) + 'kb', Math.round((1 - sizeNEW / sizeBefore) * 100) + '%', (Object.keys(customOptionsMin).length > 0 ? customOptionsMin : ''))
             return {sizeBEFORE: sizeBefore, sizeNEW: sizeNEW, sizeWEBP: sizeWEBP}
         })
     } else {
@@ -99,7 +100,7 @@ ImageOptim.optimizeFile = function (fileName, settings) {
 }
 
 ImageOptim.optimizeFileList = function (fileList, settings) {
-    console.log('images: started')
+    Logger.debug('images: started')
 
     var actions = fileList.filter(function (entry) {
         if (entry && entry.length > 0) {
@@ -115,10 +116,15 @@ ImageOptim.optimizeFileList = function (fileList, settings) {
     })
 
     return Promise.all(actions).then(function (result) {
-        console.log('all image files written')
-        console.log('images: finished')
+        Logger.debug('all image files written')
+        Logger.debug('images: finished')
         return result
     })
+}
+
+
+ImageOptim.getName = function () {
+    return 'image'
 }
 
 module.exports = ImageOptim

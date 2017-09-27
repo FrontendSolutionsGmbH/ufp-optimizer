@@ -2,6 +2,7 @@ const helper = require('./Helper')
 const path = require('path')
 const fs = require('fs')
 var brotli = require('brotli')
+const Logger = require('./Logger')
 var zopfli = require('node-zopfli')
 
 var ZipOptim = {}
@@ -16,7 +17,7 @@ ZipOptim.optimizeFile = function (fileName, settings) {
 
                 fs.writeFile(fileName + '.br', brotliBuffer, 'binary', function (err) {
                     if (err) {
-                        console.log('brotli error', err)
+                        Logger.error('brotli error', err)
                     }
                 })
             }
@@ -28,7 +29,7 @@ ZipOptim.optimizeFile = function (fileName, settings) {
                     .pipe(zopfli.createGzip(zipSettings.zopfli.options))
                     .pipe(fs.createWriteStream(fileName + '.gz')).on('finish', function () {
                     var sizeNEW = helper.getFilesizeInBytes(fileName + '.gz')
-                    console.log('zopfli ' + fileName, 'reduction: ', Math.round((sizeBefore - sizeNEW) / 1024) + 'kb', Math.round((sizeNEW / sizeBefore) * 100) + '%')
+                    Logger.debug('zopfli ' + fileName, 'reduction: ', Math.round((sizeBefore - sizeNEW) / 1024) + 'kb', Math.round((sizeNEW / sizeBefore) * 100) + '%')
                     resolve(sizeNEW)
                 })
             } else if (zipSettings.zlib.enabled) {
@@ -38,7 +39,7 @@ ZipOptim.optimizeFile = function (fileName, settings) {
                 const out = fs.createWriteStream(fileName + '.gz')
                 inp.pipe(gzip).pipe(out).on('finish', function () {
                     var sizeNEW = helper.getFilesizeInBytes(fileName + '.gz')
-                    console.log('gzip ' + fileName, 'reduction: ', Math.round((sizeBefore - sizeNEW) / 1024) + 'kb', Math.round((sizeNEW / sizeBefore) * 100) + '%')
+                    Logger.debug('gzip ' + fileName, 'reduction: ', Math.round((sizeBefore - sizeNEW) / 1024) + 'kb', Math.round((sizeNEW / sizeBefore) * 100) + '%')
 
                     resolve(sizeNEW)
                 })
@@ -49,12 +50,12 @@ ZipOptim.optimizeFile = function (fileName, settings) {
             resolve()
         }
     }).catch(function (e) {
-        console.log(e) // "oh, no!"
+        Logger.error(e) // "oh, no!"
     })
 }
 
 ZipOptim.optimizeFileList = function (fileList, settings) {
-    console.log('gzip: started')
+    Logger.debug('gzip: started')
     return Promise.all(fileList.filter(function (entry) {
         if (entry && entry.length > 0) {
             var ext = path.extname(entry)
@@ -67,10 +68,15 @@ ZipOptim.optimizeFileList = function (fileList, settings) {
     }).map(function (entry) {
         return ZipOptim.optimizeFile(entry, settings)
     })).then(function (result) {
-        console.log('all gzip files written')
-        console.log('gzip: finished')
+        Logger.debug('all gzip files written')
+        Logger.debug('gzip: finished')
         return result
     })
+}
+
+
+ZipOptim.getName = function () {
+    return 'zip'
 }
 
 module.exports = ZipOptim

@@ -1,39 +1,22 @@
-var winston = require('winston'),
-    fs = require('fs'),
-    logDir = 'log', // Or read from a configuration
-    env = process.env.NODE_ENV || 'development',
-    logger;
+var Logger = {}
+const winston = require('winston')
 
-winston.setLevels(winston.config.npm.levels);
-winston.addColors(winston.config.npm.colors);
+winston.cli();
 
-if (!fs.existsSync(logDir)) {
-    // Create the directory if it does not exist
-    fs.mkdirSync(logDir);
+Logger.info = function () {
+    winston.info.apply(this, arguments)
 }
-logger = new ( winston.Logger )({
-    transports: [
-        new winston.transports.Console({
-            level: 'warn', // Only write logs of warn level or higher
-            colorize: true
-        }),
-        new winston.transports.File({
-            level: env === 'development' ? 'debug' : 'info',
-            filename: logDir + '/logs.log',
-            maxsize: 1024 * 1024 * 10 // 10MB
-        })
-    ],
-    exceptionHandlers: [
-        new winston.transports.File({
-            filename: 'log/exceptions.log'
-        })
-    ]
-});
 
-module.exports = logger;
+Logger.debug = function () {
+    winston.debug.apply(this, arguments)
+}
 
+Logger.error = function () {
+    winston.error.apply(this, arguments)
+}
 
-// Use this singleton instance of logger like:
-// logger = require( 'Logger.js' );
-// logger.debug( 'your debug statement' );
-// logger.warn( 'your warning' );
+Logger.setLevel = function (level) {
+    winston.level = level;
+}
+
+module.exports = Logger

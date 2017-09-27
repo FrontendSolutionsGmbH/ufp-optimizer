@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs-extra')
+const Logger = require('./Logger')
 var minify = require('html-minifier').minify
 
 var HtmlOptim = {}
@@ -15,22 +16,22 @@ HtmlOptim.optimizeFile = function (fileName, settings) {
             try {
                 resultMinified = minify(result, htmlOptimSettings.options.minify.options)
             } catch (ex) {
-                console.log('html error catched', fileName)
+                Logger.error('html error catched', fileName)
             }
 
-            console.log('html minify ' + fileName, 'reduction: ', Math.round((result.length - resultMinified.length) / 1024) + 'kb', Math.round((1 - resultMinified.length / result.length) * 100) + '%')
+            Logger.debug('html minify ' + fileName, 'reduction: ', Math.round((result.length - resultMinified.length) / 1024) + 'kb', Math.round((1 - resultMinified.length / result.length) * 100) + '%')
             fs.outputFileSync(fileName, resultMinified)
             resolve(settings)
         } else {
             resolve(settings)
         }
-    }).catch(function(e) {
-        console.log(e) // "oh, no!"
+    }).catch(function (e) {
+        Logger.error(e) // "oh, no!"
     })
 }
 
 HtmlOptim.optimizeFileList = function (fileList, settings) {
-    console.log('html: started')
+    Logger.debug('html: started')
 
     var actions = fileList.filter(function (entry) {
         if (entry && entry.length > 0) {
@@ -58,10 +59,15 @@ HtmlOptim.optimizeFileList = function (fileList, settings) {
         })
         return result
     }).then(function (result) {
-        console.log('all html files optimized')
-        console.log('html: finished')
+        Logger.debug('all html files optimized')
+        Logger.debug('html: finished')
         return result
     })
+}
+
+
+HtmlOptim.getName = function () {
+    return 'html'
 }
 
 module.exports = HtmlOptim

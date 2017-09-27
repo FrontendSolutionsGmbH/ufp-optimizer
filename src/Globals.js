@@ -108,6 +108,7 @@ var globalsProduction = {
 
 
 var globalsDevelopment = defaultsDeep({
+    debug: false,
     preset: 'development',
     optimizer: {
         imageOptim: {
@@ -125,6 +126,7 @@ var globalsDevelopment = defaultsDeep({
 }, globalsProduction)
 
 var globalsExtreme = defaultsDeep({
+    debug: false,
     preset: 'extreme'
 }, globalsProduction)
 

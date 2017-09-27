@@ -30,7 +30,14 @@ var getConfigByArgv = function (argv) {
     }
 
 
-    return app.validateConfig(config, true)
+    if (argv.debug !== undefined) {
+        config.debug = argv.debug
+    }
+
+
+    var result = app.validateConfig(config, true)
+    app.setLogLevelByConfig(result)
+    return result;
 }
 
 var argv = yargs.epilog('UFP Optimizer - Frontend Solutions 2017')
