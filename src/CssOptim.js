@@ -3,30 +3,39 @@ const CleanCSS = require('clean-css')
 const fs = require('fs-extra')
 var CssOptim = {}
 
-CssOptim.optimizeFile = function (fileName, settings) {
+CssOptim.optimizeFile = function (fileName, settingsHtmlFiles, settings) {
     return new Promise(function (resolve) {
-        var uncss = require('uncss')
-        var source = fs.readFileSync(fileName, 'utf8')
+        var cssOptimSettings = settings.optimizer.cssOptim
 
-        uncss(settings.htmlFiles, settings.uncssOptions, function (error, sourcePurified) {
-            var result = new CleanCSS({sourceMap: true}).minify(sourcePurified)
+        if (cssOptimSettings.enabled && cssOptimSettings.options.uncss.enabled) {
 
-            console.log('css purify ' + fileName, 'reduction: ', Math.round((source.length - sourcePurified.length) / 1024) + 'kb', Math.round((1 - sourcePurified.length / source.length) * 100) + '%')
-            console.log('css minify ' + fileName, 'reduction: ', Math.round((sourcePurified.length - result.styles.length) / 1024) + 'kb', Math.round((1 - result.styles.length / sourcePurified.length) * 100) + '%')
-            console.log('css total ' + fileName, 'reduction: ', Math.round((source.length - result.styles.length) / 1024) + 'kb', Math.round((1 - result.styles.length / source.length) * 100) + '%')
+            var uncss = require('uncss')
+            var source = fs.readFileSync(fileName, 'utf8')
 
-            fs.outputFileSync(fileName, result.styles)
-            fs.outputFileSync(fileName + '.map', result.sourceMap)
+            uncss(settingsHtmlFiles.htmlFiles, cssOptimSettings.options.uncss.options, function (error, sourcePurified) {
+                var result = new CleanCSS({sourceMap: true}).minify(sourcePurified)
 
-            if (error) {
-                console.log('uncss-error', error)
-            }
+                console.log('css purify ' + fileName, 'reduction: ', Math.round((source.length - sourcePurified.length) / 1024) + 'kb', Math.round((1 - sourcePurified.length / source.length) * 100) + '%')
+                console.log('css minify ' + fileName, 'reduction: ', Math.round((sourcePurified.length - result.styles.length) / 1024) + 'kb', Math.round((1 - result.styles.length / sourcePurified.length) * 100) + '%')
+                console.log('css total ' + fileName, 'reduction: ', Math.round((source.length - result.styles.length) / 1024) + 'kb', Math.round((1 - result.styles.length / source.length) * 100) + '%')
+
+                fs.outputFileSync(fileName, result.styles)
+                fs.outputFileSync(fileName + '.map', result.sourceMap)
+
+                if (error) {
+                    console.log('uncss-error', error)
+                }
+                resolve()
+            })
+        } else {
             resolve()
-        })
+        }
+
+
     })
 }
 
-CssOptim.optimizeFileList = function (fileList, settings) {
+CssOptim.optimizeFileList = function (fileList, settingsHtmlFiles, settings) {
     var actions = fileList.filter(function (entry) {
         if (entry && entry.length > 0) {
             var ext = path.extname(entry)
@@ -37,7 +46,7 @@ CssOptim.optimizeFileList = function (fileList, settings) {
             }
         }
     }).map(function (entry) {
-        return CssOptim.optimizeFile(entry, settings)
+        return CssOptim.optimizeFile(entry, settingsHtmlFiles, settings)
     })
 
     return Promise.all(actions).then(function (result) {

@@ -3,29 +3,32 @@ const optimImages = require('./ImageOptim')
 const optimHTML = require('./HtmlOptim')
 const optimizeCSS = require('./CssOptim')
 const optimZIP = require('./ZipOptim')
+const optimCopy = require('./CopyOptim')
+const optimHtAccess = require('./HtAccessOptim')
 const fs = require('fs-extra')
 const defaultsDeep = require('lodash.defaultsdeep')
 const cloneDeep = require('lodash.clonedeep')
 
 var UfpOptimizer = {}
 
-
 require('events').EventEmitter.defaultMaxListeners = Infinity
-
 
 UfpOptimizer.executeOptimizations = function (settings) {
     // app.optimizeCSS()
-
-    var afterCopy = function () {
-        return Promise.all([
-            UfpOptimizer.optimizeImages(settings),
-            UfpOptimizer.optimizeHTML(settings)]).then(function () {
-            var result = UfpOptimizer.zip(settings)
-            return result
-        })
+    var doHtAccess = function () {
+        return UfpOptimizer.optimizeHtAccess(settings)
     }
 
-    return UfpOptimizer.copy(settings).then(afterCopy)
+    var doOptimizations = function () {
+        return Promise.all([
+            UfpOptimizer.optimizeImages(settings),
+            UfpOptimizer.optimizeHTML(settings)])
+    }
+
+    var doZip = function () {
+        return UfpOptimizer.zip(settings)
+    }
+    return UfpOptimizer.copy(settings).then(doOptimizations).then(doZip).then(doHtAccess)
 }
 
 UfpOptimizer.getConfig = function (preset, customConfigSettings) {
@@ -42,27 +45,12 @@ UfpOptimizer.validateConfig = function (config, autofix) {
 
 
 UfpOptimizer.copy = function (settings) {
-    return new Promise(function (resolve, reject) {
-        console.log('* ufp-optimizer copy: started', settings.inputDir, '=>', settings.outputDir)
-
-        if (!fs.existsSync(settings.inputDir)) {
-            console.log('ERROR: input dir does not exist', settings.inputDir)
-            reject(settings.inputDir)
-        } else {
-            if (settings.outputDir !== settings.inputDir) {
-                // prepare
-
-                fs.removeSync(settings.outputDir)
-                fs.mkdirSync(settings.outputDir)
-                fs.copySync(settings.inputDir, settings.outputDir)
-
-                console.log('* ufp-optimizer - copy: finished')
-            } else {
-                console.log('* ufp-optimizer - copy: finished did nothing')
-            }
-
-            resolve()
-        }
+    console.log('** ufp-optimizer  - copy started')
+    // optimize
+    var files = fs.walkSync(settings.outputDir)
+    return optimCopy.optimizeFileList(files, settings).then(function (result) {
+        console.log('** ufp-optimizer  - copy: finished')
+        return result
     })
 }
 
@@ -84,6 +72,18 @@ UfpOptimizer.optimizeHTML = function (settings) {
         return result
     })
 }
+
+
+UfpOptimizer.optimizeHtAccess = function (settings) {
+    console.log('** ufp-optimizer  - image/html/css: started')
+    // optimize
+    var files = fs.walkSync(settings.outputDir)
+    return optimHtAccess.optimizeFileList(files, settings).then(function (result) {
+        console.log('** ufp-optimizer  - htaccess: finished')
+        return result
+    })
+}
+
 
 UfpOptimizer.optimizeCSS = function (settings) {
     console.log('** ufp-optimizer  - image/html/css: started')

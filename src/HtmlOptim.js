@@ -5,25 +5,32 @@ var minify = require('html-minifier').minify
 var HtmlOptim = {}
 
 HtmlOptim.optimizeFile = function (fileName, settings) {
-    var result = fs.readFileSync(fileName, 'utf8')
-    var resultMinified = result
+    var htmlOptimSettings = settings.optimizer.htmlOptim
 
-    try {
-        resultMinified = minify(result, settings.htmlminifyOptions)
-    } catch (ex) {
-        console.log('html error catched', fileName)
-    }
+    return new Promise(function (resolve) {
+        if (htmlOptimSettings.enabled && htmlOptimSettings.options.minify.enabled) {
+            var result = fs.readFileSync(fileName, 'utf8')
+            var resultMinified = result
 
-    console.log('html minify ' + fileName, 'reduction: ', Math.round((result.length - resultMinified.length) / 1024) + 'kb', Math.round((1 - resultMinified.length / result.length) * 100) + '%')
-    fs.outputFileSync(fileName, resultMinified)
+            try {
+                resultMinified = minify(result, htmlOptimSettings.options.minify.options)
+            } catch (ex) {
+                console.log('html error catched', fileName)
+            }
 
-    return result
+            console.log('html minify ' + fileName, 'reduction: ', Math.round((result.length - resultMinified.length) / 1024) + 'kb', Math.round((1 - resultMinified.length / result.length) * 100) + '%')
+            fs.outputFileSync(fileName, resultMinified)
+            resolve(settings)
+        } else {
+            resolve(settings)
+        }
+    }).catch(function(e) {
+        console.log(e); // "oh, no!"
+    })
 }
 
 HtmlOptim.optimizeFileList = function (fileList, settings) {
     console.log('html: started')
-
-    fs.copySync(settings.htaccessFile, settings.outputDir + '/.htaccess')
 
     var actions = fileList.filter(function (entry) {
         if (entry && entry.length > 0) {

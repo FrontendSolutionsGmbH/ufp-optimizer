@@ -1,47 +1,129 @@
 const path = require('path')
+const defaultsDeep = require('lodash.defaultsdeep')
 
 var globalsProduction = {
     debug: false,
     preset: 'production',
     inputDir: 'dist',
     outputDir: 'distOptimized',
-    imageCompression: {
-        enabled: true
-    },
-    cssCompression: {
-        enabled: true
-    },
-    optionsPNG: {quality: '80'},
-    optionsMOZJPEG: {quality: '65-80'},
-    optionsSVG: {plugins: [{removeViewBox: false}]},
-    optionsGIF: {lossy: 80},
-    optionsWEBP: {quality: 80},
-    optionsJPEGRECOMPRESS: {quality: 'medium'},
-    optionsPNGCrush: {},
-    htaccessFile: path.resolve(__dirname, './.htaccess'),
-    delete: [],
-    uncssOptions: {ignore: ['.class1'], ignoreSheets: [/fast.fonts.net/]},
-    htmlminifyOptions: {},
-    customImageOptions: [
-        {
-            key: 'ui/navopen.png',
-            value: {
-                optionsPNG: {quality: '0'},
-                optionsPNGCrush: {reduce: true}
+    optimizer: {
+        imageOptim: {
+            enabled: true,
+            imagemin: {
+                enabled: true,
+                options: {
+                    pngQuant: {
+                        enabled: true,
+                        options: {quality: '80'}
+                    },
+                    pngCrush: {
+                        enabled: true,
+                        options: {}
+                    },
+                    webp: {
+                        enabled: true,
+                        options: {quality: 80}
+                    },
+                    jpegRecompress: {
+                        enabled: true,
+                        options: {quality: 'medium'}
+                    },
+                    jpegMoz: {
+                        enabled: false,
+                        options: {quality: '65-80'}
+                    },
+                    svgo: {
+                        enabled: true,
+                        options: {plugins: [{removeViewBox: false}]}
+                    },
+                    giflossy: {
+                        enabeld: true,
+                        options: {lossy: 80}
+                    }
+                }
+            },
+
+            customImageOptions: [
+                {
+                    key: 'ui/navopen.png',
+                    imageOptim: {
+                        imagemin: {
+                            options: {
+                                pngQuant: {
+                                    enabled: true,
+                                    options: {quality: '80'}
+                                },
+                                pngCrush: {
+                                    enabled: true,
+                                    options: {reduce: true}
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+
+
+        },
+        cssOptim: {
+            enabled: true,
+            options: {
+                uncss: {
+                    enabled: true,
+                    options: {ignore: ['.class1'], ignoreSheets: [/fast.fonts.net/]}
+                }
+            }
+        },
+        htaccessOptim: {
+            enabled: true,
+            options: {
+                inputFile: path.resolve(__dirname, './.htaccess'),
+                outputFile: '/.htaccess'
+            }
+        },
+        zipOptim: {
+            enabled: true,
+            brotli: {
+                enabled: true,
+            },
+            zopfli: {
+                enabled: true,
+                options: {}
+            },
+            zlib: {
+                enabled: false,
+                options: {}
+            }
+        },
+        htmlOptim: {
+            enabled: true,
+            options: {
+                minify: {
+                    enabled: true,
+                    options: {}
+                }
             }
         }
-    ]
+    }
 }
 
-var globalsDevelopment = Object.assign({}, globalsProduction, {
-    imageCompression: {
-        enabled: false
-    },
-    cssCompression: {
-        enabled: false
+var globalsDevelopment = defaultsDeep({
+    optimizer: {
+        imageOptim: {
+            enabled: false
+        },
+        zipOptim: {
+            zopfli: {
+                enabled: false
+            },
+            zlib: {
+                enabled: true
+            }
+        }
     }
-});
-var globalsExtreme = Object.assign({}, globalsProduction);
+}, globalsProduction);
+
+var globalsExtreme = defaultsDeep({}, globalsProduction);
 
 
 var getConfig = function (preset) {
