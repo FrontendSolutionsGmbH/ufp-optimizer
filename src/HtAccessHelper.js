@@ -37,7 +37,9 @@ HtAccessHelper.getHtAccess = function (settings) {
         'image/jpeg',
         'image/png',
         'image/x-icon',
-        'image/svg+xml'
+        'image/svg+xml',
+        'application/json',
+        'application/xml'
     ].map(function (type) {
         return getExpiresByType(type, expireCommon)
     }).join('\r\n');
@@ -62,6 +64,14 @@ HtAccessHelper.getHtAccess = function (settings) {
         {
             filter: '.svg',
             type: 'image/svg+xml'
+        },
+        {
+            filter: '.json',
+            type: 'application/json'
+        },
+        {
+            filter: '.xml',
+            type: 'application/xml'
         }
     ];
 
