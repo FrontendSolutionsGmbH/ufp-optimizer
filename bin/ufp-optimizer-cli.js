@@ -9,7 +9,7 @@ const yargs = require('yargs')
 
 var getConfigByArgv = function (argv) {
 
-    var config = app.getConfig(argv.preset || (argv.config && argv.config.preset))
+    var config = app.getConfig(argv.preset || (argv.conf && argv.conf.preset) || (argv.config && argv.config.preset))
 
 
     if (argv.config) {
@@ -40,6 +40,28 @@ var getConfigByArgv = function (argv) {
     return result;
 }
 
+var doOptimizations = function (settings) {
+    console.log('****** UFP OPTIMIZER started ******')
+
+    app.executeOptimizations(settings).then(function (result) {
+        console.log('****** UFP OPTIMIZER finished ******')
+        return result
+    }).catch(function (ex) {
+        console.log('****** UFP OPTIMIZER finished with errors ******', ex)
+    })
+}
+
+var enableOnlyThisOptimizer = function (settings, optimString) {
+    settings.optimizer.imageOptim.enabled = false
+    settings.optimizer.cssOptim.enabled = false
+    settings.optimizer.htaccessOptim.enabled = false
+    settings.optimizer.zipOptim.enabled = false
+    settings.optimizer.htmlOptim.enabled = false
+    settings.optimizer.copyOptim.enabled = false
+    settings.optimizer[optimString].enabled = true
+    return settings
+}
+
 var argv = yargs.epilog('UFP Optimizer - Frontend Solutions 2017')
     .usage('UFP Optimizer 2.0 - Optimizing static assets since 2017 (Javascript|CSS|PNG|JPG)')
     .example('ufp-optimizer-cli optimize dist')
@@ -50,24 +72,57 @@ var argv = yargs.epilog('UFP Optimizer - Frontend Solutions 2017')
     .example('ufp-optimizer-cli optimize --config=mySuperConfigContainingDirs.js')
     .example('ufp-optimizer-cli optimize --conf.debug=true --conf.imageCompression.enabled=false')
     .example('ufp-optimizer-cli optimize --preset=extreme --conf.debug=true --conf.imageCompression.enabled=false')
+    .example('ufp-optimizer-cli optimize-htaccess examples/1/fast dist-ht --preset=production')
     .example('ufp-optimizer-cli config > test.rc')
     .config('config', function (configPath) {
         var check = JSON.parse(fs.readFileSync(configPath, 'utf-8'))
         return check
     })
     .command(['optimize [inputDir] [outputDir]'], 'Optimizes all assets in the [inputDir] and writes them to [outputDir]', function () {
+        },
+        function (argv) {
+            var settings = getConfigByArgv(argv);
+            doOptimizations(settings);
+        }
+    )
+    .command(['optimize-copy [inputDir] [outputDir]'], 'Same as optimize but only for copy', function () {
 
         },
         function (argv) {
+            var settings = getConfigByArgv(argv);
+            doOptimizations(enableOnlyThisOptimizer(settings, 'copyOptim'));
+        }
+    )
+    .command(['optimize-htaccess [inputDir] [outputDir]'], 'Same as optimize but only for ht-access', function () {
 
-            console.log('****** UFP OPTIMIZER started ******')
+        },
+        function (argv) {
+            var settings = getConfigByArgv(argv);
+            doOptimizations(enableOnlyThisOptimizer(settings, 'htaccessOptim'));
+        }
+    )
+    .command(['optimize-images [inputDir] [outputDir]'], 'Same as optimize but only for images', function () {
 
-            app.executeOptimizations(getConfigByArgv(argv)).then(function (result) {
-                console.log('****** UFP OPTIMIZER finished ******')
-                return result
-            }).catch(function (ex) {
-                console.log('****** UFP OPTIMIZER finished with errors ******', ex)
-            })
+        },
+        function (argv) {
+            var settings = getConfigByArgv(argv);
+            doOptimizations(enableOnlyThisOptimizer(settings, 'imagesOptim'));
+        }
+    )
+    .command(['optimize-html [inputDir] [outputDir]'], 'Same as optimize but only for html', function () {
+
+        },
+        function (argv) {
+            var settings = getConfigByArgv(argv);
+            doOptimizations(enableOnlyThisOptimizer(settings, 'htmlOptim'));
+        }
+    )
+    .command(['optimize-zip [inputDir] [outputDir]'], 'Same as optimize but only for zip', function () {
+
+        },
+        function (argv) {
+            var settings = getConfigByArgv(argv);
+            doOptimizations(enableOnlyThisOptimizer(settings, 'zipOptim'));
         }
     )
     .command('config', 'Displays the config on console', function () {

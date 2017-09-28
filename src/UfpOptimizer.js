@@ -8,6 +8,7 @@ const optimHtAccess = require('./HtAccessOptim')
 const fs = require('fs-extra')
 const defaultsDeep = require('lodash.defaultsdeep')
 const Logger = require('./Logger')
+const Helper = require('./Helper')
 
 
 const cloneDeep = require('lodash.clonedeep')
@@ -27,7 +28,6 @@ var logOptimizerEnd = function (optimizer) {
 require('events').EventEmitter.defaultMaxListeners = Infinity
 
 UfpOptimizer.executeOptimizations = function (settings) {
-    // app.optimizeCSS()
     var doHtAccess = function () {
         return UfpOptimizer.optimizeHtAccess(settings)
     }
@@ -38,10 +38,14 @@ UfpOptimizer.executeOptimizations = function (settings) {
             UfpOptimizer.optimizeHTML(settings)])
     }
 
+    var doCssOptimization = function () {
+        return UfpOptimizer.optimizeCSS(settings)
+    }
+
     var doZip = function () {
         return UfpOptimizer.zip(settings)
     }
-    return UfpOptimizer.copy(settings).then(doOptimizations).then(doZip).then(doHtAccess)
+    return UfpOptimizer.copy(settings).then(doOptimizations).then(doCssOptimization).then(doZip).then(doHtAccess)
 }
 
 UfpOptimizer.getConfig = function (preset, customConfigSettings) {
@@ -61,6 +65,10 @@ UfpOptimizer.validateConfig = function (config, autofix) {
 }
 
 UfpOptimizer.copy = function (settings) {
+
+    if (settings.optimizer.copyOptim.enabled === false) {
+        return Helper.emptyPromise(settings)
+    }
     logOptimizerStart(optimCopy);
 
     return optimCopy.optimize(settings).then(function (result) {
@@ -70,7 +78,9 @@ UfpOptimizer.copy = function (settings) {
 }
 
 UfpOptimizer.optimizeImages = function (settings) {
-
+    if (settings.optimizer.imageOptim.enabled === false) {
+        return Helper.emptyPromise(settings)
+    }
     logOptimizerStart(optimImages);
 
     var files = fs.walkSync(settings.outputDir)
@@ -81,6 +91,11 @@ UfpOptimizer.optimizeImages = function (settings) {
 }
 
 UfpOptimizer.optimizeHTML = function (settings) {
+
+    if (settings.optimizer.htmlOptim.enabled === false) {
+        return Helper.emptyPromise(settings)
+    }
+
     logOptimizerStart(optimHTML);
 
 
@@ -93,8 +108,13 @@ UfpOptimizer.optimizeHTML = function (settings) {
 }
 
 UfpOptimizer.optimizeHtAccess = function (settings) {
-    logOptimizerStart(optimHtAccess);
 
+    if (settings.optimizer.htaccessOptim.enabled === false) {
+        return Helper.emptyPromise(settings)
+    }
+
+
+    logOptimizerStart(optimHtAccess);
 
     // optimize
     var files = fs.walkSync(settings.outputDir)
@@ -105,6 +125,13 @@ UfpOptimizer.optimizeHtAccess = function (settings) {
 }
 
 UfpOptimizer.optimizeCSS = function (settings) {
+
+
+    if (settings.optimizer.cssOptim.enabled === false) {
+        return Helper.emptyPromise(settings)
+    }
+
+
     logOptimizerStart(optimizeCSS);
 
 
@@ -123,6 +150,12 @@ UfpOptimizer.optimizeCSS = function (settings) {
 }
 
 UfpOptimizer.zip = function (settings) {
+
+    if (settings.optimizer.zipOptim.enabled === false) {
+        return Helper.emptyPromise(settings)
+    }
+
+
     logOptimizerStart(optimZIP);
 
 

@@ -76,7 +76,10 @@ var globalsProduction = {
         htaccessOptim: {
             enabled: true,
             options: {
-                inputFile: path.resolve(__dirname, './.htaccess'),
+                expire: 'access plus 1 year',
+                expireHTML: 'access plus 1 day',
+                maxageHTML: 86400,
+                maxage: 31536000,
                 outputFile: '/.htaccess'
             }
         },
@@ -102,6 +105,9 @@ var globalsProduction = {
                     options: {}
                 }
             }
+        },
+        copyOptim: {
+            enabled: true
         }
     }
 }
@@ -120,6 +126,13 @@ var globalsDevelopment = defaultsDeep({
             },
             zlib: {
                 enabled: true
+            }
+        }, htaccessOptim: {
+            options: {
+                expire: 'access plus 1 hour',
+                expireHTML: 'access plus 5 seconds',
+                maxageHTML: 5,
+                maxage: 60 * 60
             }
         }
     }
