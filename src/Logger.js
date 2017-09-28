@@ -1,7 +1,7 @@
 var Logger = {}
 const winston = require('winston')
 
-winston.cli();
+winston.cli()
 
 Logger.info = function () {
     winston.info.apply(this, arguments)
@@ -16,7 +16,7 @@ Logger.error = function () {
 }
 
 Logger.setLevel = function (level) {
-    winston.level = level;
+    winston.level = level
 }
 
 module.exports = Logger

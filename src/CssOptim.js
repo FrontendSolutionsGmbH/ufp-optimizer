@@ -8,7 +8,7 @@ CssOptim.optimizeFile = function (fileName, settingsHtmlFiles, settings) {
     return new Promise(function (resolve) {
         var cssOptimSettings = settings.optimizer.cssOptim
 
-        if (cssOptimSettings.enabled && cssOptimSettings.options.uncss.enabled) {
+        if (!cssOptimSettings.enabled && cssOptimSettings.enabled && cssOptimSettings.options.uncss.enabled) {
             var uncss = require('uncss')
             var source = fs.readFileSync(fileName, 'utf8')
 
@@ -52,7 +52,6 @@ CssOptim.optimizeFileList = function (fileList, settingsHtmlFiles, settings) {
         return result
     })
 }
-
 
 CssOptim.getName = function () {
     return 'css'

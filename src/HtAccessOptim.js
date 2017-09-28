@@ -9,18 +9,16 @@ HtAccessOptim.optimizeFileList = function (fileList, settings) {
         var htaccessOptimSettings = settings.optimizer.htaccessOptim
 
         if (htaccessOptimSettings.enabled) {
-
             var htAccessContent = HtAccessHelper.getHtAccess(settings)
-            var fs = require('fs');
+
             fs.writeFile(settings.outputDir + htaccessOptimSettings.options.outputFile, htAccessContent, function (err) {
                 if (err) {
-                    reject(err);
-                    return;
+                    reject(err)
+                    return
                 }
 
-                Logger.debug("The htaccess file was saved!");
-            });
-
+                Logger.debug('The htaccess file was saved!')
+            })
 
             //fs.copySync(htaccessOptimSettings.options.inputFile, settings.outputDir + htaccessOptimSettings.options.outputFile)
         }
@@ -31,7 +29,6 @@ HtAccessOptim.optimizeFileList = function (fileList, settings) {
         Logger.error(e) // "oh, no!"
     })
 }
-
 
 HtAccessOptim.getName = function () {
     return 'htaccess'

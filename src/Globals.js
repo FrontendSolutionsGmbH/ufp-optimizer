@@ -1,5 +1,5 @@
-const path = require('path')
 const defaultsDeep = require('lodash.defaultsdeep')
+const Logger = require('./Logger')
 
 var globalsProduction = {
     debug: false,
@@ -112,7 +112,6 @@ var globalsProduction = {
     }
 }
 
-
 var globalsDevelopment = defaultsDeep({
     debug: false,
     preset: 'development',
@@ -127,7 +126,8 @@ var globalsDevelopment = defaultsDeep({
             zlib: {
                 enabled: true
             }
-        }, htaccessOptim: {
+        },
+        htaccessOptim: {
             options: {
                 expire: 'access plus 1 hour',
                 expireHTML: 'access plus 5 seconds',
@@ -202,7 +202,7 @@ var getConfigHelp = function (preset) {
 
 var validateConfig = function (config, autofix) {
     if (autofix) {
-
+        Logger.debug(autofix)
     }
     return config
 }

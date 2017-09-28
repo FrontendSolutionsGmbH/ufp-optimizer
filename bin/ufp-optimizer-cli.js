@@ -8,9 +8,7 @@ const cloneDeep = require('lodash.clonedeep')
 const yargs = require('yargs')
 
 var getConfigByArgv = function (argv) {
-
     var config = app.getConfig(argv.preset || (argv.conf && argv.conf.preset) || (argv.config && argv.config.preset))
-
 
     if (argv.config) {
         var configFromFile = JSON.parse(fs.readFileSync(argv.config, 'utf-8'))
@@ -29,15 +27,13 @@ var getConfigByArgv = function (argv) {
         config.outputDir = argv.outputDir
     }
 
-
     if (argv.debug !== undefined) {
         config.debug = argv.debug
     }
 
-
     var result = app.validateConfig(config, true)
     app.setLogLevelByConfig(result)
-    return result;
+    return result
 }
 
 var doOptimizations = function (settings) {
@@ -81,55 +77,53 @@ var argv = yargs.epilog('UFP Optimizer - Frontend Solutions 2017')
     .command(['optimize [inputDir] [outputDir]'], 'Optimizes all assets in the [inputDir] and writes them to [outputDir]', function () {
         },
         function (argv) {
-            var settings = getConfigByArgv(argv);
-            doOptimizations(settings);
+            var settings = getConfigByArgv(argv)
+            doOptimizations(settings)
         }
     )
     .command(['optimize-copy [inputDir] [outputDir]'], 'Same as optimize but only for copy', function () {
 
         },
         function (argv) {
-            var settings = getConfigByArgv(argv);
-            doOptimizations(enableOnlyThisOptimizer(settings, 'copyOptim'));
+            var settings = getConfigByArgv(argv)
+            doOptimizations(enableOnlyThisOptimizer(settings, 'copyOptim'))
         }
     )
     .command(['optimize-htaccess [inputDir] [outputDir]'], 'Same as optimize but only for ht-access', function () {
 
         },
         function (argv) {
-            var settings = getConfigByArgv(argv);
-            doOptimizations(enableOnlyThisOptimizer(settings, 'htaccessOptim'));
+            var settings = getConfigByArgv(argv)
+            doOptimizations(enableOnlyThisOptimizer(settings, 'htaccessOptim'))
         }
     )
     .command(['optimize-images [inputDir] [outputDir]'], 'Same as optimize but only for images', function () {
 
         },
         function (argv) {
-            var settings = getConfigByArgv(argv);
-            doOptimizations(enableOnlyThisOptimizer(settings, 'imagesOptim'));
+            var settings = getConfigByArgv(argv)
+            doOptimizations(enableOnlyThisOptimizer(settings, 'imagesOptim'))
         }
     )
     .command(['optimize-html [inputDir] [outputDir]'], 'Same as optimize but only for html', function () {
 
         },
         function (argv) {
-            var settings = getConfigByArgv(argv);
-            doOptimizations(enableOnlyThisOptimizer(settings, 'htmlOptim'));
+            var settings = getConfigByArgv(argv)
+            doOptimizations(enableOnlyThisOptimizer(settings, 'htmlOptim'))
         }
     )
     .command(['optimize-zip [inputDir] [outputDir]'], 'Same as optimize but only for zip', function () {
 
         },
         function (argv) {
-            var settings = getConfigByArgv(argv);
-            doOptimizations(enableOnlyThisOptimizer(settings, 'zipOptim'));
+            var settings = getConfigByArgv(argv)
+            doOptimizations(enableOnlyThisOptimizer(settings, 'zipOptim'))
         }
     )
     .command('config', 'Displays the config on console', function () {
     }, function (argv) {
-
         console.log(JSON.stringify(getConfigByArgv(argv), null, 2))
-
     })
     .option('config', {
         alias: 'c',
@@ -138,7 +132,6 @@ var argv = yargs.epilog('UFP Optimizer - Frontend Solutions 2017')
     }).option('conf', {
         describe: 'inline config settings, e.g. --conf.optimizer.htmlOptim.enabled=false'
     })
-
 
 for (var i in configHelp.entries) {
     var entry = cloneDeep(configHelp.entries[i])

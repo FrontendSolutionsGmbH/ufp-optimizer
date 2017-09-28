@@ -74,7 +74,6 @@ ZipOptim.optimizeFileList = function (fileList, settings) {
     })
 }
 
-
 ZipOptim.getName = function () {
     return 'zip'
 }

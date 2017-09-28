@@ -16,7 +16,6 @@ ImageOptim.optimizeFile = function (fileName, settings) {
     var imageOptimSettings = settings.optimizer.imageOptim
     var imageminOptions = imageOptimSettings.imagemin.options
 
-
     if (imageOptimSettings.enabled && imageOptimSettings.imagemin.enabled) {
         var imageDir = path.dirname(fileName)
         var customOptionsMin = {}
@@ -123,7 +122,6 @@ ImageOptim.optimizeFileList = function (fileList, settings) {
         return result
     })
 }
-
 
 ImageOptim.getName = function () {
     return 'image'

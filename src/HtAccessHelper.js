@@ -1,8 +1,6 @@
 var HtAccessHelper = {}
 
-
 HtAccessHelper.getHtAccess = function (settings) {
-
     var htaccessOptimSettings = settings.optimizer.htaccessOptim.options
 
     var expireHTML = htaccessOptimSettings.expireHTML
@@ -10,7 +8,6 @@ HtAccessHelper.getHtAccess = function (settings) {
 
     var maxageHTML = htaccessOptimSettings.maxageHTML
     var maxageCommon = htaccessOptimSettings.maxage
-
 
     return `
 
@@ -30,10 +27,10 @@ ExpiresByType image/svg+xml ${expireCommon}"
 
 <ifmodule mod_headers.c>
 <filesmatch "\\.(ico|jpe?g|png|gif|swf|webp|css|js|svg)$">
-Header set Cache-Control "max-age=, public"
+Header set Cache-Control "max-age=${maxageCommon}, public"
 </filesmatch>
 <filesmatch "\\.(html|htm)$">
-Header set Cache-Control "max-age=31536000, public"
+Header set Cache-Control "max-age=${maxageHTML}, public"
 </filesmatch>
 </ifmodule>
 
@@ -117,10 +114,6 @@ RewriteRule \.htm\.gz$ - [T=text/html,E=no-gzip:1]
 RewriteRule \.svg\.gz$ - [T=image/svg+xml,E=no-gzip:1]
     
         `
-
-
 }
 
-
 module.exports = HtAccessHelper
-

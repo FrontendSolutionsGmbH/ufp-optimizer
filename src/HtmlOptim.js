@@ -65,7 +65,6 @@ HtmlOptim.optimizeFileList = function (fileList, settings) {
     })
 }
 
-
 HtmlOptim.getName = function () {
     return 'html'
 }
