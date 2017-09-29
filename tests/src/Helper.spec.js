@@ -1,4 +1,4 @@
-const Helper = require('Helper')
+const Helper = require('src/Helper')
 describe('cleanEmptyFoldersRecursively', function() {
   const cleanEmptyFoldersRecursively = Helper.cleanEmptyFoldersRecursively
   it('Should ignore null parameter', function() {
