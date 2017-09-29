@@ -14,7 +14,7 @@ CopyOptim.optimize = function (settings) {
                 // prepare
 
                 fs.removeSync(settings.outputDir)
-                fs.mkdirSync(settings.outputDir)
+                fs.ensureDirSync(settings.outputDir)
                 fs.copySync(settings.inputDir, settings.outputDir)
 
                 Logger.debug('copy: finished')

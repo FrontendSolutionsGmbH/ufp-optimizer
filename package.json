@@ -5,8 +5,8 @@
   "main": "src/UfpOptimizer.js",
   "scripts": {
     "test": "npm run build-0 && npm run build-1 && npm run build-2 && npm run build-3 && npm run build-4 && npm run build-5",
-    "build-0": "node bin/ufp-optimizer-cli.js optimize examples/0/fullpage dist-0",
-    "build-1": "node bin/ufp-optimizer-cli.js optimize examples/1/fast dist-1",
+    "build-0": "node bin/ufp-optimizer-cli.js optimize examples/0/fullpage dist/dist-0",
+    "build-1": "node bin/ufp-optimizer-cli.js optimize examples/1/fast dist/dist-1",
     "build-2": "node examples/2/test-fast.js",
     "build-3": "node examples/3/test-same-dir.js",
     "build-4": "node bin/ufp-optimizer-cli.js optimize examples/4/broken dist-4",
