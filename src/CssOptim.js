@@ -2,6 +2,7 @@ const path = require('path')
 const CleanCSS = require('clean-css')
 const fs = require('fs-extra')
 const Logger = require('./Logger')
+const helper = require('./Helper')
 var CssOptim = {}
 
 CssOptim.optimizeFile = function (fileName, settingsHtmlFiles, settings) {
@@ -11,7 +12,7 @@ CssOptim.optimizeFile = function (fileName, settingsHtmlFiles, settings) {
         if (!cssOptimSettings.enabled && cssOptimSettings.enabled && cssOptimSettings.options.uncss.enabled) {
             var uncss = require('uncss')
             var source = fs.readFileSync(fileName, 'utf8')
-
+            var resultStats = helper.getOptimizationResultForFileBefore(fileName, fileName, CssOptim, 'uncss');
             uncss(settingsHtmlFiles.htmlFiles, cssOptimSettings.options.uncss.options, function (error, sourcePurified) {
                 var result = new CleanCSS({sourceMap: true}).minify(sourcePurified)
 
@@ -25,10 +26,10 @@ CssOptim.optimizeFile = function (fileName, settingsHtmlFiles, settings) {
                 if (error) {
                     Logger.error('uncss-error', error)
                 }
-                resolve()
+                resolve(helper.updateOptimizationResultForFileAfter(resultStats))
             })
         } else {
-            resolve()
+            resolve(null)
         }
     })
 }
@@ -49,7 +50,8 @@ CssOptim.optimizeFileList = function (fileList, settingsHtmlFiles, settings) {
 
     return Promise.all(actions).then(function (result) {
         Logger.debug('all css files optimized')
-        return result
+        //console.log('all Css files written', helper.getOptimizationResultForOptimizer(result, CssOptim))
+        return helper.getOptimizationResultForOptimizer(result, CssOptim)
     })
 }
 

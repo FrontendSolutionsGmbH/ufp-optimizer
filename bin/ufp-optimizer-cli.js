@@ -97,6 +97,14 @@ var argv = yargs.epilog('UFP Optimizer - Frontend Solutions 2017')
             doOptimizations(enableOnlyThisOptimizer(settings, 'htaccessOptim'))
         }
     )
+    .command(['optimize-css [inputDir] [outputDir]'], 'Same as optimize but only for css', function () {
+
+        },
+        function (argv) {
+            var settings = getConfigByArgv(argv)
+            doOptimizations(enableOnlyThisOptimizer(settings, 'cssOptim'))
+        }
+    )
     .command(['optimize-images [inputDir] [outputDir]'], 'Same as optimize but only for images', function () {
 
         },

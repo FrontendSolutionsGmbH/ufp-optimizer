@@ -52,7 +52,7 @@ HtmlOptim.optimizeFileList = function (fileList, settings) {
         Logger.debug('all html files written')
         Logger.debug('html: finished')
 
-        console.log('all HtmlOptim files written', helper.getOptimizationResultForOptimizer(result, HtmlOptim))
+      //  console.log('all HtmlOptim files written', helper.getOptimizationResultForOptimizer(result, HtmlOptim))
         return helper.getOptimizationResultForOptimizer(result, HtmlOptim)
     })
 }

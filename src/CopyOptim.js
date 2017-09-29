@@ -22,7 +22,7 @@ CopyOptim.optimize = function (settings) {
                 Logger.debug('copy: finished did nothing')
             }
 
-            resolve()
+            resolve(null)
         }
     })
 }
