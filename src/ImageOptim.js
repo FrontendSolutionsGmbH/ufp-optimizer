@@ -114,7 +114,7 @@ ImageOptim.optimizeFileList = function (fileList, settings) {
         Logger.debug('all image files written')
         Logger.debug('images: finished')
 
-        console.log('all iamge files written', helper.getOptimizationResultForOptimizer(result, ImageOptim))
+        //  console.log('all iamge files written', helper.getOptimizationResultForOptimizer(result, ImageOptim))
         return helper.getOptimizationResultForOptimizer(result, ImageOptim)
     })
 }
