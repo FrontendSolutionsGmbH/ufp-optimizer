@@ -4,6 +4,7 @@
   "description": "optimizing ufp frontend packages",
   "main": "src/UfpOptimizer.js",
   "scripts": {
+    "mocha-test": "NODE_PATH=./src mocha --opts build/mocha.opts",
     "test": "npm run build-0 && npm run build-1 && npm run build-2 && npm run build-3 && npm run build-4 && npm run build-5",
     "build-0": "node bin/ufp-optimizer-cli.js examples/0/fullpage dist-0",
     "build-1": "node bin/ufp-optimizer-cli.js examples/1/fast dist-1",
@@ -38,6 +39,7 @@
     "node-zopfli": "^2.0.2"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
     "eslint": "^4.6.1",
     "eslint-config-standard": "^10.2.1",
     "eslint-config-standard-react": "^5.0.0",
@@ -55,6 +57,7 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-react": "^7.3.0",
     "eslint-plugin-redux": "^0.1.0",
-    "eslint-plugin-standard": "^3.0.1"
+    "eslint-plugin-standard": "^3.0.1",
+    "mocha": "^3.5.3"
   }
 }
