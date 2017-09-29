@@ -102,7 +102,7 @@ var argv = yargs.epilog('UFP Optimizer - Frontend Solutions 2017')
         },
         function (argv) {
             var settings = getConfigByArgv(argv)
-            doOptimizations(enableOnlyThisOptimizer(settings, 'imagesOptim'))
+            doOptimizations(enableOnlyThisOptimizer(settings, 'imageOptim'))
         }
     )
     .command(['optimize-html [inputDir] [outputDir]'], 'Same as optimize but only for html', function () {

@@ -91,7 +91,6 @@ ZipOptim.optimizeFileList = function (fileList, settings) {
     }).map(function (entry) {
         return ZipOptim.optimizeFile(entry, settings)
     })).then(function (result) {
-        console.log('all gzip files written', helper.getOptimizationResultForOptimizer(result, ZipOptim))
         Logger.debug('gzip: finished')
         return helper.getOptimizationResultForOptimizer(result, ZipOptim)
     })

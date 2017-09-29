@@ -36,8 +36,7 @@ ImageOptim.optimizeFile = function (fileName, settings) {
         settings.webp = defaultsDeep(customOptionsMin.webp || {}, imageminOptions.webp)
         settings.giflossy = defaultsDeep(customOptionsMin.giflossy || {}, imageminOptions.giflossy)
 
-        var sizeBefore = helper.getFilesizeInBytes(fileName)
-
+        var resultStats = helper.getOptimizationResultForFileBefore(fileName, fileName, ImageOptim, 'image');
         var funcAll = function () {
             Logger.debug('image', fileName)
             var ext = path.extname(fileName)
@@ -87,16 +86,11 @@ ImageOptim.optimizeFile = function (fileName, settings) {
             }
         }
 
-        return funcAll().then(function (result) {
-            console.log('imagemin', result)
-            var sizeNEW = helper.getFilesizeInBytes(fileName)
-            var sizeWEBP = helper.getFilesizeInBytes(fileName)
-
-            Logger.debug('image', (Object.keys(customOptionsMin).length > 0 ? 'custom' : ''), fileName, 'reduction: ', Math.round((sizeBefore - sizeNEW) / 1024) + 'kb', Math.round((1 - sizeNEW / sizeBefore) * 100) + '%', (Object.keys(customOptionsMin).length > 0 ? customOptionsMin : ''))
-            return {sizeBEFORE: sizeBefore, sizeNEW: sizeNEW, sizeWEBP: sizeWEBP}
+        return funcAll().then(function () {
+            return helper.updateOptimizationResultForFileAfter(resultStats);
         })
     } else {
-        return helper.emptyPromise()
+        return helper.emptyPromise(null)
     }
 }
 
@@ -119,7 +113,9 @@ ImageOptim.optimizeFileList = function (fileList, settings) {
     return Promise.all(actions).then(function (result) {
         Logger.debug('all image files written')
         Logger.debug('images: finished')
-        return result
+
+        console.log('all iamge files written', helper.getOptimizationResultForOptimizer(result, ImageOptim))
+        return helper.getOptimizationResultForOptimizer(result, ImageOptim)
     })
 }
 
