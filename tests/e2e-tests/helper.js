@@ -11,14 +11,15 @@ helper.filewalker = function (dir) {
   list.forEach(function (file) {
     file = path.resolve(dir, file)
 
-    result.push(file)
-
     var stat = fs.statSync(file)
+
     if (stat && stat.isDirectory()) {
       var res = this.filewalker(file)
-
+      result.push({type: 'dir', fileName: file})
       result = result.concat(res)
     }
+
+    result.push({type: 'file', fileName: file, fileSize: stat['size']})
   })
   return result
 }
