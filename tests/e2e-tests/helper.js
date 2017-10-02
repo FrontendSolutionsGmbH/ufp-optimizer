@@ -3,12 +3,26 @@ const app = require('src/UfpOptimizer')
 
 var helper = {}
 
-helper.build = function (commandObject) {
+helper.copy = function (data) {
+  const settings = app.getDefaultSettings()
+  settings.inputDir = data.inputDir
+  settings.outputDir = data.outputDir
+  app.execute(settings)
+}
+
+helper.fastBuild = function (data) {
+  const settings = app.getDefaultSettings()
+  settings.inputDir = data.inputDir
+  settings.outputDir = data.outputDir
+  app.execute(settings)
+}
+
+helper.build = function (data) {
   console.log('****** UFP OPTIMIZER 2.0 started ******')
   console.log('****** USAGE:  ufp-optimizer-cli [inputDir] [outputDir] [configFile] ******')
-  var inputDirName = commandObject.inputDirName || 'examples/0/input'
-  var outputDirName = commandObject.outputDirName || 'dist'
-  var configFileName = (commandObject.configFileName && path.join(process.cwd(), commandObject.configFileName)) || path.join(__dirname, '../../src/Globals.js')
+  var inputDirName = data.inputDirName || 'examples/0/input'
+  var outputDirName = data.outputDirName || 'dist'
+  var configFileName = (data.configFileName && path.join(process.cwd(), data.configFileName)) || path.join(__dirname, '../../src/Globals.js')
 
   console.log('****** USAGE:  ufp-optimizer-cli ' + inputDirName + ' ' + outputDirName + ' ' + configFileName + ' ******')
 
