@@ -59,30 +59,23 @@ UfpOptimizer.executeOptimizations = function (settings) {
 
     var doStats = function (result) {
         optimizerStatResults.push(result)
-        Logger.info('------------')
-        Logger.info('Statistics')
-        Logger.debug('------------')
-        Logger.debug('Detailed')
-        Logger.debug('------------')
-        StatsPrinter.getSimpleDetailsResultsAsArray(optimizerStatResults).map(function (line) {
-            Logger.debug(line)
-        })
-        Logger.debug('------------')
-        Logger.debug('PerFile')
-        Logger.debug('------------')
-        StatsPrinter.getSummaryDetailsPerFile(optimizerStatResults).map(function (line) {
-            Logger.debug(line)
-        })
-        Logger.info('------------')
-        Logger.info('Total')
-        Logger.info('------------')
-        StatsPrinter.getSummaryDetailsTotal(optimizerStatResults, settings, true).map(function (line) {
-            Logger.info(line)
-        })
-        StatsPrinter.getSummaryDetailsTotal(optimizerStatResults, settings, false).map(function (line) {
-            Logger.info(line)
-        })
-        Logger.info('------------')
+        console.log('------------')
+        console.log('Statistics')
+        console.log('------------')
+        console.log('Results per optimization step')
+        console.log('')
+        StatsPrinter.printTable(StatsPrinter.getSimpleDetailsResultsAsArray(optimizerStatResults))
+        console.log('------------')
+        console.log('Results per output file')
+        console.log('')
+        StatsPrinter.printTable(StatsPrinter.getSummaryDetailsPerFile(optimizerStatResults))
+        console.log('------------')
+        console.log('Total summary')
+        console.log('')
+        var totalResults = StatsPrinter.getSummaryDetailsTotal(optimizerStatResults, settings, false);
+        totalResults = totalResults.concat(StatsPrinter.getSummaryDetailsTotal(optimizerStatResults, settings, true))
+        StatsPrinter.printTable(totalResults)
+        console.log('------------')
         return result;
     }
     return UfpOptimizer.copy(settings).then(doImageOptimization).then(doHTMLOptimization).then(doCssOptimization).then(doZip).then(doHtAccess).then(doStats)

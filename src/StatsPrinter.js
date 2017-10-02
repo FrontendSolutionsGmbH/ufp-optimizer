@@ -15,18 +15,6 @@ StatsPrinter.getSimpleDetailsResultsAsArray = function (results) {
 
 }
 
-StatsPrinter.getModuleResult = function (moduleResult) {
-    var result = []
-
-    if (moduleResult) {
-        moduleResult.files.map(function (entry) {
-            result.push(path.basename(entry.outputFileName) + ' ' + Math.round(entry.sizeBefore / 1024) + 'kb => ' + Math.round(entry.sizeAfter / 1024) + 'kb (-' + Math.round((entry.sizeBefore - entry.sizeAfter) / 1024) + 'kb ' + Math.round((entry.sizeAfter / entry.sizeBefore) * 100) + '%)' + ' by ' + moduleResult.name + '-' + entry.group);
-        })
-    }
-
-
-    return result;
-}
 
 var getResultsAdvanced = function (results, useWebP) {
 
@@ -109,12 +97,14 @@ var getResultsAdvanced = function (results, useWebP) {
             var toDeleteKeys = []
             Object.keys(outputFiles).map(function (key) {
                 var entry = outputFiles[key]
-
-                if (useWebP && (entry.outputFileName.indexOf('.jpg') > -1 || entry.outputFileName.indexOf('.jpeg') > -1 || entry.outputFileName.indexOf('.png') > -1)) {
-                    toDeleteKeys.push(key)
-                } else if (!useWebP && entry.outputFileName.indexOf('.webp') > -1) {
-                    toDeleteKeys.push(key)
+                if (useWebP !== undefined) {
+                    if (useWebP && (entry.outputFileName.indexOf('.jpg') > -1 || entry.outputFileName.indexOf('.jpeg') > -1 || entry.outputFileName.indexOf('.png') > -1)) {
+                        toDeleteKeys.push(key)
+                    } else if (!useWebP && entry.outputFileName.indexOf('.webp') > -1) {
+                        toDeleteKeys.push(key)
+                    }
                 }
+
 
             })
 
@@ -135,6 +125,31 @@ var getResultsAdvanced = function (results, useWebP) {
 
 }
 
+
+StatsPrinter.getModuleResult = function (moduleResult) {
+    var result = []
+
+    if (moduleResult) {
+        moduleResult.files.map(function (entry) {
+            result.push({
+                Filename: path.basename(entry.outputFileName),
+                SizeBefore: Math.round(entry.sizeBefore / 1024) + ' kb',
+                SizeAfter: Math.round(entry.sizeAfter / 1024) + ' kb',
+                SizePercentageAfter: Math.round((entry.sizeAfter / entry.sizeBefore) * 100) + '%',
+                SizePercentageSaved: Math.round(100 - (entry.sizeAfter / entry.sizeBefore) * 100) + '%',
+                SavedBytes: Math.round((entry.sizeBefore - entry.sizeAfter) / 1024) + ' kb ',
+                Module: moduleResult.name,
+                Group: entry.group,
+                Origin: path.basename(entry.outputFileName) !== path.basename(entry.inputFileName) ? path.basename(entry.inputFileName) : ''
+            })
+
+        })
+    }
+
+
+    return result;
+}
+
 StatsPrinter.getSummaryDetailsPerFile = function (results) {
     var result = []
     var resultsAdvanced = getResultsAdvanced(results)
@@ -143,9 +158,19 @@ StatsPrinter.getSummaryDetailsPerFile = function (results) {
         var entryOuter = resultsAdvanced.outputFiles[key];
 
         result.push(entryOuter.entries.map(function (entry) {
-            //    return path.basename(entry.outputFileName) + ' ' + Math.round(entryOuter.sizeBeforeLargestTotal / 1024) + 'kb => ' + Math.round(entryOuter.sizeAfterSmallest / 1024) + 'kb (-' + Math.round((entryOuter.sizeBeforeLargestTotal - entryOuter.sizeAfterSmallest) / 1024) + 'kb ' + Math.round((entryOuter.sizeAfterSmallest / entryOuter.sizeBeforeLargestTotal) * 100) + '%)'
+            return {
+                Filename: path.basename(entry.outputFileName),
+                SizeBefore: Math.round(entryOuter.sizeBeforeLargestTotal / 1024) + ' kb',
+                SizeAfter: Math.round(entryOuter.sizeAfterSmallest / 1024) + ' kb',
+                SizePercentageAfter: Math.round((entryOuter.sizeAfterSmallest / entryOuter.sizeBeforeLargestTotal) * 100) + '%',
+                SizePercentageSaved: Math.round(100 - (entryOuter.sizeAfterSmallest / entryOuter.sizeBeforeLargestTotal) * 100) + '%',
+                SavedBytes: Math.round((entryOuter.sizeBeforeLargestTotal - entryOuter.sizeAfterSmallest) / 1024) + ' kb ',
+                Modules: 'TODO',
+                Groups: 'TODO',
+                Origin: path.basename(entry.outputFileName) !== path.basename(entry.inputFileName) ? path.basename(entry.inputFileName) : ''
+            }
 
-            return path.basename(entry.outputFileName) + ' ' + Math.round(entryOuter.sizeAfterSmallest / 1024) + 'kb ' + Math.round((entryOuter.sizeAfterSmallest / entryOuter.sizeBeforeLargestTotal) * 100) + '% ' + '(' + Math.round(entryOuter.sizeBeforeLargestTotal / 1024) + 'kb -' + Math.round((entryOuter.sizeBeforeLargestTotal - entryOuter.sizeAfterSmallest) / 1024) + 'kb -' + Math.round((1 - (entryOuter.sizeAfterSmallest / entryOuter.sizeBeforeLargestTotal)) * 100) + '%)'
+
         }))
 
     });
@@ -155,21 +180,21 @@ StatsPrinter.getSummaryDetailsPerFile = function (results) {
 StatsPrinter.getSummaryDetailsTotal = function (results, settings, useWebP) {
     var totalResults = []
     var resultWithoutZip = {
+        name: 'No-Zip' + (useWebP ? ' with WebP' : ''),
         sizeAfterSmallest: 0,
-        sizeBeforeLargestTotal: 0,
-        name: 'No-Zip' + (useWebP ? ' with WebP' : '')
+        sizeBeforeLargestTotal: 0
     }
 
     var resultWithBrotli = {
+        name: 'Brotli' + (useWebP ? ' with WebP' : ''),
         sizeAfterSmallest: 0,
-        sizeBeforeLargestTotal: 0,
-        name: 'Brotli' + (useWebP ? ' with WebP' : '')
+        sizeBeforeLargestTotal: 0
     }
 
     var resultWithZopfli = {
+        name: 'Zopfli' + (useWebP ? ' with WebP' : ''),
         sizeAfterSmallest: 0,
-        sizeBeforeLargestTotal: 0,
-        name: 'Zopfli' + (useWebP ? ' with WebP' : '')
+        sizeBeforeLargestTotal: 0
     }
 
     var resultsAdvanced = getResultsAdvanced(results, useWebP)
@@ -235,10 +260,25 @@ StatsPrinter.getSummaryDetailsTotal = function (results, settings, useWebP) {
         }
     }
 
+
     return totalResults.map(function (totalResultEntry) {
-        return totalResultEntry.name + ': ' + Math.round(totalResultEntry.sizeAfterSmallest / 1024) + 'kb <= ' + Math.round(totalResultEntry.sizeBeforeLargestTotal / 1024) + 'kb ' + Math.round((totalResultEntry.sizeAfterSmallest / totalResultEntry.sizeBeforeLargestTotal) * 100) + '% ' + '(' + '-' + Math.round((1 - (totalResultEntry.sizeAfterSmallest / totalResultEntry.sizeBeforeLargestTotal)) * 100) + '% ' + '-' + Math.round((totalResultEntry.sizeBeforeLargestTotal - totalResultEntry.sizeAfterSmallest) / 1024) + 'kb' + ')'
+
+        return {
+            Name: totalResultEntry.name,
+            SizeBefore: Math.round(totalResultEntry.sizeBeforeLargestTotal / 1024) + ' kb',
+            SizeAfter: Math.round(totalResultEntry.sizeAfterSmallest / 1024) + ' kb',
+            SizePercentageAfter: Math.round((totalResultEntry.sizeAfterSmallest / totalResultEntry.sizeBeforeLargestTotal) * 100) + '%',
+            SizePercentageSaved: Math.round(100 - (totalResultEntry.sizeAfterSmallest / totalResultEntry.sizeBeforeLargestTotal) * 100) + '%',
+            SavedBytes: Math.round((totalResultEntry.sizeBeforeLargestTotal - totalResultEntry.sizeAfterSmallest) / 1024) + ' kb ',
+        }
+        //return totalResultEntry.name + ': ' + Math.round(totalResultEntry.sizeAfterSmallest / 1024) + 'kb <= ' + Math.round(totalResultEntry.sizeBeforeLargestTotal / 1024) + 'kb ' + Math.round((totalResultEntry.sizeAfterSmallest / totalResultEntry.sizeBeforeLargestTotal) * 100) + '% ' + '(' + '-' + Math.round((1 - (totalResultEntry.sizeAfterSmallest / totalResultEntry.sizeBeforeLargestTotal)) * 100) + '% ' + '-' + Math.round((totalResultEntry.sizeBeforeLargestTotal - totalResultEntry.sizeAfterSmallest) / 1024) + 'kb' + ')'
     })
 
+}
+
+StatsPrinter.printTable = function (result) {
+    require('console.table')
+    console.table(result)
 }
 
 module.exports = StatsPrinter

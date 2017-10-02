@@ -86,14 +86,17 @@ ImageOptim.optimizeFile = function (fileName, settings) {
             if (plugins.length > 0 || doWebp) {
 
                 if (doWebP) {
-                    resultStats.push(helper.getOptimizationResultForFileBefore(fileName, fileName.replace('.png', '.webp').replace('.jpg', '.webp').replace('.jpeg', '.webp'), ImageOptim, 'imagemin-webp'))
 
                     return imagemin([fileName], imageDir, {
                         plugins: [imageminWebp(settings.webp.options)]
+                    }).then(function (result) {
+                        resultStats.push(helper.getOptimizationResultForFileBefore(fileName, fileName.replace('.png', '.webp').replace('.jpg', '.webp').replace('.jpeg', '.webp'), ImageOptim, 'imagemin-webp'))
+                        return result;
                     }).catch(function (error) {
                         Logger.error('error', fileName, error)
                         // resolve()
                     }).then(function () {
+
                         return imagemin([fileName], imageDir, {
                             plugins: plugins
                         }).catch(function (error) {
