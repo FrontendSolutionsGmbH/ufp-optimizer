@@ -14,7 +14,7 @@ helper.filewalker = function (dir) {
     var stat = fs.statSync(file)
 
     if (stat && stat.isDirectory()) {
-      var res = this.filewalker(file)
+      var res = helper.filewalker(file)
       result.push({type: 'dir', fileName: file})
       result = result.concat(res)
     }
@@ -52,14 +52,14 @@ helper.build = function (data) {
   settings.inputDir = inputDirName
   settings.outputDir = outputDirName
 
-    app.execute(settings).then(function (result) {
+   return app.execute(settings).then(function (result) {
     console.log('****** UFP OPTIMIZER finished ******')
     return result
   }).catch(function (ex) {
     console.log('****** UFP OPTIMIZER finished with errors ******', ex)
   })
 
-  console.log('****** UFP OPTIMIZER TEST EARLY END******')
+  //console.log('****** UFP OPTIMIZER TEST EARLY END******')
 }
 
 module.exports = helper

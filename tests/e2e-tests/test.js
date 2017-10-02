@@ -1,4 +1,5 @@
 const helper = require('./helper')
+const path = require('path')
 
 describe('Fullpage Test', function() {
   it('Should ignore null parameter', function (done) {
@@ -7,11 +8,13 @@ describe('Fullpage Test', function() {
       outputDirName: 'dist-0',
       configFileName: ''
     }
-    helper.build(data)
+    const inputData = helper.filewalker(data.inputDirName)
+    var outputData
     this.timeout(10000)
-    setTimeout(done, 5000)
-    expect(true).to.be.true
-    console.log('helle')
+    helper.build(data).then(function () {
+      outputData = helper.filewalker(data.outputDirName)
+      expect(inputData.length).to.equal(outputData.length)
+    }).then(done, done)
   })
 })
 describe('Fast', function() {
@@ -21,10 +24,13 @@ describe('Fast', function() {
       outputDirName: 'dist-1',
       configFileName: ''
     }
-    helper.build(data)
+    const inputData = helper.filewalker(data.inputDirName)
+    var outputData
     this.timeout(10000)
-    setTimeout(done, 5000)
-    expect(true).to.be.true
+    helper.build(data).then(function () {
+      outputData = helper.filewalker(data.outputDirName)
+      expect(inputData.length).to.equal(outputData.length)
+    }).then(done, done)
   })
 })
 describe('Fast Test', function() {
@@ -33,10 +39,13 @@ describe('Fast Test', function() {
       inputDirName: 'tests/e2e-tests/testdata/1/fast',
       outputDirName: 'dist-2'
     }
-    helper.build(data)
+    const inputData = helper.filewalker(data.inputDirName)
+    var outputData
     this.timeout(10000)
-    setTimeout(done, 5000)
-    expect(true).to.be.true
+    helper.build(data).then(function () {
+      outputData = helper.filewalker(data.outputDirName)
+      expect(inputData.length).to.equal(outputData.length)
+    }).then(done, done)
   })
 })
 describe('Same Dir Test', function() {
@@ -51,10 +60,13 @@ describe('Same Dir Test', function() {
       inputDirName: 'dist-3',
       outputDirName: 'dist-3'
     }
-    helper.build(data)
+    const inputData = helper.filewalker(data.inputDirName)
+    var outputData
     this.timeout(10000)
-    setTimeout(done, 5000)
-    expect(true).to.be.true
+    helper.build(data).then(function () {
+      outputData = helper.filewalker(data.outputDirName)
+      expect(inputData.length).to.equal(outputData.length)
+    }).then(done, done)
   })
 })
 describe('Broken Test', function() {
@@ -64,11 +76,13 @@ describe('Broken Test', function() {
       outputDirName: 'dist-4',
       configFileName: ''
     }
-    helper.build(data)
+    const inputData = helper.filewalker(data.inputDirName)
+    var outputData
     this.timeout(10000)
-    setTimeout(done, 5000)
-    expect(true).to.be.true
-    console.log('helle')
+    helper.build(data).then(function () {
+      outputData = helper.filewalker(data.outputDirName)
+      expect(inputData.length).to.equal(outputData.length)
+    }).then(done, done)
   })
 })
 describe('Not Existing Test', function() {
@@ -78,9 +92,12 @@ describe('Not Existing Test', function() {
       outputDirName: 'dist-5',
       configFileName: ''
     }
-    helper.build(data)
-    this.timeout(5000)
-    setTimeout(done, 3000)
-    expect(true).to.be.true
+    const inputData = helper.filewalker(data.inputDirName)
+    var outputData
+    this.timeout(10000)
+    helper.build(data).then(function () {
+      outputData = helper.filewalker(data.outputDirName)
+      expect(inputData.length).to.equal(outputData.length)
+    }).then(done, done)
   })
 })
