@@ -151,22 +151,22 @@ var globalsLossy = defaultsDeep({
 
                 options: {
                     pngQuant: {
-                        options: {quality: '30'}
+                        options: {quality: '0'}
                     },
                     pngCrush: {
-                        options: {}
+                        options: {reduce: true}
                     },
                     webp: {
-                        options: {quality: 30}
+                        options: {quality: 0}
                     },
                     jpegRecompress: {
                         options: {quality: 'low'}
                     },
                     jpegMoz: {
-                        options: {quality: '20-50'}
+                        options: {quality: '0'}
                     },
                     giflossy: {
-                        options: {lossy: 30}
+                        options: {lossy: 0}
                     }
                 }
             }

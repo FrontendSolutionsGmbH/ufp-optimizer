@@ -39,14 +39,6 @@ var getResultsAdvanced = function (results, useWebP) {
             // add inputfiles
             moduleResult.files.map(function (entry) {
                 var key = entry.inputFileName
-                if (entry.inputFileName.indexOf('.jpg') > -1 || entry.inputFileName.indexOf('.jpeg') > -1 || entry.inputFileName.indexOf('.png') > -1) {
-                    if (!useWebP && entry.outputFileName.indexOf('.webp') > -1) {
-                        return;
-                    }
-                    if (useWebP && !entry.outputFileName.indexOf('.webp') > -1) {
-                        return;
-                    }
-                }
 
                 if (inputFiles[key]) {
                     inputFiles[key].entries.push(entry)
@@ -77,15 +69,6 @@ var getResultsAdvanced = function (results, useWebP) {
             // add outputfiles
             moduleResult.files.map(function (entry) {
                 var key2 = entry.outputFileName
-
-                if (entry.inputFileName.indexOf('.jpg') > -1 || entry.inputFileName.indexOf('.jpeg') > -1 || entry.inputFileName.indexOf('.png') > -1) {
-                    if (!useWebP && entry.outputFileName.indexOf('.webp') > -1) {
-                        return;
-                    }
-                    if (useWebP && !entry.outputFileName.indexOf('.webp') > -1) {
-                        return;
-                    }
-                }
 
                 if (outputFiles[key2]) {
                     outputFiles[key2].entries.push(entry)
@@ -119,6 +102,26 @@ var getResultsAdvanced = function (results, useWebP) {
                     }
                 }, -1)
             })
+
+
+            //filter out webp/no webp
+
+            var toDeleteKeys = []
+            Object.keys(outputFiles).map(function (key) {
+                var entry = outputFiles[key]
+
+                if (useWebP && (entry.outputFileName.indexOf('.jpg') > -1 || entry.outputFileName.indexOf('.jpeg') > -1 || entry.outputFileName.indexOf('.png') > -1)) {
+                    toDeleteKeys.push(key)
+                } else if (!useWebP && entry.outputFileName.indexOf('.webp') > -1) {
+                    toDeleteKeys.push(key)
+                }
+
+            })
+
+            toDeleteKeys.map(function (key) {
+                delete outputFiles[key]
+            })
+
 
         }
     })
@@ -154,7 +157,7 @@ StatsPrinter.getSummaryDetailsTotal = function (results, settings, useWebP) {
     var resultWithoutZip = {
         sizeAfterSmallest: 0,
         sizeBeforeLargestTotal: 0,
-        name: 'No Zip' + (useWebP ? ' with WebP' : '')
+        name: 'No-Zip' + (useWebP ? ' with WebP' : '')
     }
 
     var resultWithBrotli = {

@@ -53,7 +53,7 @@ var enableOnlyThisOptimizer = function (settings, optimString) {
     settings.optimizer.htaccessOptim.enabled = false
     settings.optimizer.zipOptim.enabled = false
     settings.optimizer.htmlOptim.enabled = false
-    settings.optimizer.copyOptim.enabled = false
+    settings.optimizer.copyOptim.enabled = true
     settings.optimizer[optimString].enabled = true
     return settings
 }

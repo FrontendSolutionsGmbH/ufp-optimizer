@@ -44,6 +44,7 @@ ImageOptim.optimizeFile = function (fileName, settings) {
             Logger.debug('image', fileName)
             var ext = path.extname(fileName)
             var plugins = []
+            var doWebP = false
             switch (ext) {
                 case '.png':
                     if (settings.pngQuant.enabled) {
@@ -55,8 +56,7 @@ ImageOptim.optimizeFile = function (fileName, settings) {
                         resultStats[0].group += '-pngCrush'
                     }
                     if (settings.webp.enabled) {
-                        plugins.push(imageminWebp(settings.webp.options))
-                        resultStats.push(helper.getOptimizationResultForFileBefore(fileName, fileName.replace('.png', '.webp'), ImageOptim, 'imagemin-webp'))
+                        doWebP = true
                     }
                     break
                 case '.jpg':
@@ -66,8 +66,7 @@ ImageOptim.optimizeFile = function (fileName, settings) {
                         resultStats[0].group += '-jpegRecompress'
                     }
                     if (settings.webp.enabled) {
-                        plugins.push(imageminWebp(settings.webp.options))
-                        resultStats.push(helper.getOptimizationResultForFileBefore(fileName, fileName.replace('.jpg', '.webp').replace('.jpeg', '.webp'), ImageOptim, 'imagemin-webp'))
+                        doWebP = true
                     }
                     break
                 case '.svg':
@@ -84,14 +83,33 @@ ImageOptim.optimizeFile = function (fileName, settings) {
                     break
             }
 
-            console.log('jpegRecompress', settings.jpegRecompress.options, plugins)
-            if (plugins.length > 0) {
-                return imagemin([fileName], imageDir, {
-                    plugins: plugins
-                }).catch(function (error) {
-                    Logger.error('error', fileName, error)
-                    // resolve()
-                })
+            if (plugins.length > 0 || doWebp) {
+
+                if (doWebP) {
+                    resultStats.push(helper.getOptimizationResultForFileBefore(fileName, fileName.replace('.png', '.webp').replace('.jpg', '.webp').replace('.jpeg', '.webp'), ImageOptim, 'imagemin-webp'))
+
+                    return imagemin([fileName], imageDir, {
+                        plugins: [imageminWebp(settings.webp.options)]
+                    }).catch(function (error) {
+                        Logger.error('error', fileName, error)
+                        // resolve()
+                    }).then(function () {
+                        return imagemin([fileName], imageDir, {
+                            plugins: plugins
+                        }).catch(function (error) {
+                            Logger.error('error', fileName, error)
+                            // resolve()
+                        })
+                    })
+                } else {
+                    return imagemin([fileName], imageDir, {
+                        plugins: plugins
+                    }).catch(function (error) {
+                        Logger.error('error', fileName, error)
+                        // resolve()
+                    })
+                }
+
             } else {
                 return helper.emptyPromise(null)
             }
