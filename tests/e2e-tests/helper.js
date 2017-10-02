@@ -1,7 +1,27 @@
+const fs = require('fs')
 const path = require('path')
 const app = require('src/UfpOptimizer')
 
 var helper = {}
+
+helper.filewalker = function (dir) {
+  var result = []
+
+  var list = fs.readdirSync(dir)
+  list.forEach(function (file) {
+    file = path.resolve(dir, file)
+
+    result.push(file)
+
+    var stat = fs.statSync(file)
+    if (stat && stat.isDirectory()) {
+      var res = this.filewalker(file)
+
+      result = result.concat(res)
+    }
+  })
+  return result
+}
 
 helper.copy = function (data) {
   const settings = app.getDefaultSettings()
