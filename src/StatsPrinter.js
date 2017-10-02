@@ -2,7 +2,7 @@ const Helper = require('./Helper')
 const path = require('path')
 var StatsPrinter = {}
 
-StatsPrinter.getSimpleResultsAsArray = function (results) {
+StatsPrinter.getSimpleDetailsResultsAsArray = function (results) {
 
     if (results) {
         return Helper.flatten(results.map(function (module) {

@@ -62,7 +62,7 @@ UfpOptimizer.executeOptimizations = function (settings) {
         Logger.info('------------')
         Logger.info('Statistics')
         Logger.info('------------')
-        StatsPrinter.getSimpleResultsAsArray(optimizerStatResults).map(function (line) {
+        StatsPrinter.getSimpleDetailsResultsAsArray(optimizerStatResults).map(function (line) {
             Logger.info(line)
         })
 
