@@ -62,10 +62,23 @@ UfpOptimizer.executeOptimizations = function (settings) {
         Logger.info('------------')
         Logger.info('Statistics')
         Logger.info('------------')
+        Logger.info('Detailed')
+        Logger.info('------------')
         StatsPrinter.getSimpleDetailsResultsAsArray(optimizerStatResults).map(function (line) {
             Logger.info(line)
         })
-
+        Logger.info('------------')
+        Logger.info('PerFile')
+        Logger.info('------------')
+        StatsPrinter.getSummaryDetailsPerFile(optimizerStatResults).map(function (line) {
+            Logger.info(line)
+        })
+        Logger.info('------------')
+        Logger.info('Total')
+        Logger.info('------------')
+        StatsPrinter.getSummaryDetailsTotal(optimizerStatResults, settings).map(function (line) {
+            Logger.info(line)
+        })
         Logger.info('------------')
         return result;
     }
