@@ -36,7 +36,7 @@ ImageOptim.optimizeFile = function (fileName, settings) {
         settings.webp = defaultsDeep(customOptionsMin.webp || {}, imageminOptions.webp)
         settings.giflossy = defaultsDeep(customOptionsMin.giflossy || {}, imageminOptions.giflossy)
 
-        var resultStats = helper.getOptimizationResultForFileBefore(fileName, fileName, ImageOptim, 'image');
+        var resultStats = helper.getOptimizationResultForFileBefore(fileName, fileName, ImageOptim, 'imagemin');
         var funcAll = function () {
             Logger.debug('image', fileName)
             var ext = path.extname(fileName)
@@ -82,7 +82,7 @@ ImageOptim.optimizeFile = function (fileName, settings) {
                     // resolve()
                 })
             } else {
-                return helper.emptyPromise()
+                return helper.emptyPromise(null)
             }
         }
 

@@ -24,7 +24,7 @@ HtAccessOptim.optimizeFileList = function (fileList, settings) {
         }
 
         Logger.debug('htaccess: finished')
-        resolve(settings)
+        resolve(null)
     }).catch(function (e) {
         Logger.error(e) // "oh, no!"
     })

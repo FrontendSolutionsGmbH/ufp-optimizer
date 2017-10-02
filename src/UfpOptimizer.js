@@ -9,7 +9,7 @@ const fs = require('fs-extra')
 const defaultsDeep = require('lodash.defaultsdeep')
 const Logger = require('./Logger')
 const Helper = require('./Helper')
-
+const StatsPrinter = require('./StatsPrinter')
 const cloneDeep = require('lodash.clonedeep')
 
 var UfpOptimizer = {}
@@ -24,26 +24,52 @@ var logOptimizerEnd = function (optimizer) {
 
 require('events').EventEmitter.defaultMaxListeners = Infinity
 
+
 UfpOptimizer.executeOptimizations = function (settings) {
-    var doHtAccess = function () {
+
+    var optimizerStatResults = [];
+
+    var doHtAccess = function (result) {
+        optimizerStatResults.push(result)
         return UfpOptimizer.optimizeHtAccess(settings)
     }
 
-    var doImageOptimization = function () {
+    var doImageOptimization = function (result) {
+
+        optimizerStatResults.push(result)
         return UfpOptimizer.optimizeImages(settings);
     }
 
-    var doHTMLOptimization = function () {
+    var doHTMLOptimization = function (result) {
+
+        optimizerStatResults.push(result)
         return UfpOptimizer.optimizeHTML(settings);
     }
-    var doCssOptimization = function () {
+    var doCssOptimization = function (result) {
+
+        optimizerStatResults.push(result)
         return UfpOptimizer.optimizeCSS(settings)
     }
 
-    var doZip = function () {
+    var doZip = function (result) {
+
+        optimizerStatResults.push(result)
         return UfpOptimizer.zip(settings)
     }
-    return UfpOptimizer.copy(settings).then(doImageOptimization).then(doHTMLOptimization).then(doCssOptimization).then(doZip).then(doHtAccess)
+
+    var doStats = function (result) {
+        optimizerStatResults.push(result)
+        Logger.info('------------')
+        Logger.info('Statistics')
+        Logger.info('------------')
+        StatsPrinter.getSimpleResultsAsArray(optimizerStatResults).map(function (line) {
+            Logger.info(line)
+        })
+
+        Logger.info('------------')
+        return result;
+    }
+    return UfpOptimizer.copy(settings).then(doImageOptimization).then(doHTMLOptimization).then(doCssOptimization).then(doZip).then(doHtAccess).then(doStats)
 }
 
 UfpOptimizer.getConfig = function (preset, customConfigSettings) {
@@ -64,7 +90,7 @@ UfpOptimizer.validateConfig = function (config, autofix) {
 
 UfpOptimizer.copy = function (settings) {
     if (settings.optimizer.copyOptim.enabled === false) {
-        return Helper.emptyPromise(settings)
+        return Helper.emptyPromise(null)
     }
     logOptimizerStart(optimCopy)
 
@@ -76,7 +102,7 @@ UfpOptimizer.copy = function (settings) {
 
 UfpOptimizer.optimizeImages = function (settings) {
     if (settings.optimizer.imageOptim.enabled === false) {
-        return Helper.emptyPromise(settings)
+        return Helper.emptyPromise(null)
     }
     logOptimizerStart(optimImages)
 
@@ -89,7 +115,7 @@ UfpOptimizer.optimizeImages = function (settings) {
 
 UfpOptimizer.optimizeHTML = function (settings) {
     if (settings.optimizer.htmlOptim.enabled === false) {
-        return Helper.emptyPromise(settings)
+        return Helper.emptyPromise(null)
     }
 
     logOptimizerStart(optimHTML)
@@ -104,7 +130,7 @@ UfpOptimizer.optimizeHTML = function (settings) {
 
 UfpOptimizer.optimizeHtAccess = function (settings) {
     if (settings.optimizer.htaccessOptim.enabled === false) {
-        return Helper.emptyPromise(settings)
+        return Helper.emptyPromise(null)
     }
 
     logOptimizerStart(optimHtAccess)
@@ -119,7 +145,7 @@ UfpOptimizer.optimizeHtAccess = function (settings) {
 
 UfpOptimizer.optimizeCSS = function (settings) {
     if (settings.optimizer.cssOptim.enabled === false) {
-        return Helper.emptyPromise(settings)
+        return Helper.emptyPromise(null)
     }
 
     logOptimizerStart(optimizeCSS)
@@ -140,7 +166,7 @@ UfpOptimizer.optimizeCSS = function (settings) {
 
 UfpOptimizer.zip = function (settings) {
     if (settings.optimizer.zipOptim.enabled === false) {
-        return Helper.emptyPromise(settings)
+        return Helper.emptyPromise(null)
     }
 
     logOptimizerStart(optimZIP)
