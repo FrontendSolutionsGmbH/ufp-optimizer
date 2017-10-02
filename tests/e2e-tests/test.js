@@ -3,7 +3,7 @@ const helper = require('./helper')
 describe('Fullpage Test', function() {
   it('Should ignore null parameter', function (done) {
     const data = {
-      inputDirName: 'examples/0/fullpage',
+      inputDirName: 'tests/e2e-tests/testdata/0/fullpage',
       outputDirName: 'dist-0',
       configFileName: ''
     }
@@ -17,7 +17,7 @@ describe('Fullpage Test', function() {
 describe('Fast', function() {
   it('Should ignore null parameter', function (done) {
     const data = {
-      inputDirName: 'examples/1/fast',
+      inputDirName: 'tests/e2e-tests/testdata/1/fast',
       outputDirName: 'dist-1',
       configFileName: ''
     }
@@ -30,7 +30,7 @@ describe('Fast', function() {
 describe('Fast Test', function() {
   it('Should ignore null parameter', function (done) {
     const data = {
-      inputDirName: 'examples/1/fast',
+      inputDirName: 'tests/e2e-tests/testdata/1/fast',
       outputDirName: 'dist-2'
     }
     helper.build(data)
@@ -43,7 +43,7 @@ describe('Same Dir Test', function() {
   it('Should ignore null parameter', function (done) {
 
     var data = {
-      inputDirName: 'examples/1/fast',
+      inputDirName: 'tests/e2e-tests/testdata/1/fast',
       outputDirName: 'dist-3'
     }
     helper.copy(data)
@@ -60,7 +60,7 @@ describe('Same Dir Test', function() {
 describe('Broken Test', function() {
   it('Should ignore null parameter', function (done) {
     const data = {
-      inputDirName: 'examples/4/broken',
+      inputDirName: 'tests/e2e-tests/testdata/4/broken',
       outputDirName: 'dist-4',
       configFileName: ''
     }
@@ -74,7 +74,7 @@ describe('Broken Test', function() {
 describe('Not Existing Test', function() {
   it('Should ignore null parameter', function(done) {
     const data = {
-      inputDirName: 'examples/5/not-existing',
+      inputDirName: 'tests/e2e-tests/testdata/5/not-existing',
       outputDirName: 'dist-5',
       configFileName: ''
     }
