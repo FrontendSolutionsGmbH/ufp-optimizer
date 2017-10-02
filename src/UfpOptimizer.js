@@ -29,12 +29,13 @@ UfpOptimizer.executeOptimizations = function (settings) {
         return UfpOptimizer.optimizeHtAccess(settings)
     }
 
-    var doOptimizations = function () {
-        return Promise.all([
-            UfpOptimizer.optimizeImages(settings),
-            UfpOptimizer.optimizeHTML(settings)])
+    var doImageOptimization = function () {
+        return UfpOptimizer.optimizeImages(settings);
     }
 
+    var doHTMLOptimization = function () {
+        return UfpOptimizer.optimizeHTML(settings);
+    }
     var doCssOptimization = function () {
         return UfpOptimizer.optimizeCSS(settings)
     }
@@ -42,7 +43,7 @@ UfpOptimizer.executeOptimizations = function (settings) {
     var doZip = function () {
         return UfpOptimizer.zip(settings)
     }
-    return UfpOptimizer.copy(settings).then(doOptimizations).then(doCssOptimization).then(doZip).then(doHtAccess)
+    return UfpOptimizer.copy(settings).then(doImageOptimization).then(doHTMLOptimization).then(doCssOptimization).then(doZip).then(doHtAccess)
 }
 
 UfpOptimizer.getConfig = function (preset, customConfigSettings) {
