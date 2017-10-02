@@ -15,11 +15,11 @@ const cloneDeep = require('lodash.clonedeep')
 var UfpOptimizer = {}
 
 var logOptimizerStart = function (optimizer) {
-    Logger.info('** ' + optimizer.getName() + ' started' + ' **')
+    Logger.log('** ' + optimizer.getName() + ' started' + ' **')
 }
 
 var logOptimizerEnd = function (optimizer) {
-    Logger.info('** ' + optimizer.getName() + ' finished' + ' **')
+    Logger.log('** ' + optimizer.getName() + ' finished' + ' **')
 }
 
 require('events').EventEmitter.defaultMaxListeners = Infinity
@@ -61,22 +61,25 @@ UfpOptimizer.executeOptimizations = function (settings) {
         optimizerStatResults.push(result)
         Logger.info('------------')
         Logger.info('Statistics')
-        Logger.info('------------')
-        Logger.info('Detailed')
-        Logger.info('------------')
+        Logger.debug('------------')
+        Logger.debug('Detailed')
+        Logger.debug('------------')
         StatsPrinter.getSimpleDetailsResultsAsArray(optimizerStatResults).map(function (line) {
-            Logger.info(line)
+            Logger.debug(line)
         })
-        Logger.info('------------')
-        Logger.info('PerFile')
-        Logger.info('------------')
+        Logger.debug('------------')
+        Logger.debug('PerFile')
+        Logger.debug('------------')
         StatsPrinter.getSummaryDetailsPerFile(optimizerStatResults).map(function (line) {
-            Logger.info(line)
+            Logger.debug(line)
         })
         Logger.info('------------')
         Logger.info('Total')
         Logger.info('------------')
-        StatsPrinter.getSummaryDetailsTotal(optimizerStatResults, settings).map(function (line) {
+        StatsPrinter.getSummaryDetailsTotal(optimizerStatResults, settings, true).map(function (line) {
+            Logger.info(line)
+        })
+        StatsPrinter.getSummaryDetailsTotal(optimizerStatResults, settings, false).map(function (line) {
             Logger.info(line)
         })
         Logger.info('------------')

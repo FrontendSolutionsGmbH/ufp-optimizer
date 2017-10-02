@@ -28,15 +28,26 @@ StatsPrinter.getModuleResult = function (moduleResult) {
     return result;
 }
 
-var getResultsAdvanced = function (results) {
+var getResultsAdvanced = function (results, useWebP) {
 
     var inputFiles = {};
     var outputFiles = {};
 
     results.map(function (moduleResult) {
         if (moduleResult) {
+
+            // add inputfiles
             moduleResult.files.map(function (entry) {
                 var key = entry.inputFileName
+                if (entry.inputFileName.indexOf('.jpg') > -1 || entry.inputFileName.indexOf('.jpeg') > -1 || entry.inputFileName.indexOf('.png') > -1) {
+                    if (!useWebP && entry.outputFileName.indexOf('.webp') > -1) {
+                        return;
+                    }
+                    if (useWebP && !entry.outputFileName.indexOf('.webp') > -1) {
+                        return;
+                    }
+                }
+
                 if (inputFiles[key]) {
                     inputFiles[key].entries.push(entry)
                     if (entry.sizeBefore < inputFiles[key].sizeBeforeSmallest) {
@@ -63,8 +74,19 @@ var getResultsAdvanced = function (results) {
                 }
             })
 
+            // add outputfiles
             moduleResult.files.map(function (entry) {
                 var key2 = entry.outputFileName
+
+                if (entry.inputFileName.indexOf('.jpg') > -1 || entry.inputFileName.indexOf('.jpeg') > -1 || entry.inputFileName.indexOf('.png') > -1) {
+                    if (!useWebP && entry.outputFileName.indexOf('.webp') > -1) {
+                        return;
+                    }
+                    if (useWebP && !entry.outputFileName.indexOf('.webp') > -1) {
+                        return;
+                    }
+                }
+
                 if (outputFiles[key2]) {
                     outputFiles[key2].entries.push(entry)
                     if (entry.sizeBefore < outputFiles[key2].sizeBeforeSmallest) {
@@ -127,28 +149,29 @@ StatsPrinter.getSummaryDetailsPerFile = function (results) {
     return Helper.flatten(result).sort()
 }
 
-StatsPrinter.getSummaryDetailsTotal = function (results, settings) {
+StatsPrinter.getSummaryDetailsTotal = function (results, settings, useWebP) {
     var totalResults = []
     var resultWithoutZip = {
         sizeAfterSmallest: 0,
         sizeBeforeLargestTotal: 0,
-        name: 'No Zip'
+        name: 'No Zip' + (useWebP ? ' with WebP' : '')
     }
 
     var resultWithBrotli = {
         sizeAfterSmallest: 0,
         sizeBeforeLargestTotal: 0,
-        name: 'Brotli'
+        name: 'Brotli' + (useWebP ? ' with WebP' : '')
     }
 
     var resultWithZopfli = {
         sizeAfterSmallest: 0,
         sizeBeforeLargestTotal: 0,
-        name: 'Zopfli'
+        name: 'Zopfli' + (useWebP ? ' with WebP' : '')
     }
-    
-    var resultsAdvanced = getResultsAdvanced(results)
 
+    var resultsAdvanced = getResultsAdvanced(results, useWebP)
+
+    // collect sizes of br/gz/no zip compressors
     Object.keys(resultsAdvanced.outputFiles).map(function (key, index) {
         var entryOuter = resultsAdvanced.outputFiles[key];
 
@@ -161,6 +184,33 @@ StatsPrinter.getSummaryDetailsTotal = function (results, settings) {
         } else {
             resultWithoutZip.sizeAfterSmallest += entryOuter.sizeAfterSmallest
             resultWithoutZip.sizeBeforeLargestTotal += entryOuter.sizeBeforeLargestTotal
+        }
+
+    });
+
+    // add sizes of files to gzip/brotli that are not zipped (like images, they are not compressed but we want to know the total amount of reduction.
+    Object.keys(resultsAdvanced.outputFiles).map(function (key, index) {
+        var entryOuter = resultsAdvanced.outputFiles[key];
+
+        if (!entryOuter.outputFileName.endsWith('.br') && !entryOuter.outputFileName.endsWith('.gz')) {
+            var foundInstanceWithBr = false
+            var foundInstanceWithGz = false
+
+            Object.keys(resultsAdvanced.outputFiles).map(function (key2, index2) {
+                var entryOuter2 = resultsAdvanced.outputFiles[key2];
+                if (entryOuter2.outputFileName === entryOuter.outputFileName + '.gz') {
+                    foundInstanceWithGz = true;
+                } else if (entryOuter2.outputFileName === entryOuter.outputFileName + '.br') {
+                    foundInstanceWithBr = true;
+                }
+            })
+
+            if (!foundInstanceWithBr && !foundInstanceWithGz) {
+                resultWithZopfli.sizeAfterSmallest += entryOuter.sizeAfterSmallest
+                resultWithZopfli.sizeBeforeLargestTotal += entryOuter.sizeBeforeLargestTotal
+                resultWithBrotli.sizeAfterSmallest += entryOuter.sizeAfterSmallest
+                resultWithBrotli.sizeBeforeLargestTotal += entryOuter.sizeBeforeLargestTotal
+            }
         }
 
     });
@@ -183,7 +233,7 @@ StatsPrinter.getSummaryDetailsTotal = function (results, settings) {
     }
 
     return totalResults.map(function (totalResultEntry) {
-        return totalResultEntry.name + ' ' + Math.round(totalResultEntry.sizeAfterSmallest / 1024) + 'kb ' + Math.round((totalResultEntry.sizeAfterSmallest / totalResultEntry.sizeBeforeLargestTotal) * 100) + '% ' + '(' + Math.round(totalResultEntry.sizeBeforeLargestTotal / 1024) + 'kb -' + Math.round((totalResultEntry.sizeBeforeLargestTotal - totalResultEntry.sizeAfterSmallest) / 1024) + 'kb -' + Math.round((1 - (totalResultEntry.sizeAfterSmallest / totalResultEntry.sizeBeforeLargestTotal)) * 100) + '%)'
+        return totalResultEntry.name + ': ' + Math.round(totalResultEntry.sizeAfterSmallest / 1024) + 'kb <= ' + Math.round(totalResultEntry.sizeBeforeLargestTotal / 1024) + 'kb ' + Math.round((totalResultEntry.sizeAfterSmallest / totalResultEntry.sizeBeforeLargestTotal) * 100) + '% ' + '(' + '-' + Math.round((1 - (totalResultEntry.sizeAfterSmallest / totalResultEntry.sizeBeforeLargestTotal)) * 100) + '% ' + '-' + Math.round((totalResultEntry.sizeBeforeLargestTotal - totalResultEntry.sizeAfterSmallest) / 1024) + 'kb' + ')'
     })
 
 }

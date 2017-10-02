@@ -36,7 +36,10 @@ ImageOptim.optimizeFile = function (fileName, settings) {
         settings.webp = defaultsDeep(customOptionsMin.webp || {}, imageminOptions.webp)
         settings.giflossy = defaultsDeep(customOptionsMin.giflossy || {}, imageminOptions.giflossy)
 
-        var resultStats = helper.getOptimizationResultForFileBefore(fileName, fileName, ImageOptim, 'imagemin');
+
+        var resultStats = []
+        resultStats.push(helper.getOptimizationResultForFileBefore(fileName, fileName, ImageOptim, 'imagemin'));
+
         var funcAll = function () {
             Logger.debug('image', fileName)
             var ext = path.extname(fileName)
@@ -45,35 +48,43 @@ ImageOptim.optimizeFile = function (fileName, settings) {
                 case '.png':
                     if (settings.pngQuant.enabled) {
                         plugins.push(imageminPngquant(settings.pngQuant.options))
+                        resultStats[0].group += '-pngQuant'
                     }
                     if (settings.pngCrush.enabled) {
                         plugins.push(imageminPngcrush(settings.pngCrush.options))
+                        resultStats[0].group += '-pngCrush'
                     }
                     if (settings.webp.enabled) {
                         plugins.push(imageminWebp(settings.webp.options))
+                        resultStats.push(helper.getOptimizationResultForFileBefore(fileName, fileName.replace('.png', '.webp'), ImageOptim, 'imagemin-webp'))
                     }
                     break
                 case '.jpg':
                 case '.jpeg':
                     if (settings.jpegRecompress.enabled) {
                         plugins.push(imageminJpegRecompress(settings.jpegRecompress.options))
+                        resultStats[0].group += '-jpegRecompress'
                     }
                     if (settings.webp.enabled) {
                         plugins.push(imageminWebp(settings.webp.options))
+                        resultStats.push(helper.getOptimizationResultForFileBefore(fileName, fileName.replace('.jpg', '.webp').replace('.jpeg', '.webp'), ImageOptim, 'imagemin-webp'))
                     }
                     break
                 case '.svg':
                     if (settings.svgo.enabled) {
                         plugins.push(imageminSvgo(settings.svgo.options))
+                        resultStats[0].group += '-svgo'
                     }
                     break
                 case '.gif':
                     if (settings.giflossy.enabled) {
                         plugins.push(imageminGiflossy(settings.giflossy.options))
+                        resultStats[0].group += '-giflossy'
                     }
                     break
             }
 
+            console.log('jpegRecompress', settings.jpegRecompress.options, plugins)
             if (plugins.length > 0) {
                 return imagemin([fileName], imageDir, {
                     plugins: plugins

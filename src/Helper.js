@@ -52,7 +52,11 @@ Helper.getOptimizationResultForFileBefore = function (inputFileName, outputFileN
 
 Helper.updateOptimizationResultForFileAfter = function (optimizationResult) {
     if (optimizationResult) {
-        optimizationResult.sizeAfter = Helper.getFilesizeInBytes(optimizationResult.outputFileName)
+        if (Array.isArray(optimizationResult)) {
+            return optimizationResult.map(Helper.updateOptimizationResultForFileAfter)
+        } else {
+            optimizationResult.sizeAfter = Helper.getFilesizeInBytes(optimizationResult.outputFileName)
+        }
     }
     return optimizationResult;
 }

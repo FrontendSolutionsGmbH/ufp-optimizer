@@ -143,6 +143,37 @@ var globalsExtreme = defaultsDeep({
     preset: 'extreme'
 }, globalsProduction)
 
+var globalsLossy = defaultsDeep({
+    preset: 'lossy',
+    optimizer: {
+        imageOptim: {
+            imagemin: {
+
+                options: {
+                    pngQuant: {
+                        options: {quality: '30'}
+                    },
+                    pngCrush: {
+                        options: {}
+                    },
+                    webp: {
+                        options: {quality: 30}
+                    },
+                    jpegRecompress: {
+                        options: {quality: 'low'}
+                    },
+                    jpegMoz: {
+                        options: {quality: '20-50'}
+                    },
+                    giflossy: {
+                        options: {lossy: 30}
+                    }
+                }
+            }
+        }
+    }
+}, globalsProduction)
+
 var getConfig = function (preset) {
     var result = globalsProduction
     switch (preset) {
@@ -152,6 +183,9 @@ var getConfig = function (preset) {
         case 'extreme':
             result = globalsExtreme
             break
+        case 'lossy':
+            result = globalsLossy
+            break;
     }
     return result
 }
@@ -179,7 +213,7 @@ var getConfigHelp = function (preset) {
                 alias: 'p',
                 default: process.env.NODE_ENV,
                 demandOption: config.debug,
-                choices: ['development', 'production', 'extreme'],
+                choices: ['development', 'production', 'extreme', 'lossy'],
                 describe: 'Defines how strong it optimizes. development is fast. production takes longer, hardcore takes veeery long. Also changes the cache duration for development purposes',
                 type: 'string',
                 group: 'Options:'

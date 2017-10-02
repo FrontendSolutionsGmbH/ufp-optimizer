@@ -3,6 +3,10 @@ const winston = require('winston')
 
 winston.cli()
 
+Logger.log = function () {
+    winston.log.apply(this, arguments)
+}
+
 Logger.info = function () {
     winston.info.apply(this, arguments)
 }
