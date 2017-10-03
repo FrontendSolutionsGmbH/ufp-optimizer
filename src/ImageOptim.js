@@ -90,7 +90,9 @@ ImageOptim.optimizeFile = function (fileName, settings) {
                     return imagemin([fileName], imageDir, {
                         plugins: [imageminWebp(settings.webp.options)]
                     }).then(function (result) {
-                        resultStats.push(helper.getOptimizationResultForFileBefore(fileName, fileName.replace('.png', '.webp').replace('.jpg', '.webp').replace('.jpeg', '.webp'), ImageOptim, 'imagemin-webp'))
+                        if (fs.existsSync(path)) {
+                            resultStats.push(helper.getOptimizationResultForFileBefore(fileName, fileName.replace('.png', '.webp').replace('.jpg', '.webp').replace('.jpeg', '.webp'), ImageOptim, 'imagemin-webp'))
+                        }
                         return result;
                     }).catch(function (error) {
                         Logger.error('error', fileName, error)
