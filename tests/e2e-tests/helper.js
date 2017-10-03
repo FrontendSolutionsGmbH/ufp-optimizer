@@ -4,22 +4,28 @@ const app = require('src/UfpOptimizer')
 
 var helper = {}
 
+helper.cutSuffix = function (string) {
+    return string.replace(/(^.*)\./g, '$1')
+}
+
+
 helper.filewalker = function (dir) {
   var result = []
 
   var list = fs.readdirSync(dir)
   list.forEach(function (file) {
     file = path.resolve(dir, file)
+      const fileName = file.replace(/^.*[\\\/]/, '')
 
     var stat = fs.statSync(file)
 
     if (stat && stat.isDirectory()) {
       var res = helper.filewalker(file)
-      result.push({type: 'dir', fileName: file})
+      result.push({type: 'dir', fileName: fileName, path: file})
       result = result.concat(res)
     }
 
-    result.push({type: 'file', fileName: file, fileSize: stat['size']})
+    result.push({type: 'file', fileName: fileName, fileSize: stat['size'], path: file})
   })
   return result
 }

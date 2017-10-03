@@ -2,7 +2,7 @@ const helper = require('./helper')
 const path = require('path')
 
 describe('Fullpage Test', function() {
-  it('Should ignore null parameter', function (done) {
+  it('Should compress the files', function (done) {
     const data = {
       inputDirName: 'tests/e2e-tests/testdata/0/fullpage',
       outputDirName: 'dist-0',
@@ -12,20 +12,21 @@ describe('Fullpage Test', function() {
     const inputDataFiles = inputData.filter(function (entry) {
       return entry.type === 'file'
     })
-    const inputDataFilesSize = inputDataFiles.reduce(function (value, entry) {
-      return value + entry.fileSize
-    }, 0)
-    var outputData
     this.timeout(10000)
     helper.build(data).then(function () {
-      outputData = helper.filewalker(data.outputDirName)
+      const outputData = helper.filewalker(data.outputDirName)
       const outputDataFiles = outputData.filter(function (entry) {
         return entry.type === 'file'
       })
-      const outputDataFilesSize = outputDataFiles.reduce(function (value, entry) {
-        return value + entry.fileSize
-      }, 0)
-      expect(inputDataFilesSize).to.equal(outputDataFilesSize)
+        inputDataFiles.forEach(function (inputEntry) {
+            const inputPrefix = helper.cutSuffix(inputEntry.fileName)
+            outputDataFiles.forEach(function (outputEntry) {
+              const outputPrefix = helper.cutSuffix(outputEntry.fileName)
+                if (inputPrefix === outputPrefix || inputPrefix === helper.cutSuffix(outputPrefix)) {
+                    expect(inputEntry.fileSize).to.be.at.least(outputEntry.fileSize)
+                }
+            })
+        })
     }).then(done, done)
   })
 })/*
