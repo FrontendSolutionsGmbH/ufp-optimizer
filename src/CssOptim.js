@@ -26,14 +26,13 @@ CssOptim.optimizeFile = function (fileName, settingsHtmlFiles, settings) {
                 .minify(source)
                 .then(function (output) {
 
-                    console.log(output)
                     fs.outputFileSync(fileName, output.styles)
                     fs.outputFileSync(fileName + '.map', output.sourceMap)
                     resolve(helper.updateOptimizationResultForFileAfter(resultStats))
                 })
                 .catch(function (error) {
 
-                    Logger.error('uncss-error', error)
+                    Logger.error('cleanCss-error', error)
                     reject(null)
                 });
 
