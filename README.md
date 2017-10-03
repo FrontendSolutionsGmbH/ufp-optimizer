@@ -14,6 +14,7 @@ It is based on a bunch of cross-platform node.js tools
 * [clean-css](https://www.npmjs.com/package/clean-css)
 * [html-minifier](https://www.npmjs.com/package/html-minifier)
 * [node-zopfli](https://www.npmjs.com/package/node-zopfli)
+* [uglify-js](https://www.npmjs.com/package/uglify-js)
 * [brotli](https://www.npmjs.com/package/brotli)
 * [imagemin](https://www.npmjs.com/package/imagemin)
 * [imagemin-giflossy](https://www.npmjs.com/package/imagemin-giflossy)
@@ -105,7 +106,7 @@ TODO
 
 ## CLI params ##
 
-ufp-optimizer-cli [inputDir] [outputDir] [configFile]
+ufp-optimizer-cli optimize [inputDir] [outputDir] [configFile]
 
 | Parameter | Description                                     | Example |
 | --------- | -----------                                     | ------- |
@@ -122,17 +123,14 @@ The config file is a json file containing sever settings to control what will be
 | inputDir  | Directory which contains the files that need to be compressed | dist    |
 | outputDir  | Where the files will be written. Needs to be different from inputDir | distCompressed    |
 
+To get a better idea what you can configure have a look at the default config [Globals.js](src/Globals.js)
+
 ## Todos ##
 
-* repair uncss (seems to be used in an incorrect way working on css+html and not on html only)
-* add development preset for faster execution (no brotli, no zopfli just zlib + faster image compressions)
 * File based optimization: Allow regex as input and not only full directories
-* More config settings (enable/disable whole steps like html-minification, use brotli and zopfli on more extensions and so on)
 * Intelligent optimizer: Image similarity Index, e.g. GMSD for optimal compression method
 * Better image compression: jpegmini and imageOptim https://jamiemason.github.io/ImageOptim-CLI/
-* Better interface for ufp-optimizer (like webpack)
-* Better js compression: add closure  and uglify-js (caution)
-* Webpack Plugin
+* Webpack Plugin?
 
 ## Known problems ##
 

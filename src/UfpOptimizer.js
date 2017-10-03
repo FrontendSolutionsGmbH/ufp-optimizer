@@ -1,6 +1,7 @@
 const path = require('path')
 const optimImages = require('./ImageOptim')
 const optimHTML = require('./HtmlOptim')
+const optimJs = require('./JsOptim')
 const optimizeCSS = require('./CssOptim')
 const optimZIP = require('./ZipOptim')
 const optimCopy = require('./CopyOptim')
@@ -45,6 +46,11 @@ UfpOptimizer.executeOptimizations = function (settings) {
         optimizerStatResults.push(result)
         return UfpOptimizer.optimizeHTML(settings);
     }
+    var doJsOptimization = function (result) {
+
+        optimizerStatResults.push(result)
+        return UfpOptimizer.optimizeJs(settings);
+    }
     var doCssOptimization = function (result) {
 
         optimizerStatResults.push(result)
@@ -78,7 +84,7 @@ UfpOptimizer.executeOptimizations = function (settings) {
         console.log('------------')
         return result;
     }
-    return UfpOptimizer.copy(settings).then(doImageOptimization).then(doHTMLOptimization).then(doCssOptimization).then(doZip).then(doHtAccess).then(doStats)
+    return UfpOptimizer.copy(settings).then(doImageOptimization).then(doHTMLOptimization).then(doCssOptimization).then(doJsOptimization).then(doZip).then(doHtAccess).then(doStats)
 }
 
 UfpOptimizer.getConfig = function (preset, customConfigSettings) {
@@ -133,6 +139,21 @@ UfpOptimizer.optimizeHTML = function (settings) {
     var files = fs.walkSync(settings.outputDir)
     return optimHTML.optimizeFileList(files, settings).then(function (result) {
         logOptimizerEnd(optimHTML)
+        return result
+    })
+}
+
+UfpOptimizer.optimizeJs = function (settings) {
+    if (settings.optimizer.jsOptim.enabled === false) {
+        return Helper.emptyPromise(null)
+    }
+
+    logOptimizerStart(optimJs)
+
+    // optimize
+    var files = fs.walkSync(settings.outputDir)
+    return optimJs.optimizeFileList(files, settings).then(function (result) {
+        logOptimizerEnd(optimJs)
         return result
     })
 }

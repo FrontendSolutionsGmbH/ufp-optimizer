@@ -14,7 +14,6 @@ HtmlOptim.optimizeFile = function (fileName, settings) {
             var result = fs.readFileSync(fileName, 'utf8')
             var resultMinified = result
 
-            console.log('doHtmlMinify', htmlOptimSettings)
             var resultStats = helper.getOptimizationResultForFileBefore(fileName, fileName, HtmlOptim, 'htmlMinifier');
 
             try {
@@ -23,7 +22,6 @@ HtmlOptim.optimizeFile = function (fileName, settings) {
                 Logger.error('html error catched', fileName)
             }
 
-            console.log(resultMinified)
             fs.outputFileSync(fileName, resultMinified)
             resolve(helper.updateOptimizationResultForFileAfter(resultStats))
         } else {
@@ -54,7 +52,6 @@ HtmlOptim.optimizeFileList = function (fileList, settings) {
         Logger.debug('all html files written')
         Logger.debug('html: finished')
 
-        //  console.log('all HtmlOptim files written', helper.getOptimizationResultForOptimizer(result, HtmlOptim))
         return helper.getOptimizationResultForOptimizer(result, HtmlOptim)
     })
 }

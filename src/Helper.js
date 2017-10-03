@@ -64,7 +64,9 @@ Helper.updateOptimizationResultForFileAfter = function (optimizationResult) {
 Helper.getOptimizationResultForOptimizer = function (resultsForFiles, optimizer) {
     return {
         name: optimizer.getName(),
-        files: Helper.flatten(resultsForFiles || [])
+        files: Helper.flatten(resultsForFiles || []).filter(function (entry) {
+            return entry ? true : false;
+        })
     };
 }
 

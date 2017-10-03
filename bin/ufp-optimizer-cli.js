@@ -53,6 +53,7 @@ var enableOnlyThisOptimizer = function (settings, optimString) {
     settings.optimizer.htaccessOptim.enabled = false
     settings.optimizer.zipOptim.enabled = false
     settings.optimizer.htmlOptim.enabled = false
+    settings.optimizer.jsOptim.enabled = false
     settings.optimizer.copyOptim.enabled = true
     settings.optimizer[optimString].enabled = true
     return settings
@@ -119,6 +120,14 @@ var argv = yargs.epilog('UFP Optimizer - Frontend Solutions 2017')
         function (argv) {
             var settings = getConfigByArgv(argv)
             doOptimizations(enableOnlyThisOptimizer(settings, 'htmlOptim'))
+        }
+    )
+    .command(['optimize-js [inputDir] [outputDir]'], 'Same as optimize but only for js', function () {
+
+        },
+        function (argv) {
+            var settings = getConfigByArgv(argv)
+            doOptimizations(enableOnlyThisOptimizer(settings, 'jsOptim'))
         }
     )
     .command(['optimize-zip [inputDir] [outputDir]'], 'Same as optimize but only for zip', function () {

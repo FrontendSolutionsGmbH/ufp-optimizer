@@ -118,6 +118,15 @@ var globalsProduction = {
                 }
             }
         },
+        jsOptim: {
+            enabled: true,
+            options: {
+                uglifyJs: {
+                    enabled: true,
+                    options: {}
+                }
+            }
+        },
         copyOptim: {
             enabled: true
         }
