@@ -67,9 +67,9 @@ var globalsProduction = {
         cssOptim: {
             enabled: true,
             options: {
-                uncss: {
+                cleanCss: {
                     enabled: true,
-                    options: {ignore: ['.class1'], ignoreSheets: [/fast.fonts.net/]}
+                    options: {level: 1}
                 }
             }
         },
@@ -140,11 +140,7 @@ var globalsDevelopment = defaultsDeep({
 
 var globalsExtreme = defaultsDeep({
     debug: false,
-    preset: 'extreme'
-}, globalsProduction)
-
-var globalsLossy = defaultsDeep({
-    preset: 'lossy',
+    preset: 'extreme',
     optimizer: {
         imageOptim: {
             imagemin: {
@@ -168,6 +164,55 @@ var globalsLossy = defaultsDeep({
                     giflossy: {
                         options: {lossy: 0}
                     }
+                }
+            }
+        },
+        cssOptim: {
+            enabled: true,
+            options: {
+                cleanCss: {
+                    enabled: true,
+                    options: {level: 2}
+                }
+            }
+        }
+    }
+}, globalsProduction)
+
+var globalsLossy = defaultsDeep({
+    preset: 'lossy',
+    optimizer: {
+        imageOptim: {
+            imagemin: {
+
+                options: {
+                    pngQuant: {
+                        options: {quality: '30'}
+                    },
+                    pngCrush: {
+                        options: {reduce: true}
+                    },
+                    webp: {
+                        options: {quality: 30}
+                    },
+                    jpegRecompress: {
+                        options: {quality: 'low'}
+                    },
+                    jpegMoz: {
+                        options: {quality: '30'}
+                    },
+                    giflossy: {
+                        options: {lossy: 30}
+                    }
+                }
+            }
+        },
+        cssOptim: {
+            enabled: true,
+            options: {
+                cleanCss: {
+                    enabled: true,
+                    options: {level: 2}
                 }
             }
         }

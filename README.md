@@ -13,7 +13,7 @@ It is based on a bunch of cross-platform node.js tools
 
 * [clean-css](https://www.npmjs.com/package/clean-css)
 * [html-minifier](https://www.npmjs.com/package/html-minifier)
-* [node-zopfli](https://www.npmjs.com/package/)
+* [node-zopfli](https://www.npmjs.com/package/node-zopfli)
 * [brotli](https://www.npmjs.com/package/brotli)
 * [imagemin](https://www.npmjs.com/package/imagemin)
 * [imagemin-giflossy](https://www.npmjs.com/package/imagemin-giflossy)
