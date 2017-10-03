@@ -1,6 +1,7 @@
 const helper = require('./Helper')
 const path = require('path')
 const imagemin = require('imagemin')
+const fs = require('fs-extra')
 const imageminPngquant = require('imagemin-pngquant')
 const imageminSvgo = require('imagemin-svgo')
 const imageminWebp = require('imagemin-webp')
