@@ -100,9 +100,21 @@ var globalsProduction = {
         htmlOptim: {
             enabled: true,
             options: {
-                minify: {
+                htmlMinifier: {
                     enabled: true,
-                    options: {}
+                    options: {
+                        collapseBooleanAttributes: true,
+                        collapseInlineTagWhitespace: true,
+                        collapseWhitespace: true,
+                        conservativeCollapse: true,
+                        decodeEntities: true,
+                        removeComments: true,
+                        removeEmptyAttributes: true,
+                        removeEmptyElements: true,
+                        removeScriptTypeAttributes: true,
+                        sortAttributes: true,
+                        sortClassName: true
+                    }
                 }
             }
         },

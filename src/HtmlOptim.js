@@ -10,18 +10,20 @@ HtmlOptim.optimizeFile = function (fileName, settings) {
     var htmlOptimSettings = settings.optimizer.htmlOptim
 
     return new Promise(function (resolve) {
-        if (htmlOptimSettings.enabled && htmlOptimSettings.options.minify.enabled) {
+        if (htmlOptimSettings.enabled && htmlOptimSettings.options.htmlMinifier.enabled) {
             var result = fs.readFileSync(fileName, 'utf8')
             var resultMinified = result
 
-            var resultStats = helper.getOptimizationResultForFileBefore(fileName, fileName, HtmlOptim, 'minify');
+            console.log('doHtmlMinify', htmlOptimSettings)
+            var resultStats = helper.getOptimizationResultForFileBefore(fileName, fileName, HtmlOptim, 'htmlMinifier');
 
             try {
-                resultMinified = minify(result, htmlOptimSettings.options.minify.options)
+                resultMinified = minify(result, htmlOptimSettings.options.htmlMinifier.options)
             } catch (ex) {
                 Logger.error('html error catched', fileName)
             }
 
+            console.log(resultMinified)
             fs.outputFileSync(fileName, resultMinified)
             resolve(helper.updateOptimizationResultForFileAfter(resultStats))
         } else {
@@ -52,7 +54,7 @@ HtmlOptim.optimizeFileList = function (fileList, settings) {
         Logger.debug('all html files written')
         Logger.debug('html: finished')
 
-      //  console.log('all HtmlOptim files written', helper.getOptimizationResultForOptimizer(result, HtmlOptim))
+        //  console.log('all HtmlOptim files written', helper.getOptimizationResultForOptimizer(result, HtmlOptim))
         return helper.getOptimizationResultForOptimizer(result, HtmlOptim)
     })
 }
