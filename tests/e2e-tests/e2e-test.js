@@ -6,31 +6,31 @@ const testsuits = [
     configFileName: ''
   },
   {
-    testName: 'Fast',
+    testName: 'CSS',
     inputDirName: 'tests/e2e-tests/testdata/1/css',
     outputDirName: 'dist-1',
     configFileName: ''
   },
   {
-    testName: 'Test Fast',
+    testName: 'HTML',
     inputDirName: 'tests/e2e-tests/testdata/2/html',
     outputDirName: 'dist-2',
     configFileName: ''
   },
   {
-    testName: 'Same Dir',
+    testName: 'IMG',
     inputDirName: 'tests/e2e-tests/testdata/3/img',
     outputDirName: 'dist-3',
     configFileName: ''
   },
   {
-    testName: 'Broken',
-    inputDirName: 'tests/e2e-tests/testdata/4/inc',
+    testName: 'PHP',
+    inputDirName: 'tests/e2e-tests/testdata/4/php',
     outputDirName: 'dist-4',
     configFileName: ''
   },
   {
-    testName: 'Not Existing',
+    testName: 'JS',
     inputDirName: 'tests/e2e-tests/testdata/5/js',
     outputDirName: 'dist-5',
     configFileName: ''
