@@ -68,8 +68,16 @@ Then you can either use it in your node.js code, as a cli terminal command or as
 
 If you use ufp-optimizer in your node.js code you have the following commands available
 
+```javascript
+var uo = require('ufp-optimizer')
+var settings = uo.getConfig();
+settings.inputDir = 'dist';
+settings.outputDir = 'blub';
+uo.executeOptimizations(settings);
+```
 
-| Function | Params | Description |
+
+| Command | Params | Description |
 | --------- | ----------- | --------- |
 | getConfig | none | Returns the default settings object. You can change anything you like but keep in mind to use different input and outputDir |
 | executeOptimizations  | settings object | The most important command. One function to do everything (copy/css/images/html/...). Just pass the settings and you are good to go |
@@ -79,15 +87,6 @@ If you use ufp-optimizer in your node.js code you have the following commands av
 | optimizeCSS | settings object | Minimize css files. By default it does nothing dangerous to keep it compatible with all browsers |
 | optimizeJs | settings object | Minimize js files. By default it does nothing dangerous to keep it compatible with all browsers |
 | zip | settings object | Does zopfli + brotli compression on all text files |
-
-
-```javascript
-var uo = require('ufp-optimizer')
-var settings = uo.getConfig();
-settings.inputDir = 'dist';
-settings.outputDir = 'blub';
-uo.executeOptimizations(settings);
-```
 
 
 ### Commandline usage ###
@@ -111,9 +110,32 @@ or
 ```
 
 
-The default for inputDir is dist, outputDir is distOptimized. configFile is optional
+The default for inputDir is dist, outputDir is distOptimized.
 
-You can also run only a specific optimizer, e.g. to only optimize images and nothing else
+
+## CLI params ##
+
+Additional parameters are available to finetune your optimization process
+
+ufp-optimizer-cli optimize [inputDir] [outputDir] --config=myConfig.json --conf.preset=production --preset=development -- debug --help
+
+| Parameter | Description                                     | Example |
+| --------- | -----------                                     | ------- |
+| inputDir  | Directory which contains the files that need to be compressed | dist    |
+| outputDir  | Where the files will be written. Needs to be different from inputDir | distCompressed    |
+| --config  | Optional: A json config file containing specific params. To generate one use the config command | --config=myConfig.json    |
+| --conf  | Optional: Same as --config but inline, so no file is expected but instead the attributes | --conf.preset=production --conf.optimizer.imageOptim.enabled=false    |
+| --preset  | Optional: 'development', 'production', 'extreme', 'lossy' | --preset=lossy    |
+| --debug  | Optional: To get more output | --debug    |
+| --help  | Optional: To display a help | --help    |
+
+
+```
+> ufp-optimizer-cli optimize [inputDir] [outputDir] --preset=production --config=myConfig.json
+> ufp-optimizer-cli optimize [inputDir] [outputDir] --conf.preset=production --conf.optimizer.imageOptim.enabled=false
+```
+
+You may also run only a specific optimizer, e.g. to only optimize images and nothing else
 
 ```
 > ufp-optimizer-cli optimize-images [inputDir] [outputDir]
@@ -126,36 +148,27 @@ You can also run only a specific optimizer, e.g. to only optimize images and not
 ```
 
 
-## CLI params ##
+### The config command
 
-ufp-optimizer-cli optimize [inputDir] [outputDir] [configFile]
-
-| Parameter | Description                                     | Example |
-| --------- | -----------                                     | ------- |
-| inputDir  | Directory which contains the files that need to be compressed | dist    |
-| outputDir  | Where the files will be written. Needs to be different from inputDir | distCompressed    |
-| --config  | Optional: A config file containing specific params. Copy the ./src/Globals.js and modify it | --config=myConfig.js    |
-| --conf  | Optional: Same as --config but inline, so no file is expected but instead the attributes | --conf.preset=production --conf.optimizer.imageOptim.enabled=false    |
-| --preset  | Optional: 'development', 'production', 'extreme', 'lossy' | --preset=lossy    |
-| --debug  | Optional: To get more output | --debug    |
-| --help  | Optional: To display a help | --help    |
-
-
+Last but not least you can print the current configuration settings with the 'config' command, e.g. to see if everything is correct or to generate your own config starter
 
 ```
-> ufp-optimizer-cli optimize-images [inputDir] [outputDir] --preset=production --config=myConfig.js
-> ufp-optimizer-cli optimize-css [inputDir] [outputDir] --preset=development
+> ufp-optimizer-cli config > myConfig.json
+> ufp-optimizer-cli config --preset=production --config=myConfig.json
+> ufp-optimizer-cli config --conf.optimizer.imageOptim.enabled=false
 ```
 
-## ConfigFile params ##
+
+## Config params ##
 
 The config file is a json file containing sever settings to control what will be compressed and how. You can e.g. use a special png compression algorithm on some files or exclude them.
 
 | Parameter | Description                                     | Example |
 | --------- | -----------                                     | ------- |
 | inputDir  | Directory which contains the files that need to be compressed | dist    |
-| outputDir  | Where the files will be written. Needs to be different from inputDir | distCompressed    |
-| optimizer  | Huge amount of configurable properties, like quality and iterations and so on | [Globals.js](src/Globals.js)    |
+| outputDir  | Where the files will be written. Needs to be different from inputDir | distCompressed |
+| ... | Huge amount of configurable properties, like quality and iterations and so on | [Globals.js](src/Globals.js) |
+
 
 ## Todos ##
 
