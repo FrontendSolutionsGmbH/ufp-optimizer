@@ -13,6 +13,9 @@
     "build-5": "node bin/ufp-optimizer-cli.js optimize examples/5/not-existing dist/dist-5",
     "eslint": "./node_modules/.bin/eslint src/**.* bin/**.* --fix"
   },
+  "engines": {
+    "node": ">=8.5"
+  },
   "bin": {
     "ufp-optimizer-cli": "bin/ufp-optimizer-cli.js"
   },
