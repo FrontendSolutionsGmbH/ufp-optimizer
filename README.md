@@ -9,14 +9,7 @@ UFP optimizer is for optimizing stuff in an easy way
 * .gz and .br
 * optimized .htaccess
 
-It has different presets to get the best out of it
-
-* 'development': fast but not that small, e.g. it does normal .gz generation and not the slower but better zopfli one
-* 'production': good quality with some optimizations, normally this is what you want
-* 'lossy': === 'production' even smaller but with accepted loss of quality (e.g. images have low quality settings like 30)
-* 'extreme': === 'production' but with ultra hard settings to get the most out of it. Without quality loss ! This method takes a loooot of time so be prepared and get a cup of coffee
-
-and is based on a bunch of cross-platform node.js tools
+It is based on a bunch of cross-platform tools and combines them
 
 * [clean-css](https://www.npmjs.com/package/clean-css)
 * [html-minifier](https://www.npmjs.com/package/html-minifier)
@@ -49,6 +42,16 @@ ufp-optimizer works on a directory full of assets and compresses/minifies everyt
 * html minification with html-minifier
 * javascript minification with uglify-js
 * ready to use .htaccess for the above optimizations (so that a compatible browser loads image.jpeg.webp instead of image.jpeg)
+
+It has different presets to get the best out of it
+
+| Preset | Description |
+| --------- | ----------- | --------- |
+| production | Default: good quality with some optimizations, normally this is what you want |
+| development | fast but not that small, e.g. it does normal .gz generation and not the slower but better zopfli one |
+| lossy | same as 'production' but smaller but with accepted loss of quality (e.g. images have low quality settings like 30) |
+| extreme | same as 'production' but with strong settings to get the most out of it. This method takes a long time so be prepared and get a cup of coffee |
+
 
 ## How do I start? ##
 
