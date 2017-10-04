@@ -21,7 +21,7 @@ testsuits.forEach(function (data) {
             const outputPrefix = helper.cutSuffix(outputEntry.fileName)
             if (inputPrefix === outputPrefix || inputPrefix === helper.cutSuffix(outputPrefix)) {
               outputExists = true
-              expect(inputEntry.fileSize, 'input: ' + inputEntry.fileName + '\noutput: ' + outputEntry.fileName + '\n').to.be.at.least(outputEntry.fileSize)
+              expect(outputEntry.fileSize, 'input: ' + inputEntry.fileName + '\noutput: ' + outputEntry.fileName + '\n').to.be.at.most(inputEntry.fileSize)
             }
           })
           expect(outputExists).to.be.true
