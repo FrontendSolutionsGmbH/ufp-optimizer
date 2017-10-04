@@ -1,20 +1,28 @@
 # README #
 
-UFP optimizer is for optimizing stuff
+UFP optimizer is for optimizing stuff in an easy way
 
 * css
-* images
+* images  (jpeg, png, webp, svg)
 * html
-* svg
-* ...
+* javascript
+* .gz and .br
+* optimized .htaccess
 
-It is based on a bunch of cross-platform node.js tools
+It has different presets to get the best out of it
 
+* 'development': fast but not that small, e.g. it does normal .gz generation and not the slower but better zopfli one
+* 'production': good quality with some optimizations, normally this is what you want
+* 'lossy': === 'production' even smaller but with accepted loss of quality (e.g. images have low quality settings like 30)
+* 'extreme': === 'production' but with ultra hard settings to get the most out of it. Without quality loss ! This method takes a loooot of time so be prepared and get a cup of coffee
+
+and is based on a bunch of cross-platform node.js tools
 
 * [clean-css](https://www.npmjs.com/package/clean-css)
 * [html-minifier](https://www.npmjs.com/package/html-minifier)
 * [node-zopfli](https://www.npmjs.com/package/node-zopfli)
 * [uglify-js](https://www.npmjs.com/package/uglify-js)
+* [node-zopfli](https://www.npmjs.com/package/node-zopfli)
 * [brotli](https://www.npmjs.com/package/brotli)
 * [imagemin](https://www.npmjs.com/package/imagemin)
 * [imagemin-giflossy](https://www.npmjs.com/package/imagemin-giflossy)
@@ -29,15 +37,17 @@ It is based on a bunch of cross-platform node.js tools
 
 * Python 2.7
 * GCC (Unix) or Visual Studio Express (Windows)
+* Node 8.5
 
 ## What is this repository for? ##
 
-ufp-optimizer works on a directory base and compresses everything inside
+ufp-optimizer works on a directory full of assets and compresses/minifies everything inside
 
 * zopfli+brotli to text files (html, javascript, svg, css, ...)
 * image compressions (lossy) with imagemin
 * webp conversion of images (jpg and png)
 * html minification with html-minifier
+* javascript minification with uglify-js
 * ready to use .htaccess for the above optimizations (so that a compatible browser loads image.jpeg.webp instead of image.jpeg)
 
 ## How do I start? ##
@@ -64,6 +74,7 @@ If you use ufp-optimizer in your node.js code you have the following commands av
 | optimizeImages | settings object | Does lossy png, jpg and svg optimizations on all files in the outputDir. You can fine-tune the algorithms per settingsfile if necessary, e.g. allowing loss to get better results. |
 | optimizeHTML | settings object |  Minimizes html files. By default it does nothing dangerous to keep it compatible with all browsers |
 | optimizeCSS | settings object | Minimize css files. By default it does nothing dangerous to keep it compatible with all browsers |
+| optimizeJs | settings object | Minimize js files. By default it does nothing dangerous to keep it compatible with all browsers |
 | zip | settings object | Does zopfli + brotli compression on all text files |
 
 
@@ -81,28 +92,36 @@ uo.executeOptimizations(settings);
 You can also use it via command line
 
 ```
-> ufp-optimizer-cli [inputDir] [outputDir] [configFile]
+> ufp-optimizer-cli optimize [inputDir] [outputDir]
 ```
 
 Example for commandline
 
 ```
-> ufp-optimizer-cli dist distOptimized
+> ufp-optimizer-cli optimize dist distOptimized
 ```
 
 or
 
 ```
-> node node_modules/ufp-optimizer/bin/ufp-optimizer-cli dist distOptimized
+> node node_modules/ufp-optimizer/bin/ufp-optimizer-cli optimize dist distOptimized
 ```
 
 
 The default for inputDir is dist, outputDir is distOptimized. configFile is optional
 
+You can also run only a specific optimizer, e.g. to only optimize images and nothing else
 
-### webpack usage ###
+```
+> ufp-optimizer-cli optimize-images [inputDir] [outputDir]
+> ufp-optimizer-cli optimize-css [inputDir] [outputDir]
+> ufp-optimizer-cli optimize-html [inputDir] [outputDir]
+> ufp-optimizer-cli optimize-js [inputDir] [outputDir]
+> ufp-optimizer-cli optimize-zip [inputDir] [outputDir]
+> ufp-optimizer-cli optimize-htaccess [inputDir] [outputDir]
+> ufp-optimizer-cli optimize-copy [inputDir] [outputDir]
+```
 
-TODO
 
 ## CLI params ##
 
@@ -112,7 +131,18 @@ ufp-optimizer-cli optimize [inputDir] [outputDir] [configFile]
 | --------- | -----------                                     | ------- |
 | inputDir  | Directory which contains the files that need to be compressed | dist    |
 | outputDir  | Where the files will be written. Needs to be different from inputDir | distCompressed    |
-| configFile  | Optional: A config file containing specific params. Copy the ./src/Globals.js and modify it | myConfig.js    |
+| --config  | Optional: A config file containing specific params. Copy the ./src/Globals.js and modify it | --config=myConfig.js    |
+| --conf  | Optional: Same as --config but inline, so no file is expected but instead the attributes | --conf.preset=production --conf.optimizer.imageOptim.enabled=false    |
+| --preset  | Optional: 'development', 'production', 'extreme', 'lossy' | --preset=lossy    |
+| --debug  | Optional: To get more output | --debug    |
+| --help  | Optional: To display a help | --help    |
+
+
+
+```
+> ufp-optimizer-cli optimize-images [inputDir] [outputDir] --preset=production --config=myConfig.js
+> ufp-optimizer-cli optimize-css [inputDir] [outputDir] --preset=development
+```
 
 ## ConfigFile params ##
 
@@ -136,7 +166,7 @@ To get a better idea what you can configure have a look at the default config [G
 
 ### zopfli problem ###
 
-If you get an error like the one below just execute "npm rebuild"
+If you get an error like the one below make sure that the prerequsites are met and execute "npm rebuild"
 
 ```
 Error: Cannot find module '/mnt/d/Alex/projects/teo/node_modules/node-zopfli/lib/binding/node-v51-linux-x64/zopfli.node'

@@ -88,7 +88,7 @@ UfpOptimizer.executeOptimizations = function (settings) {
 }
 
 UfpOptimizer.getConfig = function (preset, customConfigSettings) {
-    return defaultsDeep(cloneDeep(customConfigSettings) || {}, require('./Globals').getConfig(preset || (customConfigSettings && customConfigSettings.preset)))
+    return defaultsDeep(customConfigSettings && cloneDeep(customConfigSettings) || {}, require('./Globals').getConfig(preset || (customConfigSettings && customConfigSettings.preset)))
 }
 
 UfpOptimizer.setLogLevelByConfig = function (config) {

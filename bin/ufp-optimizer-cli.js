@@ -15,8 +15,10 @@ var getConfigByArgv = function (argv) {
         config = defaultsDeep(cloneDeep(configFromFile), config)
     }
 
+
     if (argv.conf) {
-        config = defaultsDeep(argv.conf, config)
+        var confJson = JSON.parse(JSON.stringify(argv.conf).replace(/"false"/g, false).replace(/'false'/g, false).replace(/"true"/g, true).replace(/'true'/g, 'a'))
+        config = defaultsDeep(confJson, config)
     }
 
     if (argv.inputDir) {
@@ -68,7 +70,7 @@ var argv = yargs.epilog('UFP Optimizer - Frontend Solutions 2017')
     .example('ufp-optimizer-cli optimize dist distOptimized --config=myConfig.js')
     .example('ufp-optimizer-cli optimize --config=mySuperConfigContainingDirs.js')
     .example('ufp-optimizer-cli optimize --conf.debug=true --conf.imageCompression.enabled=false')
-    .example('ufp-optimizer-cli optimize --preset=extreme --conf.debug=true --conf.imageCompression.enabled=false')
+    .example('ufp-optimizer-cli optimize --preset=extreme --conf.debug=true --conf.optimizer.imageOptim.enabled=false')
     .example('ufp-optimizer-cli optimize-htaccess examples/1/fast dist-ht --preset=production')
     .example('ufp-optimizer-cli config > test.rc')
     .config('config', function (configPath) {
