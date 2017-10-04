@@ -1,32 +1,49 @@
 const path = require('path')
-const CleanCSS = require('clean-css')
 const fs = require('fs-extra')
+const Logger = require('./Logger')
+const helper = require('./Helper')
+const CleanCSS = require('clean-css');
+
 var CssOptim = {}
 
-CssOptim.optimizeFile = function (fileName, settings) {
-    return new Promise(function (resolve) {
-        var uncss = require('uncss')
-        var source = fs.readFileSync(fileName, 'utf8')
+CssOptim.optimizeFile = function (fileName, settingsHtmlFiles, settings) {
+    return new Promise(function (resolve, reject) {
+        var cssOptimSettings = settings.optimizer.cssOptim
 
-        uncss(settings.htmlFiles, settings.uncssOptions, function (error, sourcePurified) {
-            var result = new CleanCSS({sourceMap: true}).minify(sourcePurified)
 
-            console.log('css purify ' + fileName, 'reduction: ', Math.round((source.length - sourcePurified.length) / 1024) + 'kb', Math.round((1 - sourcePurified.length / source.length) * 100) + '%')
-            console.log('css minify ' + fileName, 'reduction: ', Math.round((sourcePurified.length - result.styles.length) / 1024) + 'kb', Math.round((1 - result.styles.length / sourcePurified.length) * 100) + '%')
-            console.log('css total ' + fileName, 'reduction: ', Math.round((source.length - result.styles.length) / 1024) + 'kb', Math.round((1 - result.styles.length / source.length) * 100) + '%')
+        if (cssOptimSettings.enabled && cssOptimSettings.options.cleanCss.enabled) {
 
-            fs.outputFileSync(fileName, result.styles)
-            fs.outputFileSync(fileName + '.map', result.sourceMap)
 
-            if (error) {
-                console.log('uncss-error', error)
-            }
-            resolve()
-        })
+            var resultStats = helper.getOptimizationResultForFileBefore(fileName, fileName, CssOptim, 'uncss');
+
+            var options = cssOptimSettings.options.cleanCss.options
+            options.returnPromise = true
+
+
+            var source = fs.readFileSync(fileName, 'utf8')
+
+            new CleanCSS(options)
+                .minify(source)
+                .then(function (output) {
+
+                    fs.outputFileSync(fileName, output.styles)
+                    fs.outputFileSync(fileName + '.map', output.sourceMap)
+                    resolve(helper.updateOptimizationResultForFileAfter(resultStats))
+                })
+                .catch(function (error) {
+
+                    Logger.error('cleanCss-error', error)
+                    reject(null)
+                });
+
+        }
+        else {
+            resolve(null)
+        }
     })
 }
 
-CssOptim.optimizeFileList = function (fileList, settings) {
+CssOptim.optimizeFileList = function (fileList, settingsHtmlFiles, settings) {
     var actions = fileList.filter(function (entry) {
         if (entry && entry.length > 0) {
             var ext = path.extname(entry)
@@ -37,13 +54,18 @@ CssOptim.optimizeFileList = function (fileList, settings) {
             }
         }
     }).map(function (entry) {
-        return CssOptim.optimizeFile(entry, settings)
+        return CssOptim.optimizeFile(entry, settingsHtmlFiles, settings)
     })
 
     return Promise.all(actions).then(function (result) {
-        console.log('all css files optimized')
-        return result
+        Logger.debug('all css files optimized')
+        //console.log('all Css files written', helper.getOptimizationResultForOptimizer(result, CssOptim))
+        return helper.getOptimizationResultForOptimizer(result, CssOptim)
     })
+}
+
+CssOptim.getName = function () {
+    return 'css'
 }
 
 module.exports = CssOptim

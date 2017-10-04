@@ -1,77 +1,185 @@
 const path = require('path')
 const optimImages = require('./ImageOptim')
 const optimHTML = require('./HtmlOptim')
+const optimJs = require('./JsOptim')
 const optimizeCSS = require('./CssOptim')
 const optimZIP = require('./ZipOptim')
+const optimCopy = require('./CopyOptim')
+const optimHtAccess = require('./HtAccessOptim')
 const fs = require('fs-extra')
+const defaultsDeep = require('lodash.defaultsdeep')
+const Logger = require('./Logger')
+const Helper = require('./Helper')
+const StatsPrinter = require('./StatsPrinter')
+const cloneDeep = require('lodash.clonedeep')
 
 var UfpOptimizer = {}
 
-UfpOptimizer.execute = function (settings) {
-    // app.optimizeCSS()
-
-    var afterCopy = function () {
-        return Promise.all([
-            UfpOptimizer.optimizeImages(settings),
-            UfpOptimizer.optimizeHTML(settings)]).then(function () {
-            var result = UfpOptimizer.zip(settings)
-            return result
-        })
-    }
-
-    return UfpOptimizer.copy(settings).then(afterCopy)
+var logOptimizerStart = function (optimizer) {
+    Logger.log('** ' + optimizer.getName() + ' started' + ' **')
 }
 
-UfpOptimizer.getDefaultSettings = function () {
-    return require('./Globals')
+var logOptimizerEnd = function (optimizer) {
+    Logger.log('** ' + optimizer.getName() + ' finished' + ' **')
+}
+
+require('events').EventEmitter.defaultMaxListeners = Infinity
+
+
+UfpOptimizer.executeOptimizations = function (settings) {
+
+    var optimizerStatResults = [];
+
+    var doHtAccess = function (result) {
+        optimizerStatResults.push(result)
+        return UfpOptimizer.optimizeHtAccess(settings)
+    }
+
+    var doImageOptimization = function (result) {
+
+        optimizerStatResults.push(result)
+        return UfpOptimizer.optimizeImages(settings);
+    }
+
+    var doHTMLOptimization = function (result) {
+
+        optimizerStatResults.push(result)
+        return UfpOptimizer.optimizeHTML(settings);
+    }
+    var doJsOptimization = function (result) {
+
+        optimizerStatResults.push(result)
+        return UfpOptimizer.optimizeJs(settings);
+    }
+    var doCssOptimization = function (result) {
+
+        optimizerStatResults.push(result)
+        return UfpOptimizer.optimizeCSS(settings)
+    }
+
+    var doZip = function (result) {
+
+        optimizerStatResults.push(result)
+        return UfpOptimizer.zip(settings)
+    }
+
+    var doStats = function (result) {
+        optimizerStatResults.push(result)
+        console.log('------------')
+        console.log('Statistics')
+        console.log('------------')
+        console.log('Results per optimization step')
+        console.log('')
+        StatsPrinter.printTable(StatsPrinter.getSimpleDetailsResultsAsArray(optimizerStatResults))
+        console.log('------------')
+        console.log('Results per output file')
+        console.log('')
+        StatsPrinter.printTable(StatsPrinter.getSummaryDetailsPerFile(optimizerStatResults))
+        console.log('------------')
+        console.log('Total summary')
+        console.log('')
+        var totalResults = StatsPrinter.getSummaryDetailsTotal(optimizerStatResults, settings, false);
+        totalResults = totalResults.concat(StatsPrinter.getSummaryDetailsTotal(optimizerStatResults, settings, true))
+        StatsPrinter.printTable(totalResults)
+        console.log('------------')
+        return result;
+    }
+    return UfpOptimizer.copy(settings).then(doImageOptimization).then(doHTMLOptimization).then(doCssOptimization).then(doJsOptimization).then(doZip).then(doHtAccess).then(doStats)
+}
+
+UfpOptimizer.getConfig = function (preset, customConfigSettings) {
+    return defaultsDeep(customConfigSettings && cloneDeep(customConfigSettings) || {}, require('./Globals').getConfig(preset || (customConfigSettings && customConfigSettings.preset)))
+}
+
+UfpOptimizer.setLogLevelByConfig = function (config) {
+    Logger.setLevel(config.debug && (config.debug === 'true' || config.debug === true) ? 'debug' : 'info')
+}
+
+UfpOptimizer.getConfigHelp = function (preset) {
+    return require('./Globals').getConfigHelp(preset)
+}
+
+UfpOptimizer.validateConfig = function (config, autofix) {
+    return require('./Globals').validateConfig(config, autofix)
 }
 
 UfpOptimizer.copy = function (settings) {
-    return new Promise(function (resolve, reject) {
-        console.log('* ufp-optimizer copy: started', settings.inputDir, '=>', settings.outputDir)
+    if (settings.optimizer.copyOptim.enabled === false) {
+        return Helper.emptyPromise(null)
+    }
+    logOptimizerStart(optimCopy)
 
-        if (!fs.existsSync(settings.inputDir)) {
-            console.log('ERROR: input dir does not exist', settings.inputDir)
-            reject(settings.inputDir)
-        } else {
-            if (settings.outputDir !== settings.inputDir) {
-                // prepare
-
-                fs.removeSync(settings.outputDir)
-                fs.mkdirSync(settings.outputDir)
-                fs.copySync(settings.inputDir, settings.outputDir)
-
-                console.log('* ufp-optimizer - copy: finished')
-            } else {
-                console.log('* ufp-optimizer - copy: finished did nothing')
-            }
-
-            resolve()
-        }
+    return optimCopy.optimize(settings).then(function (result) {
+        logOptimizerEnd(optimCopy)
+        return result
     })
 }
 
 UfpOptimizer.optimizeImages = function (settings) {
-    console.log('** ufp-optimizer  - image/html/css: started')
+    if (settings.optimizer.imageOptim.enabled === false) {
+        return Helper.emptyPromise(null)
+    }
+    logOptimizerStart(optimImages)
+
     var files = fs.walkSync(settings.outputDir)
     return optimImages.optimizeFileList(files, settings).then(function (result) {
-        console.log('** ufp-optimizer  - image/html/css: finished')
+        logOptimizerEnd(optimImages)
         return result
     })
 }
 
 UfpOptimizer.optimizeHTML = function (settings) {
-    console.log('** ufp-optimizer  - image/html/css: started')
+    if (settings.optimizer.htmlOptim.enabled === false) {
+        return Helper.emptyPromise(null)
+    }
+
+    logOptimizerStart(optimHTML)
+
     // optimize
     var files = fs.walkSync(settings.outputDir)
     return optimHTML.optimizeFileList(files, settings).then(function (result) {
-        console.log('** ufp-optimizer  - image/html/css: finished')
+        logOptimizerEnd(optimHTML)
+        return result
+    })
+}
+
+UfpOptimizer.optimizeJs = function (settings) {
+    if (settings.optimizer.jsOptim.enabled === false) {
+        return Helper.emptyPromise(null)
+    }
+
+    logOptimizerStart(optimJs)
+
+    // optimize
+    var files = fs.walkSync(settings.outputDir)
+    return optimJs.optimizeFileList(files, settings).then(function (result) {
+        logOptimizerEnd(optimJs)
+        return result
+    })
+}
+
+UfpOptimizer.optimizeHtAccess = function (settings) {
+    if (settings.optimizer.htaccessOptim.enabled === false) {
+        return Helper.emptyPromise(null)
+    }
+
+    logOptimizerStart(optimHtAccess)
+
+    // optimize
+    var files = fs.walkSync(settings.outputDir)
+    return optimHtAccess.optimizeFileList(files, settings).then(function (result) {
+        logOptimizerEnd(optimHtAccess)
         return result
     })
 }
 
 UfpOptimizer.optimizeCSS = function (settings) {
-    console.log('** ufp-optimizer  - image/html/css: started')
+    if (settings.optimizer.cssOptim.enabled === false) {
+        return Helper.emptyPromise(null)
+    }
+
+    logOptimizerStart(optimizeCSS)
+
     // optimize
     var files = fs.walkSync(settings.outputDir)
     return optimizeCSS.optimizeFileList(files.filter(function (entry) {
@@ -81,16 +189,21 @@ UfpOptimizer.optimizeCSS = function (settings) {
             return ['.htm', '.html'].indexOf(path.extname(entry)) > -1
         })
     }, settings).then(function (result) {
-        console.log('** ufp-optimizer  - image/html/css: finished')
+        logOptimizerEnd(optimizeCSS)
         return result
     })
 }
 
 UfpOptimizer.zip = function (settings) {
-    console.log('*** ufp-optimizer  - zip: started')
+    if (settings.optimizer.zipOptim.enabled === false) {
+        return Helper.emptyPromise(null)
+    }
+
+    logOptimizerStart(optimZIP)
+
     var files = fs.walkSync(settings.outputDir)
     return optimZIP.optimizeFileList(files, settings).then(function (result) {
-        console.log('*** ufp-optimizer  - zip: finished')
+        logOptimizerEnd(optimZIP)
         return result
     })
 }
