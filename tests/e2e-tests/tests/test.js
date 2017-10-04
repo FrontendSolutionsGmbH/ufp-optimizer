@@ -1,6 +1,5 @@
-const helper = require('./helper')
-const testsuits = require('./e2e-test')
-const path = require('path')
+const helper = require('../helper')
+const testsuits = require('../testDefinition')
 
 testsuits.forEach(function (data) {
   describe(data.testName + ' Test', function () {

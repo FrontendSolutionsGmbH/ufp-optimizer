@@ -38,36 +38,3 @@ const testsuits = [
 ]
 
 module.exports = testsuits
-
-/*const testsuits = {
-  fullpage: {
-    inputDirName: 'tests/e2e-tests/testdata/0/fullpage',
-    outputDirName: 'dist-0',
-    configFileName: ''
-  },
-  fast: {
-    inputDirName: 'tests/e2e-tests/testdata/1/fast',
-    outputDirName: 'dist-1',
-    configFileName: ''
-  },
-  testFast: {
-    inputDirName: 'tests/e2e-tests/testdata/2/test-fast.js',
-    outputDirName: '',
-    configFileName: ''
-  },
-  testSameDir: {
-    inputDirName: 'tests/e2e-tests/testdata/3/test-same-dir.js',
-    outputDirName: '',
-    configFileName: ''
-  },
-  broken: {
-    inputDirName: 'tests/e2e-tests/testdata/4/broken',
-    outputDirName: 'dist-4',
-    configFileName: ''
-  },
-  notExisting: {
-    inputDirName: 'tests/e2e-tests/testdata/5/not-existing',
-    outputDirName: 'dist-5',
-    configFileName: ''
-  }
-}*/
