@@ -46,7 +46,7 @@ ufp-optimizer works on a directory full of assets and compresses/minifies everyt
 It has different presets to get the best out of it
 
 | Preset | Description |
-| --------- | ----------- | --------- |
+| --------- | --------- |
 | production | Default: good quality with some optimizations, normally this is what you want |
 | development | fast but not that small, e.g. it does normal .gz generation and not the slower but better zopfli one |
 | lossy | same as 'production' but smaller but with accepted loss of quality (e.g. images have low quality settings like 30) |
@@ -155,8 +155,7 @@ The config file is a json file containing sever settings to control what will be
 | --------- | -----------                                     | ------- |
 | inputDir  | Directory which contains the files that need to be compressed | dist    |
 | outputDir  | Where the files will be written. Needs to be different from inputDir | distCompressed    |
-
-To get a better idea what you can configure have a look at the default config [Globals.js](src/Globals.js)
+| optimizer  | Huge amount of configurable properties, like quality and iterations and so on | [Globals.js](src/Globals.js)    |
 
 ## Todos ##
 
