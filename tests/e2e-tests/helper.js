@@ -14,6 +14,7 @@ helper.filewalker = function (dir) {
   var list = fs.readdirSync(dir)
   list.forEach(function (file) {
     file = path.resolve(dir, file)
+    const dirName = dir.replace(/^.*[\\\/]/, '')
     const fileName = file.replace(/^.*[\\\/]/, '')
 
     var stat = fs.statSync(file)
@@ -25,6 +26,15 @@ helper.filewalker = function (dir) {
         path: file
       })
       result = result.concat(res)
+    }
+    else if (dirName === 'goodFiles') {
+      result.push({
+        type: 'file',
+        fileName: fileName,
+        fileSize: stat['size'],
+        path: file,
+        strongAssertion: true
+      })
     }
     else {
       result.push({

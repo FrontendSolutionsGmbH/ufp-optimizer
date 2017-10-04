@@ -21,7 +21,12 @@ testsuits.forEach(function (data) {
             const outputPrefix = helper.cutSuffix(outputEntry.fileName)
             if (inputPrefix === outputPrefix || inputPrefix === helper.cutSuffix(outputPrefix)) {
               outputExists = true
-              expect(outputEntry.fileSize, 'input: ' + inputEntry.path + '\noutput: ' + outputEntry.path + '\n').to.be.at.most(inputEntry.fileSize)
+              if (inputEntry.strongAssertion) {
+                expect(outputEntry.fileSize, 'input: ' + inputEntry.path + '\noutput: ' + outputEntry.path + '\n').to.be.below(inputEntry.fileSize)
+              }
+              else {
+                expect(outputEntry.fileSize, 'input: ' + inputEntry.path + '\noutput: ' + outputEntry.path + '\n').to.be.at.most(inputEntry.fileSize)
+              }
             }
           })
           expect(outputExists).to.be.true
