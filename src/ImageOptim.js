@@ -37,9 +37,8 @@ ImageOptim.optimizeFile = function (fileName, settings) {
         settings.webp = defaultsDeep(customOptionsMin.webp || {}, imageminOptions.webp)
         settings.giflossy = defaultsDeep(customOptionsMin.giflossy || {}, imageminOptions.giflossy)
 
-
         var resultStats = []
-        resultStats.push(helper.getOptimizationResultForFileBefore(fileName, fileName, ImageOptim, 'imagemin'));
+        resultStats.push(helper.getOptimizationResultForFileBefore(fileName, fileName, ImageOptim, 'imagemin'))
 
         var funcAll = function () {
             Logger.debug('image', fileName)
@@ -84,9 +83,16 @@ ImageOptim.optimizeFile = function (fileName, settings) {
                     break
             }
 
-            if (plugins.length > 0 || doWebp) {
-
+            if (plugins.length > 0 || doWebP) {
                 if (doWebP) {
+                    var funcForNormalImage = function () {
+                        return imagemin([fileName], imageDir, {
+                            plugins: plugins
+                        }).catch(function (error) {
+                            Logger.error('error', fileName, error)
+                            // resolve()
+                        })
+                    }
 
                     return imagemin([fileName], imageDir, {
                         plugins: [imageminWebp(settings.webp.options)]
@@ -94,19 +100,11 @@ ImageOptim.optimizeFile = function (fileName, settings) {
                         if (fs.existsSync(path)) {
                             resultStats.push(helper.getOptimizationResultForFileBefore(fileName, fileName.replace('.png', '.webp').replace('.jpg', '.webp').replace('.jpeg', '.webp'), ImageOptim, 'imagemin-webp'))
                         }
-                        return result;
+                        return result
                     }).catch(function (error) {
                         Logger.error('error', fileName, error)
                         // resolve()
-                    }).then(function () {
-
-                        return imagemin([fileName], imageDir, {
-                            plugins: plugins
-                        }).catch(function (error) {
-                            Logger.error('error', fileName, error)
-                            // resolve()
-                        })
-                    })
+                    }).then(funcForNormalImage)
                 } else {
                     return imagemin([fileName], imageDir, {
                         plugins: plugins
@@ -115,14 +113,13 @@ ImageOptim.optimizeFile = function (fileName, settings) {
                         // resolve()
                     })
                 }
-
             } else {
                 return helper.emptyPromise(null)
             }
         }
 
         return funcAll().then(function () {
-            return helper.updateOptimizationResultForFileAfter(resultStats);
+            return helper.updateOptimizationResultForFileAfter(resultStats)
         })
     } else {
         return helper.emptyPromise(null)

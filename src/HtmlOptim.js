@@ -14,7 +14,7 @@ HtmlOptim.optimizeFile = function (fileName, settings) {
             var result = fs.readFileSync(fileName, 'utf8')
             var resultMinified = result
 
-            var resultStats = helper.getOptimizationResultForFileBefore(fileName, fileName, HtmlOptim, 'htmlMinifier');
+            var resultStats = helper.getOptimizationResultForFileBefore(fileName, fileName, HtmlOptim, 'htmlMinifier')
 
             try {
                 resultMinified = minify(result, htmlOptimSettings.options.htmlMinifier.options)
@@ -22,7 +22,12 @@ HtmlOptim.optimizeFile = function (fileName, settings) {
                 Logger.error('html error catched', fileName)
             }
 
-            fs.outputFileSync(fileName, resultMinified)
+            fs.outputFileSync(fileName + 'temp', resultMinified)
+            if (helper.getFilesizeInBytes(fileName + 'temp') < helper.getFilesizeInBytes(fileName)) {
+                fs.renameSync(fileName + 'temp', fileName)
+            } else {
+                fs.unlinkSync(fileName + 'temp')
+            }
             resolve(helper.updateOptimizationResultForFileAfter(resultStats))
         } else {
             resolve(null)

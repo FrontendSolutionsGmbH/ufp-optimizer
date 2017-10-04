@@ -3,7 +3,6 @@ const path = require('path')
 var StatsPrinter = {}
 
 StatsPrinter.getSimpleDetailsResultsAsArray = function (results) {
-
     if (results) {
         return Helper.flatten(results.map(function (module) {
                 return StatsPrinter.getModuleResult(module)
@@ -11,19 +10,14 @@ StatsPrinter.getSimpleDetailsResultsAsArray = function (results) {
     } else {
         return ' no results'
     }
-
-
 }
 
-
 var getResultsAdvanced = function (results, useWebP) {
-
-    var inputFiles = {};
-    var outputFiles = {};
+    var inputFiles = {}
+    var outputFiles = {}
 
     results.map(function (moduleResult) {
         if (moduleResult) {
-
             // add inputfiles
             moduleResult.files.map(function (entry) {
                 var key = entry.inputFileName
@@ -76,7 +70,6 @@ var getResultsAdvanced = function (results, useWebP) {
                         entries: [entry]
                     }
                 }
-
             })
 
             Object.keys(outputFiles).map(function (key) {
@@ -91,7 +84,6 @@ var getResultsAdvanced = function (results, useWebP) {
                 }, -1)
             })
 
-
             //filter out webp/no webp
 
             var toDeleteKeys = []
@@ -104,27 +96,20 @@ var getResultsAdvanced = function (results, useWebP) {
                         toDeleteKeys.push(key)
                     }
                 }
-
-
             })
 
             toDeleteKeys.map(function (key) {
                 delete outputFiles[key]
             })
-
-
         }
     })
-
 
     return {
         results: results,
         inputFiles: inputFiles,
         outputFiles: outputFiles
     }
-
 }
-
 
 StatsPrinter.getModuleResult = function (moduleResult) {
     var result = []
@@ -142,20 +127,18 @@ StatsPrinter.getModuleResult = function (moduleResult) {
                 Group: entry.group,
                 Origin: path.basename(entry.outputFileName) !== path.basename(entry.inputFileName) ? path.basename(entry.inputFileName) : ''
             })
-
         })
     }
 
-
-    return result;
+    return result
 }
 
 StatsPrinter.getSummaryDetailsPerFile = function (results) {
     var result = []
     var resultsAdvanced = getResultsAdvanced(results)
 
-    Object.keys(resultsAdvanced.outputFiles).map(function (key, index) {
-        var entryOuter = resultsAdvanced.outputFiles[key];
+    Object.keys(resultsAdvanced.outputFiles).map(function (key) {
+        var entryOuter = resultsAdvanced.outputFiles[key]
 
         result.push(entryOuter.entries.map(function (entry) {
             return {
@@ -169,11 +152,8 @@ StatsPrinter.getSummaryDetailsPerFile = function (results) {
                 Groups: 'TODO',
                 Origin: path.basename(entry.outputFileName) !== path.basename(entry.inputFileName) ? path.basename(entry.inputFileName) : ''
             }
-
-
         }))
-
-    });
+    })
     return Helper.flatten(result).sort()
 }
 
@@ -200,8 +180,8 @@ StatsPrinter.getSummaryDetailsTotal = function (results, settings, useWebP) {
     var resultsAdvanced = getResultsAdvanced(results, useWebP)
 
     // collect sizes of br/gz/no zip compressors
-    Object.keys(resultsAdvanced.outputFiles).map(function (key, index) {
-        var entryOuter = resultsAdvanced.outputFiles[key];
+    Object.keys(resultsAdvanced.outputFiles).map(function (key) {
+        var entryOuter = resultsAdvanced.outputFiles[key]
 
         if (entryOuter.outputFileName.endsWith('.br')) {
             resultWithBrotli.sizeAfterSmallest += entryOuter.sizeAfterSmallest
@@ -213,23 +193,22 @@ StatsPrinter.getSummaryDetailsTotal = function (results, settings, useWebP) {
             resultWithoutZip.sizeAfterSmallest += entryOuter.sizeAfterSmallest
             resultWithoutZip.sizeBeforeLargestTotal += entryOuter.sizeBeforeLargestTotal
         }
-
-    });
+    })
 
     // add sizes of files to gzip/brotli that are not zipped (like images, they are not compressed but we want to know the total amount of reduction.
-    Object.keys(resultsAdvanced.outputFiles).map(function (key, index) {
-        var entryOuter = resultsAdvanced.outputFiles[key];
+    Object.keys(resultsAdvanced.outputFiles).map(function (key) {
+        var entryOuter = resultsAdvanced.outputFiles[key]
 
         if (!entryOuter.outputFileName.endsWith('.br') && !entryOuter.outputFileName.endsWith('.gz')) {
             var foundInstanceWithBr = false
             var foundInstanceWithGz = false
 
-            Object.keys(resultsAdvanced.outputFiles).map(function (key2, index2) {
-                var entryOuter2 = resultsAdvanced.outputFiles[key2];
+            Object.keys(resultsAdvanced.outputFiles).map(function (key2) {
+                var entryOuter2 = resultsAdvanced.outputFiles[key2]
                 if (entryOuter2.outputFileName === entryOuter.outputFileName + '.gz') {
-                    foundInstanceWithGz = true;
+                    foundInstanceWithGz = true
                 } else if (entryOuter2.outputFileName === entryOuter.outputFileName + '.br') {
-                    foundInstanceWithBr = true;
+                    foundInstanceWithBr = true
                 }
             })
 
@@ -240,14 +219,11 @@ StatsPrinter.getSummaryDetailsTotal = function (results, settings, useWebP) {
                 resultWithBrotli.sizeBeforeLargestTotal += entryOuter.sizeBeforeLargestTotal
             }
         }
-
-    });
-
+    })
 
     totalResults.push(resultWithoutZip)
-    var zipOptimSettings = settings.optimizer.zipOptim;
+    var zipOptimSettings = settings.optimizer.zipOptim
     if (zipOptimSettings.enabled) {
-
         if (zipOptimSettings.zopfli.enabled) {
             totalResults.push(resultWithZopfli)
         } else if (zipOptimSettings.zlib.enabled) {
@@ -260,20 +236,17 @@ StatsPrinter.getSummaryDetailsTotal = function (results, settings, useWebP) {
         }
     }
 
-
     return totalResults.map(function (totalResultEntry) {
-
         return {
             Name: totalResultEntry.name,
             SizeBefore: Math.round(totalResultEntry.sizeBeforeLargestTotal / 1024) + ' kb',
             SizeAfter: Math.round(totalResultEntry.sizeAfterSmallest / 1024) + ' kb',
             SizePercentageAfter: Math.round((totalResultEntry.sizeAfterSmallest / totalResultEntry.sizeBeforeLargestTotal) * 100) + '%',
             SizePercentageSaved: Math.round(100 - (totalResultEntry.sizeAfterSmallest / totalResultEntry.sizeBeforeLargestTotal) * 100) + '%',
-            SavedBytes: Math.round((totalResultEntry.sizeBeforeLargestTotal - totalResultEntry.sizeAfterSmallest) / 1024) + ' kb ',
+            SavedBytes: Math.round((totalResultEntry.sizeBeforeLargestTotal - totalResultEntry.sizeAfterSmallest) / 1024) + ' kb '
         }
         //return totalResultEntry.name + ': ' + Math.round(totalResultEntry.sizeAfterSmallest / 1024) + 'kb <= ' + Math.round(totalResultEntry.sizeBeforeLargestTotal / 1024) + 'kb ' + Math.round((totalResultEntry.sizeAfterSmallest / totalResultEntry.sizeBeforeLargestTotal) * 100) + '% ' + '(' + '-' + Math.round((1 - (totalResultEntry.sizeAfterSmallest / totalResultEntry.sizeBeforeLargestTotal)) * 100) + '% ' + '-' + Math.round((totalResultEntry.sizeBeforeLargestTotal - totalResultEntry.sizeAfterSmallest) / 1024) + 'kb' + ')'
     })
-
 }
 
 StatsPrinter.printTable = function (result) {

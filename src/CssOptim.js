@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs-extra')
 const Logger = require('./Logger')
 const helper = require('./Helper')
-const CleanCSS = require('clean-css');
+const CleanCSS = require('clean-css')
 
 var CssOptim = {}
 
@@ -10,32 +10,32 @@ CssOptim.optimizeFile = function (fileName, settingsHtmlFiles, settings) {
     return new Promise(function (resolve, reject) {
         var cssOptimSettings = settings.optimizer.cssOptim
 
-
         if (cssOptimSettings.enabled && cssOptimSettings.options.cleanCss.enabled) {
-
-
-            var resultStats = helper.getOptimizationResultForFileBefore(fileName, fileName, CssOptim, 'uncss');
+            var resultStats = helper.getOptimizationResultForFileBefore(fileName, fileName, CssOptim, 'uncss')
 
             var options = cssOptimSettings.options.cleanCss.options
             options.returnPromise = true
-
 
             var source = fs.readFileSync(fileName, 'utf8')
 
             new CleanCSS(options)
                 .minify(source)
                 .then(function (output) {
+                    fs.outputFileSync(fileName + 'temp', output.styles)
+                    if (helper.getFilesizeInBytes(fileName + 'temp') < helper.getFilesizeInBytes(fileName)) {
+                        fs.renameSync(fileName + 'temp', fileName)
+                    } else {
+                        fs.unlinkSync(fileName + 'temp')
+                    }
 
-                    fs.outputFileSync(fileName, output.styles)
                     fs.outputFileSync(fileName + '.map', output.sourceMap)
                     resolve(helper.updateOptimizationResultForFileAfter(resultStats))
+                    return resultStats
                 })
                 .catch(function (error) {
-
                     Logger.error('cleanCss-error', error)
-                    reject(null)
-                });
-
+                    reject(error)
+                })
         }
         else {
             resolve(null)
