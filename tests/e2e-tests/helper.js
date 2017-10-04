@@ -5,9 +5,8 @@ const app = require('src/UfpOptimizer')
 var helper = {}
 
 helper.cutSuffix = function (string) {
-    return string.replace(/(^.*)\./g, '$1')
+  return string.replace(/(^.*)\./g, '$1')
 }
-
 
 helper.filewalker = function (dir) {
   var result = []
@@ -15,17 +14,26 @@ helper.filewalker = function (dir) {
   var list = fs.readdirSync(dir)
   list.forEach(function (file) {
     file = path.resolve(dir, file)
-      const fileName = file.replace(/^.*[\\\/]/, '')
+    const fileName = file.replace(/^.*[\\\/]/, '')
 
     var stat = fs.statSync(file)
-
     if (stat && stat.isDirectory()) {
       var res = helper.filewalker(file)
-      result.push({type: 'dir', fileName: fileName, path: file})
+      result.push({
+        type: 'dir',
+        fileName: fileName,
+        path: file
+      })
       result = result.concat(res)
     }
-
-    result.push({type: 'file', fileName: fileName, fileSize: stat['size'], path: file})
+    else {
+      result.push({
+        type: 'file',
+        fileName: fileName,
+        fileSize: stat['size'],
+        path: file
+      })
+    }
   })
   return result
 }
@@ -49,16 +57,11 @@ helper.build = function (data) {
   console.log('****** USAGE:  ufp-optimizer-cli [inputDir] [outputDir] [configFile] ******')
   var inputDirName = data.inputDirName || 'examples/0/input'
   var outputDirName = data.outputDirName || 'dist'
-  var configFileName = (data.configFileName && path.join(process.cwd(), data.configFileName)) || path.join(__dirname, '../../src/Globals.js')
-
-  console.log('****** USAGE:  ufp-optimizer-cli ' + inputDirName + ' ' + outputDirName + ' ' + configFileName + ' ******')
-
-  const settings = require(configFileName)
-
+  var settings = app.getConfig('production')
   settings.inputDir = inputDirName
   settings.outputDir = outputDirName
 
-   return app.execute(settings).then(function (result) {
+  return app.executeOptimizations(settings).then(function (result) {
     console.log('****** UFP OPTIMIZER finished ******')
     return result
   }).catch(function (ex) {
