@@ -7,13 +7,11 @@ var zopfli = require('node-zopfli')
 
 var ZipOptim = {}
 
-
 ZipOptim.doGzip = function (fileName, settings) {
     return new Promise(function (resolve) {
         var zipSettings = settings.optimizer.zipOptim
         var result
         if (zipSettings.enabled) {
-
             if (zipSettings.zopfli.enabled) {
                 result = helper.getOptimizationResultForFileBefore(fileName, fileName + '.gz', ZipOptim, 'zopfli')
                 fs.createReadStream(fileName)
@@ -26,7 +24,7 @@ ZipOptim.doGzip = function (fileName, settings) {
                 const gzip = zlib.createGzip(zipSettings.zlib.options)
                 const inp = fs.createReadStream(fileName)
                 const out = fs.createWriteStream(fileName + '.gz')
-                var result = helper.getOptimizationResultForFileBefore(fileName, fileName + '.gz', ZipOptim, 'zlib')
+                result = helper.getOptimizationResultForFileBefore(fileName, fileName + '.gz', ZipOptim, 'zlib')
                 inp.pipe(gzip).pipe(out).on('finish', function () {
                     resolve(helper.updateOptimizationResultForFileAfter(result))
                 })
@@ -40,11 +38,11 @@ ZipOptim.doGzip = function (fileName, settings) {
 }
 
 ZipOptim.doBrotli = function (fileName, settings) {
-    return new Promise(function (resolve) {
+    return new Promise(function (resolve, reject) {
         var zipSettings = settings.optimizer.zipOptim
         if (zipSettings.enabled) {
             if (zipSettings.brotli.enabled) {
-                var result = helper.getOptimizationResultForFileBefore(fileName, fileName + '.br', ZipOptim, 'brotli');
+                var result = helper.getOptimizationResultForFileBefore(fileName, fileName + '.br', ZipOptim, 'brotli')
                 var brotliBuffer = brotli.compress(fs.readFileSync(fileName))
                 fs.writeFile(fileName + '.br', brotliBuffer, 'binary', function (err) {
                     if (err) {
@@ -64,17 +62,14 @@ ZipOptim.doBrotli = function (fileName, settings) {
 }
 
 ZipOptim.optimizeFile = function (fileName, settings) {
-
-
     return Promise.all([
         ZipOptim.doBrotli(fileName, settings),
         ZipOptim.doGzip(fileName, settings)
     ]).then(function (results) {
-        return results;
+        return results
     }).catch(function (e) {
         Logger.error(e) // "oh, no!"
     })
-
 }
 
 ZipOptim.optimizeFileList = function (fileList, settings) {

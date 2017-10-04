@@ -251,7 +251,7 @@ var getConfig = function (preset) {
             break
         case 'lossy':
             result = globalsLossy
-            break;
+            break
     }
     return result
 }

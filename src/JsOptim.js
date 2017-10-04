@@ -14,7 +14,7 @@ JsOptim.optimizeFile = function (fileName, settings) {
             var result = fs.readFileSync(fileName, 'utf8')
             var resultMinified = result
 
-            var resultStats = helper.getOptimizationResultForFileBefore(fileName, fileName, JsOptim, 'uglify-js');
+            var resultStats = helper.getOptimizationResultForFileBefore(fileName, fileName, JsOptim, 'uglify-js')
 
             try {
                 resultMinified = minify(result, JsOptimSettings.options.uglifyJs.options)
@@ -22,15 +22,19 @@ JsOptim.optimizeFile = function (fileName, settings) {
                 Logger.error('js error catched', fileName)
             }
 
-
             if (resultMinified.error) {
                 Logger.error(resultMinified.error)
-                reject(null)
+                reject(resultMinified.error)
             } else {
-                fs.outputFileSync(fileName, resultMinified.code)
+                fs.outputFileSync(fileName + 'temp', resultMinified.code)
+                if (helper.getFilesizeInBytes(fileName + 'temp') < helper.getFilesizeInBytes(fileName)) {
+                    fs.renameSync(fileName + 'temp', fileName)
+                } else {
+                    fs.unlinkSync(fileName + 'temp')
+                }
+
                 resolve(helper.updateOptimizationResultForFileAfter(resultStats))
             }
-
         } else {
             resolve(null)
         }

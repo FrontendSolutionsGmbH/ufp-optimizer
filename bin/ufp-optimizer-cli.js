@@ -15,7 +15,6 @@ var getConfigByArgv = function (argv) {
         config = defaultsDeep(cloneDeep(configFromFile), config)
     }
 
-
     if (argv.conf) {
         var confJson = JSON.parse(JSON.stringify(argv.conf).replace(/"false"/g, false).replace(/'false'/g, false).replace(/"true"/g, true).replace(/'true'/g, 'a'))
         config = defaultsDeep(confJson, config)

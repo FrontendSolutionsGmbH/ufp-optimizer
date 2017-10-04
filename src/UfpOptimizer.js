@@ -25,10 +25,8 @@ var logOptimizerEnd = function (optimizer) {
 
 require('events').EventEmitter.defaultMaxListeners = Infinity
 
-
 UfpOptimizer.executeOptimizations = function (settings) {
-
-    var optimizerStatResults = [];
+    var optimizerStatResults = []
 
     var doHtAccess = function (result) {
         optimizerStatResults.push(result)
@@ -36,29 +34,24 @@ UfpOptimizer.executeOptimizations = function (settings) {
     }
 
     var doImageOptimization = function (result) {
-
         optimizerStatResults.push(result)
-        return UfpOptimizer.optimizeImages(settings);
+        return UfpOptimizer.optimizeImages(settings)
     }
 
     var doHTMLOptimization = function (result) {
-
         optimizerStatResults.push(result)
-        return UfpOptimizer.optimizeHTML(settings);
+        return UfpOptimizer.optimizeHTML(settings)
     }
     var doJsOptimization = function (result) {
-
         optimizerStatResults.push(result)
-        return UfpOptimizer.optimizeJs(settings);
+        return UfpOptimizer.optimizeJs(settings)
     }
     var doCssOptimization = function (result) {
-
         optimizerStatResults.push(result)
         return UfpOptimizer.optimizeCSS(settings)
     }
 
     var doZip = function (result) {
-
         optimizerStatResults.push(result)
         return UfpOptimizer.zip(settings)
     }
@@ -78,17 +71,17 @@ UfpOptimizer.executeOptimizations = function (settings) {
         console.log('------------')
         console.log('Total summary')
         console.log('')
-        var totalResults = StatsPrinter.getSummaryDetailsTotal(optimizerStatResults, settings, false);
+        var totalResults = StatsPrinter.getSummaryDetailsTotal(optimizerStatResults, settings, false)
         totalResults = totalResults.concat(StatsPrinter.getSummaryDetailsTotal(optimizerStatResults, settings, true))
         StatsPrinter.printTable(totalResults)
         console.log('------------')
-        return result;
+        return result
     }
     return UfpOptimizer.copy(settings).then(doImageOptimization).then(doHTMLOptimization).then(doCssOptimization).then(doJsOptimization).then(doZip).then(doHtAccess).then(doStats)
 }
 
 UfpOptimizer.getConfig = function (preset, customConfigSettings) {
-    return defaultsDeep(customConfigSettings && cloneDeep(customConfigSettings) || {}, require('./Globals').getConfig(preset || (customConfigSettings && customConfigSettings.preset)))
+    return defaultsDeep((customConfigSettings && cloneDeep(customConfigSettings)) || {}, require('./Globals').getConfig(preset || (customConfigSettings && customConfigSettings.preset)))
 }
 
 UfpOptimizer.setLogLevelByConfig = function (config) {

@@ -1,6 +1,5 @@
 var HtAccessHelper = {}
 
-
 var getExpiresByType = function (type, expire) {
     return `ExpiresByType ${type} "${expire}"`
 }
@@ -42,7 +41,7 @@ HtAccessHelper.getHtAccess = function (settings) {
         'application/xml'
     ].map(function (type) {
         return getExpiresByType(type, expireCommon)
-    }).join('\r\n');
+    }).join('\r\n')
 
     var filesToZip = [
         {
@@ -73,14 +72,14 @@ HtAccessHelper.getHtAccess = function (settings) {
             filter: '.xml',
             type: 'application/xml'
         }
-    ];
+    ]
 
     var filesZipArrayAsString = filesToZip.map(function (entry) {
-        return getFileZip(entry.filter, entry.type);
+        return getFileZip(entry.filter, entry.type)
     }).join('\r\n')
 
     var rewriteRules = filesToZip.map(function (entry) {
-        return getRewriteRuleForZip(entry.filter, entry.type);
+        return getRewriteRuleForZip(entry.filter, entry.type)
     }).join('\r\n')
 
     return `
