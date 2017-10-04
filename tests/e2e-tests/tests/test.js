@@ -22,14 +22,16 @@ testsuits.forEach(function (data) {
             if (inputPrefix === outputPrefix || inputPrefix === helper.cutSuffix(outputPrefix)) {
               outputExists = true
               if (inputEntry.strongAssertion) {
-                expect(outputEntry.fileSize, 'input: ' + inputEntry.path + '\noutput: ' + outputEntry.path + '\n').to.be.below(inputEntry.fileSize)
+                expect(outputEntry.fileSize, 'Not compressed\ninput: ' + inputEntry.path + '\n' +
+                  'output: ' + outputEntry.path + '\n').to.be.below(inputEntry.fileSize)
               }
               else {
-                expect(outputEntry.fileSize, 'input: ' + inputEntry.path + '\noutput: ' + outputEntry.path + '\n').to.be.at.most(inputEntry.fileSize)
+                expect(outputEntry.fileSize, 'Not compressed\ninput: ' + inputEntry.path + '\n' +
+                  'output: ' + outputEntry.path + '\n').to.be.at.most(inputEntry.fileSize)
               }
             }
           })
-          expect(outputExists).to.be.true
+          expect(outputExists, 'Missing output file\ninput: ' + inputEntry.path).to.be.true
         })
       }).then(done, done)
     })
