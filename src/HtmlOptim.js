@@ -1,60 +1,63 @@
 const path = require('path')
 const fs = require('fs-extra')
+const Logger = require('./Logger')
+const helper = require('./Helper')
 var minify = require('html-minifier').minify
 
 var HtmlOptim = {}
 
 HtmlOptim.optimizeFile = function (fileName, settings) {
-    var result = fs.readFileSync(fileName, 'utf8')
-    var resultMinified = result
+    var htmlOptimSettings = settings.optimizer.htmlOptim
 
-    try {
-        resultMinified = minify(result, settings.htmlminifyOptions)
-    } catch (ex) {
-        console.log('html error catched', fileName)
-    }
+    return new Promise(function (resolve) {
+        if (htmlOptimSettings.enabled && htmlOptimSettings.options.htmlMinifier.enabled) {
+            var result = fs.readFileSync(fileName, 'utf8')
+            var resultMinified = result
 
-    console.log('html minify ' + fileName, 'reduction: ', Math.round((result.length - resultMinified.length) / 1024) + 'kb', Math.round((1 - resultMinified.length / result.length) * 100) + '%')
-    fs.outputFileSync(fileName, resultMinified)
+            var resultStats = helper.getOptimizationResultForFileBefore(fileName, fileName, HtmlOptim, 'htmlMinifier');
 
-    return result
+            try {
+                resultMinified = minify(result, htmlOptimSettings.options.htmlMinifier.options)
+            } catch (ex) {
+                Logger.error('html error catched', fileName)
+            }
+
+            fs.outputFileSync(fileName, resultMinified)
+            resolve(helper.updateOptimizationResultForFileAfter(resultStats))
+        } else {
+            resolve(null)
+        }
+    }).catch(function (e) {
+        Logger.error(e) // "oh, no!"
+    })
 }
 
 HtmlOptim.optimizeFileList = function (fileList, settings) {
-    console.log('html: started')
-
-    fs.copySync(settings.htaccessFile, settings.outputDir + '/.htaccess')
+    Logger.debug('html: started')
 
     var actions = fileList.filter(function (entry) {
         if (entry && entry.length > 0) {
             var ext = path.extname(entry)
-            var dir = path.dirname(entry)
-            if (['.php'].indexOf(ext) > -1 && dir === settings.outputDir) {
+            if (['.html', '.htm'].indexOf(ext) > -1) {
                 return true
+            } else {
+                return false
             }
         }
     }).map(function (entry) {
         return HtmlOptim.optimizeFile(entry, settings)
     })
 
-    // delete all php stuff
     return Promise.all(actions).then(function (result) {
-        fileList.filter(function (entry) {
-            if (entry && entry.length > 0) {
-                var ext = path.extname(entry)
-                if (['.html', '.htm'].indexOf(ext) > -1) {
-                    return true
-                }
-            }
-        }).map(function (entry) {
-            return HtmlOptim.optimizeFile(entry, settings)
-        })
-        return result
-    }).then(function (result) {
-        console.log('all html files optimized')
-        console.log('html: finished')
-        return result
+        Logger.debug('all html files written')
+        Logger.debug('html: finished')
+
+        return helper.getOptimizationResultForOptimizer(result, HtmlOptim)
     })
+}
+
+HtmlOptim.getName = function () {
+    return 'html'
 }
 
 module.exports = HtmlOptim

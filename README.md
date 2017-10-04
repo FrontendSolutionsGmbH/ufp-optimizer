@@ -13,7 +13,8 @@ It is based on a bunch of cross-platform node.js tools
 
 * [clean-css](https://www.npmjs.com/package/clean-css)
 * [html-minifier](https://www.npmjs.com/package/html-minifier)
-* [node-zopfli](https://www.npmjs.com/package/)
+* [node-zopfli](https://www.npmjs.com/package/node-zopfli)
+* [uglify-js](https://www.npmjs.com/package/uglify-js)
 * [brotli](https://www.npmjs.com/package/brotli)
 * [imagemin](https://www.npmjs.com/package/imagemin)
 * [imagemin-giflossy](https://www.npmjs.com/package/imagemin-giflossy)
@@ -57,8 +58,8 @@ If you use ufp-optimizer in your node.js code you have the following commands av
 
 | Function | Params | Description |
 | --------- | ----------- | --------- |
-| getDefaultSettings | none | Returns the default settings object. You can change anything you like but keep in mind to use different input and outputDir |
-| execute  | settings object | The most important command. One function to do everything (copy/css/images/html/...). Just pass the settings and you are good to go |
+| getConfig | none | Returns the default settings object. You can change anything you like but keep in mind to use different input and outputDir |
+| executeOptimizations  | settings object | The most important command. One function to do everything (copy/css/images/html/...). Just pass the settings and you are good to go |
 | copy | settings object | Creates the outputDir if necessary or deletes the content in it. It copies everything from inputDir then. You need to pass the settings object which contains inputDir and outputDir |
 | optimizeImages | settings object | Does lossy png, jpg and svg optimizations on all files in the outputDir. You can fine-tune the algorithms per settingsfile if necessary, e.g. allowing loss to get better results. |
 | optimizeHTML | settings object |  Minimizes html files. By default it does nothing dangerous to keep it compatible with all browsers |
@@ -68,10 +69,10 @@ If you use ufp-optimizer in your node.js code you have the following commands av
 
 ```javascript
 var uo = require('ufp-optimizer')
-var settings = uo.getDefaultSettings();
+var settings = uo.getConfig();
 settings.inputDir = 'dist';
 settings.outputDir = 'blub';
-uo.execute(settings);
+uo.executeOptimizations(settings);
 ```
 
 
@@ -105,7 +106,7 @@ TODO
 
 ## CLI params ##
 
-ufp-optimizer-cli [inputDir] [outputDir] [configFile]
+ufp-optimizer-cli optimize [inputDir] [outputDir] [configFile]
 
 | Parameter | Description                                     | Example |
 | --------- | -----------                                     | ------- |
@@ -122,12 +123,14 @@ The config file is a json file containing sever settings to control what will be
 | inputDir  | Directory which contains the files that need to be compressed | dist    |
 | outputDir  | Where the files will be written. Needs to be different from inputDir | distCompressed    |
 
+To get a better idea what you can configure have a look at the default config [Globals.js](src/Globals.js)
+
 ## Todos ##
 
-* add development mode for faster execution (no brotli, no zopfli just zlib + faster image compressions)
-* add closure compiler if wanted (and optionally uglify-js)
-* Webpack Plugin
-* More config settings (enable/disable whole steps like html-minification, use brotli and zopfli on more extensions and so on)
+* File based optimization: Allow regex as input and not only full directories
+* Intelligent optimizer: Image similarity Index, e.g. GMSD for optimal compression method
+* Better image compression: jpegmini and imageOptim https://jamiemason.github.io/ImageOptim-CLI/
+* Webpack Plugin?
 
 ## Known problems ##
 

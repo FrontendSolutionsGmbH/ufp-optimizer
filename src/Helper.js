@@ -38,4 +38,44 @@ Helper.emptyPromise = function (val) {
     })
 }
 
+
+Helper.getOptimizationResultForFileBefore = function (inputFileName, outputFileName, optimizer, group) {
+    return {
+        optimizerName: optimizer.getName(),
+        group: group,
+        inputFileName: inputFileName,
+        outputFileName: outputFileName,
+        sizeBefore: Helper.getFilesizeInBytes(inputFileName),
+        sizeAfter: null
+    }
+}
+
+Helper.updateOptimizationResultForFileAfter = function (optimizationResult) {
+    if (optimizationResult) {
+        if (Array.isArray(optimizationResult)) {
+            return optimizationResult.map(Helper.updateOptimizationResultForFileAfter)
+        } else {
+            optimizationResult.sizeAfter = Helper.getFilesizeInBytes(optimizationResult.outputFileName)
+        }
+    }
+    return optimizationResult;
+}
+
+Helper.getOptimizationResultForOptimizer = function (resultsForFiles, optimizer) {
+    return {
+        name: optimizer.getName(),
+        files: Helper.flatten(resultsForFiles || []).filter(function (entry) {
+            return entry ? true : false;
+        })
+    };
+}
+
+Helper.flatten = function (arr) {
+    return arr.reduce(function (flat, toFlatten) {
+        return flat.concat(Array.isArray(toFlatten) ? Helper.flatten(toFlatten) : toFlatten);
+    }, []);
+}
+//    Logger.debug('gzip ' + fileName, 'reduction: ', Math.round((sizeBefore - sizeNEW) / 1024) + 'kb', Math.round((sizeNEW / sizeBefore) * 100) + '%')
+//  Logger.debug('zopfli ' + fileName, 'reduction: ', Math.round((sizeBefore - sizeNEW) / 1024) + 'kb', Math.round((sizeNEW / sizeBefore) * 100) + '%')
+
 module.exports = Helper
