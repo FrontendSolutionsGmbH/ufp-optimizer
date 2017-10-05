@@ -28,6 +28,10 @@ var getConfigByArgv = function (argv) {
         config.outputDir = argv.outputDir
     }
 
+    if (argv.silent !== undefined) {
+        config.silent = argv.silent
+    }
+
     if (argv.debug !== undefined) {
         config.debug = argv.debug
     }
@@ -41,7 +45,7 @@ var doOptimizations = function (settings) {
     console.log('****** UFP OPTIMIZER started ******')
 
     app.executeOptimizations(settings).then(function (result) {
-        console.log('****** UFP OPTIMIZER finished ******')
+        console.log('****** UFP OPTIMIZER finished successfully******')
         return result
     }).catch(function (ex) {
         console.log('****** UFP OPTIMIZER finished with errors ******', ex)

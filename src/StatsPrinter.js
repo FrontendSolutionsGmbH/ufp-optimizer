@@ -249,9 +249,4 @@ StatsPrinter.getSummaryDetailsTotal = function (results, settings, useWebP) {
     })
 }
 
-StatsPrinter.printTable = function (result) {
-    require('console.table')
-    console.table(result)
-}
-
 module.exports = StatsPrinter

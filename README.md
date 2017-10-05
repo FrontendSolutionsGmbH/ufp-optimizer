@@ -127,6 +127,7 @@ ufp-optimizer-cli optimize [inputDir] [outputDir] --config=myConfig.json --conf.
 | --conf  | Optional: Same as --config but inline, so no file is expected but instead the attributes | --conf.preset=production --conf.optimizer.imageOptim.enabled=false    |
 | --preset  | Optional: 'development', 'production', 'extreme', 'lossy' | --preset=lossy    |
 | --debug  | Optional: To get more output | --debug    |
+| --silent  | Optional: If set you get no output except a start and finish message | --silent    |
 | --help  | Optional: To display a help | --help    |
 
 
