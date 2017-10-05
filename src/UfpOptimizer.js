@@ -16,11 +16,11 @@ const cloneDeep = require('lodash.clonedeep')
 var UfpOptimizer = {}
 
 var logOptimizerStart = function (optimizer) {
-    Logger.log('** ' + optimizer.getName() + ' started' + ' **')
+    Logger.debug('** ' + optimizer.getName() + ' started' + ' **')
 }
 
 var logOptimizerEnd = function (optimizer) {
-    Logger.log('** ' + optimizer.getName() + ' finished' + ' **')
+    Logger.debug('** ' + optimizer.getName() + ' finished' + ' **')
 }
 
 require('events').EventEmitter.defaultMaxListeners = Infinity
@@ -58,23 +58,23 @@ UfpOptimizer.executeOptimizations = function (settings) {
 
     var doStats = function (result) {
         optimizerStatResults.push(result)
-        console.log('------------')
-        console.log('Statistics')
-        console.log('------------')
-        console.log('Results per optimization step')
-        console.log('')
-        StatsPrinter.printTable(StatsPrinter.getSimpleDetailsResultsAsArray(optimizerStatResults))
-        console.log('------------')
-        console.log('Results per output file')
-        console.log('')
-        StatsPrinter.printTable(StatsPrinter.getSummaryDetailsPerFile(optimizerStatResults))
-        console.log('------------')
-        console.log('Total summary')
-        console.log('')
+        Logger.info('------------')
+        Logger.info('Statistics')
+        Logger.info('------------')
+        Logger.info('Results per optimization step')
+        Logger.info('')
+        Logger.infoTable(StatsPrinter.getSimpleDetailsResultsAsArray(optimizerStatResults))
+        Logger.info('------------')
+        Logger.info('Results per output file')
+        Logger.info('')
+        Logger.infoTable(StatsPrinter.getSummaryDetailsPerFile(optimizerStatResults))
+        Logger.info('------------')
+        Logger.info('Total summary')
+        Logger.info('')
         var totalResults = StatsPrinter.getSummaryDetailsTotal(optimizerStatResults, settings, false)
         totalResults = totalResults.concat(StatsPrinter.getSummaryDetailsTotal(optimizerStatResults, settings, true))
-        StatsPrinter.printTable(totalResults)
-        console.log('------------')
+        Logger.infoTable(totalResults)
+        Logger.info('------------')
         return result
     }
     return UfpOptimizer.copy(settings).then(doImageOptimization).then(doHTMLOptimization).then(doCssOptimization).then(doJsOptimization).then(doZip).then(doHtAccess).then(doStats)
@@ -85,7 +85,12 @@ UfpOptimizer.getConfig = function (preset, customConfigSettings) {
 }
 
 UfpOptimizer.setLogLevelByConfig = function (config) {
-    Logger.setLevel(config.debug && (config.debug === 'true' || config.debug === true) ? 'debug' : 'info')
+    if (config.silent) {
+        Logger.setLevel('emerg')
+    } else {
+        Logger.setLevel(config.debug && (config.debug === 'true' || config.debug === true) ? 'debug' : 'info')
+    }
+
 }
 
 UfpOptimizer.getConfigHelp = function (preset) {

@@ -3,6 +3,7 @@ const Logger = require('./Logger')
 
 var globalsProduction = {
     debug: false,
+    silent: false,
     preset: 'production',
     inputDir: 'dist',
     outputDir: 'distOptimized',
@@ -291,6 +292,16 @@ var getConfigHelp = function (preset) {
                 default: false,
                 demandOption: false,
                 describe: 'if set to true you get some nice console output',
+                type: 'bool',
+                group: 'Options:'
+            },
+            {
+                show: true,
+                key: 'silent',
+                alias: 's',
+                default: false,
+                demandOption: false,
+                describe: 'if set to true you get no logs at all',
                 type: 'bool',
                 group: 'Options:'
             }
