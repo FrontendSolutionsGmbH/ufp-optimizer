@@ -8,6 +8,13 @@ helper.cutSuffix = function (string) {
   return string.replace(/(^.*)\./g, '$1')
 }
 
+helper.dirHasFile = function (dir, fileName) {
+  const list = fs.readdirSync(dir)
+  return list.some(function (entry) {
+    return entry.replace(/^.*[\\\/]/, '') === fileName
+  })
+}
+
 helper.filewalker = function (dir) {
   var result = []
 
@@ -48,37 +55,13 @@ helper.filewalker = function (dir) {
   return result
 }
 
-helper.copy = function (data) {
-  const settings = app.getDefaultSettings()
-  settings.inputDir = data.inputDir
-  settings.outputDir = data.outputDir
-  app.execute(settings)
-}
-
-helper.fastBuild = function (data) {
-  const settings = app.getDefaultSettings()
-  settings.inputDir = data.inputDir
-  settings.outputDir = data.outputDir
-  app.execute(settings)
-}
-
 helper.build = function (data) {
-  console.log('****** UFP OPTIMIZER 2.0 started ******')
-  console.log('****** USAGE:  ufp-optimizer-cli [inputDir] [outputDir] [configFile] ******')
-  var inputDirName = data.inputDirName || 'examples/0/input'
-  var outputDirName = data.outputDirName || 'dist'
+  console.log('****** UFP OPTIMIZER TEST started ******')
   var settings = app.getConfig('production')
-  settings.inputDir = inputDirName
-  settings.outputDir = outputDirName
+  settings.inputDir = data.inputDirName
+  settings.outputDir = data.outputDirName
 
-  return app.executeOptimizations(settings).then(function (result) {
-    console.log('****** UFP OPTIMIZER finished ******')
-    return result
-  }).catch(function (ex) {
-    console.log('****** UFP OPTIMIZER finished with errors ******', ex)
-  })
-
-  //console.log('****** UFP OPTIMIZER TEST EARLY END******')
+  return app.executeOptimizations(settings)
 }
 
 module.exports = helper
