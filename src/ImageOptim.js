@@ -97,7 +97,7 @@ ImageOptim.optimizeFile = function (fileName, settings) {
                     return imagemin([fileName], imageDir, {
                         plugins: [imageminWebp(settings.webp.options)]
                     }).then(function (result) {
-                        if (fs.existsSync(path)) {
+                        if (result && fs.existsSync(result[0].path)) {
                             resultStats.push(helper.getOptimizationResultForFileBefore(fileName, fileName.replace('.png', '.webp').replace('.jpg', '.webp').replace('.jpeg', '.webp'), ImageOptim, 'imagemin-webp'))
                         }
                         return result
