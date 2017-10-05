@@ -1,4 +1,6 @@
 tests/e2e-tests/tests
+--reporter mocha-multi-reporters
+--reporter-options configFile=build/mocha-reporters.json
 --recursive
 --require build/mocha-e2e.config
 --ui bdd
