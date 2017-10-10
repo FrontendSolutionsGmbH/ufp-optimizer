@@ -90,7 +90,6 @@ UfpOptimizer.setLogLevelByConfig = function (config) {
     } else {
         Logger.setLevel(config.debug && (config.debug === 'true' || config.debug === true) ? 'debug' : 'info')
     }
-
 }
 
 UfpOptimizer.getConfigHelp = function (preset) {

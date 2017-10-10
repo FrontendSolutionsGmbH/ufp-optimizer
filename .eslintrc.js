@@ -10,10 +10,12 @@ module.exports = {
         "babel",
         "immutable",
         "no-use-extend-native",
-        "no-inferred-method-name"
+        "no-inferred-method-name",
+        "jasmine"
     ],
     "env": {
-        "browser": true
+        "browser": true,
+        "jasmine": true
     },
     "globals": {
         "Action": false,

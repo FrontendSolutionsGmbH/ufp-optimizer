@@ -27,13 +27,11 @@ Logger.setLevel = function (level) {
     winston.level = level
 }
 
-
 Logger.infoTable = function (result) {
     if (winston.level === 'info' || winston.level === 'debug') {
         require('console.table')
         console.table(result)
     }
 }
-
 
 module.exports = Logger

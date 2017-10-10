@@ -13,7 +13,7 @@
     "build-3": "node examples/3/test-same-dir.js",
     "build-4": "node bin/ufp-optimizer-cli.js optimize examples/4/broken dist/dist-4",
     "build-5": "node bin/ufp-optimizer-cli.js optimize examples/5/not-existing dist/dist-5",
-    "eslint": "./node_modules/.bin/eslint src/**.* bin/**.* --fix"
+    "eslint": "./node_modules/.bin/eslint src/ bin/ tests/e2e-tests/*.js tests/e2e-tests/tests/*.js tests/src/--fix"
   },
   "engines": {
     "node": ">=8.5"
@@ -61,6 +61,7 @@
     "eslint-plugin-flowtype": "^2.37.0",
     "eslint-plugin-immutable": "^1.0.0",
     "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jasmine": "^2.9.1",
     "eslint-plugin-jsx": "^0.0.2",
     "eslint-plugin-new-with-error": "^1.1.0",
     "eslint-plugin-no-inferred-method-name": "^1.0.2",
