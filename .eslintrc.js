@@ -11,11 +11,12 @@ module.exports = {
         "immutable",
         "no-use-extend-native",
         "no-inferred-method-name",
-        "jasmine"
+        "mocha",
+        "chai-friendly"
     ],
     "env": {
         "browser": true,
-        "jasmine": true
+        "mocha": true
     },
     "globals": {
         "Action": false,
@@ -50,6 +51,8 @@ module.exports = {
         "immutable/no-mutation": 0,
         "promise/always-return": 2,
         "no-webpack-loader-syntax": 0,
+        "no-unused-expressions": 0,
+        "chai-friendly/no-unused-expressions": 2,
         "promise/no-return-wrap": 2,
         "promise/param-names": 2,
         "promise/catch-or-return": 0,

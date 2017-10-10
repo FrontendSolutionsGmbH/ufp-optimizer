@@ -1,5 +1,7 @@
 const helper = require('../helper')
 const testsuits = require('../testDefinition')
+var chai = require('chai')
+var expect = chai.expect
 
 testsuits.forEach(function (data) {
     describe(data.testName + ' Test', function () {
@@ -39,11 +41,11 @@ testsuits.forEach(function (data) {
                         }
                     }
                 })
-                expect(outputExists, 'Missing output file\ninput: ' + inputEntry.path).toBeTruthy()
+                expect(outputExists, 'Missing output file\ninput: ' + inputEntry.path).to.be.true
             })
         })
         it('Should have a .htaccess file in the root directory', function () {
-            expect(helper.dirHasFile(data.outputDirName, '.htaccess')).toBeTruthy()
+            expect(helper.dirHasFile(data.outputDirName, '.htaccess')).to.be.true
         })
     })
 })
