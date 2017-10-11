@@ -34,4 +34,11 @@ Logger.infoTable = function (result) {
     }
 }
 
+Logger.debugTable = function (result) {
+    if (winston.level === 'debug') {
+        require('console.table')
+        console.table(result)
+    }
+}
+
 module.exports = Logger
