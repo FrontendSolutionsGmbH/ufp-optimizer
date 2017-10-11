@@ -2,4 +2,5 @@ var uo = require('./../../src/UfpOptimizer')   // regular project can use 'ufp-o
 var settings = uo.getConfig()
 settings.inputDir = 'examples/1/fast'
 settings.outputDir = 'dist/dist-2'
+settings.silent = true
 uo.executeOptimizations(settings)

@@ -26,6 +26,9 @@ var logOptimizerEnd = function (optimizer) {
 require('events').EventEmitter.defaultMaxListeners = Infinity
 
 UfpOptimizer.executeOptimizations = function (settings) {
+
+    UfpOptimizer.setLogLevelByConfig(settings)
+
     var optimizerStatResults = []
 
     var doHtAccess = function (result) {
@@ -77,7 +80,14 @@ UfpOptimizer.executeOptimizations = function (settings) {
         Logger.info('------------')
         return result
     }
-    return UfpOptimizer.copy(settings).then(doImageOptimization).then(doHTMLOptimization).then(doCssOptimization).then(doJsOptimization).then(doZip).then(doHtAccess).then(doStats)
+
+    console.log('****** UFP OPTIMIZER started ******')
+    return UfpOptimizer.copy(settings).then(doImageOptimization).then(doHTMLOptimization).then(doCssOptimization).then(doJsOptimization).then(doZip).then(doHtAccess).then(doStats).then(function (result) {
+        console.log('****** UFP OPTIMIZER finished successfully******')
+        return result
+    }).catch(function (ex) {
+        console.log('****** UFP OPTIMIZER finished with errors ******', ex)
+    })
 }
 
 UfpOptimizer.getConfig = function (preset, customConfigSettings) {

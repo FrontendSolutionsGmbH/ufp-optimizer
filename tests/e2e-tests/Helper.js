@@ -60,7 +60,7 @@ Helper.build = function (data) {
     var settings = app.getConfig('production')
     settings.inputDir = data.inputDirName
     settings.outputDir = data.outputDirName
-
+    settings.silent = true
     return app.executeOptimizations(settings)
 }
 

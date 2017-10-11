@@ -21,7 +21,11 @@ testsuits.forEach(function (data) {
                     return entry.type === 'file'
                 })
                 return outputDataFiles
-            }).then(done, done)
+            }).then((result) => {
+                done()
+            }, (error) => {
+                done(error)
+            })
         })
         it('Should compress the ' + data.testName + ' files', function () {
             inputDataFiles.forEach(function (inputEntry) {

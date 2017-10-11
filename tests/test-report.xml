@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="0.013999999999999999" tests="12" failures="1">
+  <testsuite name="Root Suite" timestamp="2017-10-11T08:05:32" tests="0" failures="0" time="0">
+  </testsuite>
+  <testsuite name="Full Page Test" timestamp="2017-10-11T08:05:32" tests="2" file="D:\Alex\projects\ufp-optimizer\tests\e2e-tests\tests\test.js" failures="0" time="0.006">
+    <testcase name="Full Page Test Should compress the Full Page files" time="0.006" classname="Should compress the Full Page files">
+    </testcase>
+    <testcase name="Full Page Test Should have a .htaccess file in the root directory" time="0" classname="Should have a .htaccess file in the root directory">
+    </testcase>
+  </testsuite>
+  <testsuite name="CSS Test" timestamp="2017-10-11T08:05:35" tests="2" file="D:\Alex\projects\ufp-optimizer\tests\e2e-tests\tests\test.js" failures="0" time="0.001">
+    <testcase name="CSS Test Should compress the CSS files" time="0.001" classname="Should compress the CSS files">
+    </testcase>
+    <testcase name="CSS Test Should have a .htaccess file in the root directory" time="0" classname="Should have a .htaccess file in the root directory">
+    </testcase>
+  </testsuite>
+  <testsuite name="HTML Test" timestamp="2017-10-11T08:05:36" tests="2" file="D:\Alex\projects\ufp-optimizer\tests\e2e-tests\tests\test.js" failures="0" time="0">
+    <testcase name="HTML Test Should compress the HTML files" time="0" classname="Should compress the HTML files">
+    </testcase>
+    <testcase name="HTML Test Should have a .htaccess file in the root directory" time="0" classname="Should have a .htaccess file in the root directory">
+    </testcase>
+  </testsuite>
+  <testsuite name="IMG Test" timestamp="2017-10-11T08:05:37" tests="2" file="D:\Alex\projects\ufp-optimizer\tests\e2e-tests\tests\test.js" failures="1" time="0.004">
+    <testcase name="IMG Test Should compress the IMG files" time="0.003" classname="Should compress the IMG files">
+    </testcase>
+    <testcase name="IMG Test Should have a .htaccess file in the root directory" time="0.001" classname="Should have a .htaccess file in the root directory">
+      <failure><![CDATA[AssertionError: expected false to be true
+    at Context.<anonymous> (tests\e2e-tests\tests\test.js:52:77)]]></failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="PHP Test" timestamp="2017-10-11T08:05:38" tests="2" file="D:\Alex\projects\ufp-optimizer\tests\e2e-tests\tests\test.js" failures="0" time="0.002">
+    <testcase name="PHP Test Should compress the PHP files" time="0.001" classname="Should compress the PHP files">
+    </testcase>
+    <testcase name="PHP Test Should have a .htaccess file in the root directory" time="0.001" classname="Should have a .htaccess file in the root directory">
+    </testcase>
+  </testsuite>
+  <testsuite name="JS Test" timestamp="2017-10-11T08:05:38" tests="2" file="D:\Alex\projects\ufp-optimizer\tests\e2e-tests\tests\test.js" failures="0" time="0.001">
+    <testcase name="JS Test Should compress the JS files" time="0.001" classname="Should compress the JS files">
+    </testcase>
+    <testcase name="JS Test Should have a .htaccess file in the root directory" time="0" classname="Should have a .htaccess file in the root directory">
+    </testcase>
+  </testsuite>
+</testsuites>
