@@ -1,7 +1,7 @@
 const helper = require('../helper')
 const testsuits = require('../testDefinition')
-var chai = require('chai')
-var expect = chai.expect
+const chai = require('chai')
+const expect = chai.expect
 
 testsuits.forEach(function (data) {
     describe(data.testName + ' Test', function () {
@@ -23,6 +23,7 @@ testsuits.forEach(function (data) {
                 return outputDataFiles
             }).then((result) => {
                 done()
+                return result
             }, (error) => {
                 done(error)
             })

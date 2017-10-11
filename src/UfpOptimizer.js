@@ -26,7 +26,6 @@ var logOptimizerEnd = function (optimizer) {
 require('events').EventEmitter.defaultMaxListeners = Infinity
 
 UfpOptimizer.executeOptimizations = function (settings) {
-
     UfpOptimizer.setLogLevelByConfig(settings)
 
     var optimizerStatResults = []

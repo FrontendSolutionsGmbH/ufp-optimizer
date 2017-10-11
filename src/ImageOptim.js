@@ -84,7 +84,6 @@ ImageOptim.optimizeFile = function (fileName, settings) {
             }
 
             if (plugins.length > 0 || doWebP) {
-
                 var funcForNormalImage = function () {
                     return imagemin([fileName], imageDir, {
                         plugins: plugins
