@@ -1,5 +1,8 @@
 # Changelog #
 
+## 0.10.4
+* camel case fix for osx
+
 ## 0.10.3
 * lots of refactoring
 * added dynamic .htaccess generation
