@@ -1,5 +1,5 @@
-const helper = require('../helper')
-const testsuits = require('../testDefinition')
+const helper = require('../Helper')
+const testsuits = require('../TestDefinition')
 const chai = require('chai')
 const expect = chai.expect
 
