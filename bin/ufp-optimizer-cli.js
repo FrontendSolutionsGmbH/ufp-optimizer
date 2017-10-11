@@ -37,19 +37,11 @@ var getConfigByArgv = function (argv) {
     }
 
     var result = app.validateConfig(config, true)
-    app.setLogLevelByConfig(result)
     return result
 }
 
 var doOptimizations = function (settings) {
-    console.log('****** UFP OPTIMIZER started ******')
-
-    app.executeOptimizations(settings).then(function (result) {
-        console.log('****** UFP OPTIMIZER finished successfully******')
-        return result
-    }).catch(function (ex) {
-        console.log('****** UFP OPTIMIZER finished with errors ******', ex)
-    })
+    app.executeOptimizations(settings)
 }
 
 var enableOnlyThisOptimizer = function (settings, optimString) {

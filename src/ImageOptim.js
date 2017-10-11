@@ -84,34 +84,27 @@ ImageOptim.optimizeFile = function (fileName, settings) {
             }
 
             if (plugins.length > 0 || doWebP) {
-                if (doWebP) {
-                    var funcForNormalImage = function () {
-                        return imagemin([fileName], imageDir, {
-                            plugins: plugins
-                        }).catch(function (error) {
-                            Logger.error('error', fileName, error)
-                            // resolve()
-                        })
-                    }
+                var funcForNormalImage = function () {
+                    return imagemin([fileName], imageDir, {
+                        plugins: plugins
+                    }).catch(function (error) {
+                        Logger.error('error', fileName, error)
+                    })
+                }
 
+                if (doWebP) {
                     return imagemin([fileName], imageDir, {
                         plugins: [imageminWebp(settings.webp.options)]
                     }).then(function (result) {
-                        if (result && fs.existsSync(result[0].path)) {
+                        if (result && fs.existsSync(result[0].path) && fs.existsSync(fileName.replace('.png', '.webp').replace('.jpg', '.webp').replace('.jpeg', '.webp'))) {
                             resultStats.push(helper.getOptimizationResultForFileBefore(fileName, fileName.replace('.png', '.webp').replace('.jpg', '.webp').replace('.jpeg', '.webp'), ImageOptim, 'imagemin-webp'))
                         }
                         return result
                     }).catch(function (error) {
                         Logger.error('error', fileName, error)
-                        // resolve()
                     }).then(funcForNormalImage)
                 } else {
-                    return imagemin([fileName], imageDir, {
-                        plugins: plugins
-                    }).catch(function (error) {
-                        Logger.error('error', fileName, error)
-                        // resolve()
-                    })
+                    return funcForNormalImage()
                 }
             } else {
                 return helper.emptyPromise(null)

@@ -12,3 +12,4 @@ dist-4/
 dist-5/
 dist-.*/
 dist/
+tests/test-report.xml
