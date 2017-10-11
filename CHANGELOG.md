@@ -4,6 +4,7 @@
 * lots of refactoring
 * added dynamic .htaccess generation
 * added uglify for javascript optimization
+* added e2e-tests, eslint and unit tests
 
 ## 0.9.10
 * moved to github
