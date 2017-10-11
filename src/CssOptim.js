@@ -11,7 +11,7 @@ CssOptim.optimizeFile = function (fileName, settingsHtmlFiles, settings) {
         var cssOptimSettings = settings.optimizer.cssOptim
 
         if (cssOptimSettings.enabled && cssOptimSettings.options.cleanCss.enabled) {
-            var resultStats = helper.getOptimizationResultForFileBefore(fileName, fileName, CssOptim, 'uncss')
+            var resultStats = helper.getOptimizationResultForFileBefore(fileName, fileName, CssOptim, 'clean-css')
 
             var options = cssOptimSettings.options.cleanCss.options
             options.returnPromise = true

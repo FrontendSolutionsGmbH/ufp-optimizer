@@ -9,23 +9,19 @@ testsuits.forEach(function (data) {
         var inputDataFiles
         var outputData
         var outputDataFiles
-        before(function (done) {
+        before(async function () {
             inputData = helper.filewalker(data.inputDirName)
             inputDataFiles = inputData.filter(function (entry) {
                 return entry.type === 'file'
             })
             this.timeout(10000)
-            helper.build(data).then(function () {
+
+            await helper.build(data).then(function () {
                 outputData = helper.filewalker(data.outputDirName)
                 outputDataFiles = outputData.filter(function (entry) {
                     return entry.type === 'file'
                 })
                 return outputDataFiles
-            }).then((result) => {
-                done()
-                return result
-            }, (error) => {
-                done(error)
             })
         })
         it('Should compress the ' + data.testName + ' files', function () {
