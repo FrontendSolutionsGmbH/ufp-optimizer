@@ -202,3 +202,11 @@ Error: Cannot find module '/mnt/d/Alex/projects/teo/node_modules/node-zopfli/lib
 ### write permission problem ###
 
 If somehow you get an error saying that you dont have permissions deleting the outputDir, close any programs which can access the files in that directory and try again
+
+
+### install ufp-optimizer globally ###
+
+If you want to install ufp-optimizer as a global module you need to set the --unsafe-perm param.
+```
+	sudo npm install -g --unsafe-perm ufp-optimizer
+```
