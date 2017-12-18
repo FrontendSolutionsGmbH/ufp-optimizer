@@ -9,7 +9,8 @@ const TestDefinition = [
         testName: 'CSS',
         inputDirName: 'tests/e2e-tests/testdata/1/css',
         outputDirName: 'tests/dist/1',
-        configFileName: ''
+        configFileName: '',
+        canBeLarger: true
     },
     {
         testName: 'HTML',
