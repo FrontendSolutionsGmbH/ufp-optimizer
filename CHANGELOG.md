@@ -1,5 +1,9 @@
 # Changelog #
 
+## 0.10.6
+* postcss and autoprefixer instead of only clean-css
+
+
 ## 0.10.4
 * camel case fix for osx
 
