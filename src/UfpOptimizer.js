@@ -11,6 +11,8 @@ const defaultsDeep = require('lodash.defaultsdeep')
 const Logger = require('./Logger')
 const Helper = require('./Helper')
 const StatsPrinter = require('./StatsPrinter')
+const package = require('../package.json')
+
 const cloneDeep = require('lodash.clonedeep')
 
 var UfpOptimizer = {}
@@ -80,7 +82,7 @@ UfpOptimizer.executeOptimizations = function (settings) {
         return result
     }
 
-    console.log('****** UFP OPTIMIZER started ******')
+    console.log('****** UFP OPTIMIZER ' + package.version + ' started ******')
     return UfpOptimizer.copy(settings).then(doImageOptimization).then(doHTMLOptimization).then(doCssOptimization).then(doJsOptimization).then(doZip).then(doHtAccess).then(doStats).then(function (result) {
         console.log('****** UFP OPTIMIZER finished successfully******')
         return result
