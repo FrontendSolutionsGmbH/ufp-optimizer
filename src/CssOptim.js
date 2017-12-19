@@ -28,22 +28,28 @@ CssOptim.optimizeFile = function (fileName, settingsHtmlFiles, settings) {
                 var optionsClean = cssOptimSettings.options.postCss.options.postCssClean.options
                 plugins.push(postcssclean(optionsClean))
             }
+            try {
+                postcss(plugins).process(source).then(function (output) {
+                    fs.outputFileSync(fileName + 'temp', output.css)
+                    if (helper.getFilesizeInBytes(fileName + 'temp') < helper.getFilesizeInBytes(fileName) || cssOptimSettings.options.postCss.options.postCssNext.enabled) {
+                        fs.renameSync(fileName + 'temp', fileName)
+                    } else {
+                        fs.unlinkSync(fileName + 'temp')
+                    }
 
-            postcss(plugins).process(source).then(function (output) {
-                fs.outputFileSync(fileName + 'temp', output.css)
-                if (helper.getFilesizeInBytes(fileName + 'temp') < helper.getFilesizeInBytes(fileName) || cssOptimSettings.options.postCss.options.postCssNext.enabled) {
-                    fs.renameSync(fileName + 'temp', fileName)
-                } else {
-                    fs.unlinkSync(fileName + 'temp')
-                }
+                    fs.outputFileSync(fileName + '.map', output.sourceMap)
+                    resolve(helper.updateOptimizationResultForFileAfter(resultStats))
+                    return resultStats
+                }).catch(function (error) {
+                    Logger.error('cleanCss-error', JSON.stringify(error).substr(0, 500))
+                    resolve(helper.updateOptimizationResultForFileAfter(resultStats))
 
-                fs.outputFileSync(fileName + '.map', output.sourceMap)
-                resolve(helper.updateOptimizationResultForFileAfter(resultStats))
-                return resultStats
-            }).catch(function (error) {
-                Logger.error('cleanCss-error', error)
-                reject(error)
-            })
+                })
+            }
+            catch (ex) {
+                resolve(null)
+            }
+
         }
         else {
             resolve(null)

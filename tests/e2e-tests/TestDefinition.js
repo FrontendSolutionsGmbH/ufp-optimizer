@@ -3,7 +3,8 @@ const TestDefinition = [
         testName: 'Full Page',
         inputDirName: 'tests/e2e-tests/testdata/0/fullpage',
         outputDirName: 'tests/dist/0',
-        configFileName: ''
+        configFileName: '',
+        canBeLarger: true
     },
     {
         testName: 'CSS',
