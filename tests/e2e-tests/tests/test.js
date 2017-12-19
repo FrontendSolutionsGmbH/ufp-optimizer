@@ -32,16 +32,22 @@ testsuits.forEach(function (data) {
                     const outputPrefix = helper.cutSuffix(outputEntry.fileName)
                     if (inputPrefix === outputPrefix || inputPrefix === helper.cutSuffix(outputPrefix)) {
                         outputExists = true
-                        if (inputEntry.strongAssertion) {
-                            expect(outputEntry.fileSize, 'Not compressed\ninput: ' + inputEntry.path + '\n' +
-                                'output: ' + outputEntry.path + '\n').to.be.below(inputEntry.fileSize)
+
+                        if (!data.canBeLarger) {
+                            if (inputEntry.strongAssertion) {
+                                expect(outputEntry.fileSize, 'Not compressed\ninput: ' + inputEntry.path + '\n' +
+                                    'output: ' + outputEntry.path + '\n').to.be.below(inputEntry.fileSize)
+                            }
+                            else {
+                                expect(outputEntry.fileSize, 'Not compressed\ninput: ' + inputEntry.path + '\n' +
+                                    'output: ' + outputEntry.path + '\n').to.be.at.most(inputEntry.fileSize)
+                            }
                         }
-                        else {
-                            expect(outputEntry.fileSize, 'Not compressed\ninput: ' + inputEntry.path + '\n' +
-                                'output: ' + outputEntry.path + '\n').to.be.at.most(inputEntry.fileSize)
-                        }
+
                     }
                 })
+
+                /* existance check */
                 expect(outputExists, 'Missing output file\ninput: ' + inputEntry.path).to.be.true
             })
         })

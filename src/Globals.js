@@ -68,9 +68,25 @@ var globalsProduction = {
         cssOptim: {
             enabled: true,
             options: {
-                cleanCss: {
+                postCss: {
                     enabled: true,
-                    options: {level: 1}
+                    options: {
+                        postCssNext: {
+                            enabled: true,
+                            options: {
+                                features: {
+                                    autoprefixer: {
+                                        grid: true
+                                    }
+                                }
+                            }
+                        },
+                        postCssClean: {
+                            enabled: true,
+                            options: {}
+                        }
+
+                    }
                 }
             }
         },
@@ -318,7 +334,11 @@ var validateConfig = function (config, autofix) {
     return config
 }
 
-module.exports = {getConfig: getConfig, getConfigHelp: getConfigHelp, validateConfig: validateConfig}
+module.exports = {
+    getConfig: getConfig,
+    getConfigHelp: getConfigHelp,
+    validateConfig: validateConfig
+}
 
 /*
 

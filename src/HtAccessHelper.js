@@ -71,6 +71,50 @@ HtAccessHelper.getHtAccess = function (settings) {
         {
             filter: '.xml',
             type: 'application/xml'
+        },
+        {
+            filter: '.webp',
+            type: 'image/webp'
+        },
+        {
+            filter: '.jpeg',
+            type: 'image/jpeg'
+        },
+        {
+            filter: '.jpg',
+            type: 'image/jpeg'
+        },
+        {
+            filter: '.gif',
+            type: 'image/gif'
+        },
+        {
+            filter: '.png',
+            type: 'image/png'
+        },
+        {
+            filter: '.ttf',
+            type: 'application/x-font-ttf'
+        },
+        {
+            filter: '.otf',
+            type: 'application/x-font-opentype'
+        },
+        {
+            filter: '.woff',
+            type: 'application/font-woff'
+        },
+        {
+            filter: '.woff2',
+            type: 'application/font-woff2'
+        },
+        {
+            filter: '.eot',
+            type: 'application/vnd.ms-fontobject'
+        },
+        {
+            filter: '.sfnt',
+            type: 'application/font-sfnt'
         }
     ]
 

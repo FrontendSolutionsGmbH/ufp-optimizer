@@ -2,7 +2,9 @@ const path = require('path')
 const fs = require('fs-extra')
 const Logger = require('./Logger')
 const helper = require('./Helper')
-const CleanCSS = require('clean-css')
+const postcssnext = require('postcss-cssnext')
+const postcssclean = require('postcss-clean')
+const postcss = require('postcss')
 
 var CssOptim = {}
 
@@ -10,19 +12,26 @@ CssOptim.optimizeFile = function (fileName, settingsHtmlFiles, settings) {
     return new Promise(function (resolve, reject) {
         var cssOptimSettings = settings.optimizer.cssOptim
 
-        if (cssOptimSettings.enabled && cssOptimSettings.options.cleanCss.enabled) {
-            var resultStats = helper.getOptimizationResultForFileBefore(fileName, fileName, CssOptim, 'clean-css')
-
-            var options = cssOptimSettings.options.cleanCss.options
-            options.returnPromise = true
+        if (cssOptimSettings.enabled && cssOptimSettings.options.postCss.enabled) {
+            var resultStats = helper.getOptimizationResultForFileBefore(fileName, fileName, CssOptim, 'post-css')
 
             var source = fs.readFileSync(fileName, 'utf8')
 
-            new CleanCSS(options)
-                .minify(source)
-                .then(function (output) {
-                    fs.outputFileSync(fileName + 'temp', output.styles)
-                    if (helper.getFilesizeInBytes(fileName + 'temp') < helper.getFilesizeInBytes(fileName)) {
+            var plugins = []
+
+            if (cssOptimSettings.options.postCss.options.postCssNext.enabled) {
+                var optionsNext = cssOptimSettings.options.postCss.options.postCssNext.options
+                plugins.push(postcssnext(optionsNext))
+            }
+
+            if (cssOptimSettings.options.postCss.options.postCssClean.enabled) {
+                var optionsClean = cssOptimSettings.options.postCss.options.postCssClean.options
+                plugins.push(postcssclean(optionsClean))
+            }
+            try {
+                postcss(plugins).process(source).then(function (output) {
+                    fs.outputFileSync(fileName + 'temp', output.css)
+                    if (helper.getFilesizeInBytes(fileName + 'temp') < helper.getFilesizeInBytes(fileName) || cssOptimSettings.options.postCss.options.postCssNext.enabled) {
                         fs.renameSync(fileName + 'temp', fileName)
                     } else {
                         fs.unlinkSync(fileName + 'temp')
@@ -31,11 +40,16 @@ CssOptim.optimizeFile = function (fileName, settingsHtmlFiles, settings) {
                     fs.outputFileSync(fileName + '.map', output.sourceMap)
                     resolve(helper.updateOptimizationResultForFileAfter(resultStats))
                     return resultStats
+                }).catch(function (error) {
+                    Logger.error('cleanCss-error', JSON.stringify(error).substr(0, 500))
+                    resolve(helper.updateOptimizationResultForFileAfter(resultStats))
+
                 })
-                .catch(function (error) {
-                    Logger.error('cleanCss-error', error)
-                    reject(error)
-                })
+            }
+            catch (ex) {
+                resolve(null)
+            }
+
         }
         else {
             resolve(null)
