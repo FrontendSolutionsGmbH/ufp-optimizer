@@ -8,8 +8,8 @@
     "ie 10"
   ],
   "scripts": {
-    "unit-tests": "cross-env NODE_ENV=test NODE_PATH=. mocha --opts build/mocha.opts",
-    "e2e-tests": "cross-env NODE_ENV=test NODE_PATH=. mocha --opts build/mocha-e2e.opts",
+    "unit-tests": "cross-env NODE_ENV=test NODE_PATH=. mocha --opts tests/build/mocha.opts",
+    "e2e-tests": "cross-env NODE_ENV=test NODE_PATH=. mocha --opts tests/build/mocha-e2e.opts",
     "test": "npm run build-0 && npm run build-1 && npm run build-2 && npm run build-3 && npm run build-4 && npm run build-5",
     "build-0": "node bin/ufp-optimizer-cli.js optimize examples/0/fullpage dist/dist-0",
     "build-1": "node bin/ufp-optimizer-cli.js optimize examples/1/fast dist/dist-1",

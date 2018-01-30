@@ -1,0 +1,4 @@
+tests/unit-tests/src
+--recursive
+--require tests/build/mocha.config
+--ui bdd
