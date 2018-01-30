@@ -1,5 +1,9 @@
 # Changelog #
 
+## 0.10.7
+* fixed postcss warning for missing from param
+* appending existing .htaccess content
+
 ## 0.10.6
 * postcss and autoprefixer instead of only clean-css
 
