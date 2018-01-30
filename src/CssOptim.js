@@ -29,7 +29,7 @@ CssOptim.optimizeFile = function (fileName, settingsHtmlFiles, settings) {
                 plugins.push(postcssclean(optionsClean))
             }
             try {
-                postcss(plugins).process(source).then(function (output) {
+                postcss(plugins).process(source, {from: fileName, to: fileName,  map: { inline: false }}).then(function (output) {
                     fs.outputFileSync(fileName + 'temp', output.css)
                     if (helper.getFilesizeInBytes(fileName + 'temp') < helper.getFilesizeInBytes(fileName) || cssOptimSettings.options.postCss.options.postCssNext.enabled) {
                         fs.renameSync(fileName + 'temp', fileName)

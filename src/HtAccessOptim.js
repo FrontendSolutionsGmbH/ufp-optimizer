@@ -8,8 +8,16 @@ HtAccessOptim.optimizeFileList = function (fileList, settings) {
     return new Promise(function (resolve, reject) {
         var htaccessOptimSettings = settings.optimizer.htaccessOptim
 
+
+
         if (htaccessOptimSettings.enabled) {
             var htAccessContent = HtAccessHelper.getHtAccess(settings)
+            var existingContent = HtAccessHelper.getExistingHtAccessContentByFileList(fileList)
+
+            if (existingContent && existingContent.length > 0) {
+                htAccessContent += '\r\n' + existingContent
+                Logger.debug('htaccess: existingContent found and was appended')
+            }
 
             fs.writeFile(settings.outputDir + htaccessOptimSettings.options.outputFile, htAccessContent, function (err) {
                 if (err) {
