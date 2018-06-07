@@ -9,7 +9,7 @@ testsuits.forEach(function (data) {
         var inputDataFiles
         var outputData
         var outputDataFiles
-        before(async function () {
+        before(async function iAmAnonym () {
             inputData = helper.filewalker(data.inputDirName)
             inputDataFiles = inputData.filter(function (entry) {
                 return entry.type === 'file'

@@ -6,7 +6,7 @@ const defaultsDeep = require('lodash.defaultsdeep')
 const configHelp = app.getConfigHelp('production')
 const cloneDeep = require('lodash.clonedeep')
 const yargs = require('yargs')
-const myPackage = require('../myPackage.json')
+const myPackage = require('../package.json')
 
 var getConfigByArgv = function (argv) {
     var config = app.getConfig(argv.preset || (argv.conf && argv.conf.preset) || (argv.config && argv.config.preset))
