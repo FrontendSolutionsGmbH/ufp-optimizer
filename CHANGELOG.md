@@ -1,5 +1,9 @@
 # Changelog #
 
+## 0.12.0
+
+* security ref dependencies update
+
 ## 0.10.7
 * fixed postcss warning for missing from param
 * appending existing .htaccess content
