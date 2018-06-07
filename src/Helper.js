@@ -9,6 +9,9 @@ Helper.getFilesizeInBytes = function (filename) {
 }
 
 Helper.cleanEmptyFoldersRecursively = function (folder) {
+    if (!folder) {
+        return
+    }
     var isDir = fs.statSync(folder).isDirectory()
     if (!isDir) {
         return

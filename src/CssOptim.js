@@ -9,7 +9,7 @@ const postcss = require('postcss')
 var CssOptim = {}
 
 CssOptim.optimizeFile = function (fileName, settingsHtmlFiles, settings) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve) {
         var cssOptimSettings = settings.optimizer.cssOptim
 
         if (cssOptimSettings.enabled && cssOptimSettings.options.postCss.enabled) {
@@ -29,7 +29,7 @@ CssOptim.optimizeFile = function (fileName, settingsHtmlFiles, settings) {
                 plugins.push(postcssclean(optionsClean))
             }
             try {
-                postcss(plugins).process(source, {from: fileName, to: fileName,  map: { inline: false }}).then(function (output) {
+                postcss(plugins).process(source, {from: fileName, to: fileName, map: {inline: false}}).then(function (output) {
                     fs.outputFileSync(fileName + 'temp', output.css)
                     if (helper.getFilesizeInBytes(fileName + 'temp') < helper.getFilesizeInBytes(fileName) || cssOptimSettings.options.postCss.options.postCssNext.enabled) {
                         fs.renameSync(fileName + 'temp', fileName)
@@ -43,13 +43,11 @@ CssOptim.optimizeFile = function (fileName, settingsHtmlFiles, settings) {
                 }).catch(function (error) {
                     Logger.error('cleanCss-error', JSON.stringify(error).substr(0, 500))
                     resolve(helper.updateOptimizationResultForFileAfter(resultStats))
-
                 })
             }
             catch (ex) {
                 resolve(null)
             }
-
         }
         else {
             resolve(null)
