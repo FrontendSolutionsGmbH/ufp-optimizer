@@ -1,7 +1,6 @@
 var HtAccessHelper = {}
 const fs = require('fs-extra')
 
-
 var getExpiresByType = function (type, expire) {
     return `ExpiresByType ${type} "${expire}"`
 }
@@ -22,8 +21,6 @@ var getRewriteRuleForZip = function (filter, type) {
 RewriteRule \\${filter}\\.gz$ - [T=${type},E=no-gzip:1]`
 }
 
-
-
 HtAccessHelper.getExistingHtAccessContentByFileList = function(fileList) {
     var contentSoFar = ''
 
@@ -35,7 +32,6 @@ HtAccessHelper.getExistingHtAccessContentByFileList = function(fileList) {
 
     return contentSoFar
 }
-
 
 HtAccessHelper.getHtAccess = function (settings) {
     var htaccessOptimSettings = settings.optimizer.htaccessOptim.options

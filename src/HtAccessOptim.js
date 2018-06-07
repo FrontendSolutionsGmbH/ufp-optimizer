@@ -8,8 +8,6 @@ HtAccessOptim.optimizeFileList = function (fileList, settings) {
     return new Promise(function (resolve, reject) {
         var htaccessOptimSettings = settings.optimizer.htaccessOptim
 
-
-
         if (htaccessOptimSettings.enabled) {
             var htAccessContent = HtAccessHelper.getHtAccess(settings)
             var existingContent = HtAccessHelper.getExistingHtAccessContentByFileList(fileList)

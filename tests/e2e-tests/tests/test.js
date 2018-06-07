@@ -43,7 +43,6 @@ testsuits.forEach(function (data) {
                                     'output: ' + outputEntry.path + '\n').to.be.at.most(inputEntry.fileSize)
                             }
                         }
-
                     }
                 })
 

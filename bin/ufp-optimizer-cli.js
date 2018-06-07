@@ -6,7 +6,7 @@ const defaultsDeep = require('lodash.defaultsdeep')
 const configHelp = app.getConfigHelp('production')
 const cloneDeep = require('lodash.clonedeep')
 const yargs = require('yargs')
-const package = require('../package.json')
+const myPackage = require('../myPackage.json')
 
 var getConfigByArgv = function (argv) {
     var config = app.getConfig(argv.preset || (argv.conf && argv.conf.preset) || (argv.config && argv.config.preset))
@@ -58,7 +58,7 @@ var enableOnlyThisOptimizer = function (settings, optimString) {
 }
 
 var argv = yargs.epilog('UFP Optimizer - Frontend Solutions 2017')
-    .usage('UFP Optimizer ' + package.version + ' - Optimizing static assets since 2017 (Javascript|CSS|PNG|JPG)')
+    .usage('UFP Optimizer ' + myPackage.version + ' - Optimizing static assets since 2017 (Javascript|CSS|PNG|JPG)')
     .example('ufp-optimizer-cli optimize dist')
     .example('ufp-optimizer-cli optimize dist distOptimized')
     .example('ufp-optimizer-cli optimize dist distOptimized --preset=development')
